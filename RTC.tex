@@ -125,8 +125,6 @@ While modeling the routers with RTC, we can analyze the data path stage by stage
 (3) SA stage: each output port in the wormhole-switched NoC has a SA scheduler to schedule the switch traversal at each cycle. Thus, following the same approach as BW and ST stage, we can get the service curve provided by SA stage to all the contention flows, as shown in Fig. \ref{result1}. For the fixed-priority based scheduling policy, each switch allocator provides service for high priority flows first, and flows with the same priority will be served with Round-Robin order. The unserved flits will be imposed an additional latency $T$ due the failure of switch arbitration.
 
 The equivalent service curve for the entire router can be obtained by concatenating all the five service curves together. To obtain a concise notation, denote by the upper service curve and lower service curve provided by Router $R_i$ to flow $f_j$ are $\beta_{R_i,f_j}^u$ and $\beta_{R_i,f_j}^l$, then
-$$\beta_{R_i,f_j}^l=\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l\otimes\beta_{SA,R_i,f_j}^l\otimes \beta_{ST}^l,$$
-$$\beta_{R_i,f_j}^u=\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u\otimes\beta_{SA,R_i,f_j}^u\otimes \beta_{ST}^u.$$
 
 The alert readers would notice that, the contention of different flows only occurs at SA stage. If we obtained the service curve provided by SA stage to the target flow $f_j$, we can obtain the service curve of router directly. To obtain the service curve $<\beta_{SA,R_i,f_j}^l,\beta_{SA,R_i,f_j}^u>$, we should consider the following two cases:
 
