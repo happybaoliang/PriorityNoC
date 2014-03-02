@@ -243,7 +243,7 @@ Here are some explanation about our algorithm: suppose the entire NoC is represe
         \FOR {For all the router $R_j$ in $\mathcal{R}_{f_i}$}
             \IF {$\Omega_{R_j,f_i}\neq \emptyset$ and all the flows in $\Theta_{R_j,f_i}$ have been labeled as 'Calculated'}
                 \STATE Compute the arrival curve $<\alpha^l_{i,j},\alpha^u_{i,j}>$ of flow $f_i$ at router $R_j$ according to Eq.(\ref{alphau}) and Eq.(\ref{alphal}).
-                \STATE Compute the arrival curve $<\alpha^l_{k,j},\alpha^u_{k,j}>$ at router $R_j$ of all the flows in $\Theta{R_j,f_i}$ according to Eq.(\ref{alphau}) and Eq.(\ref{alphal}), where $f_k\in\Theta{R_j,f_i}$.
+                \STATE Compute the arrival curve $<\alpha^l_{k,j},\alpha^u_{k,j}>$ at router $R_j$ of all the flows in $\Theta_{R_j,f_i}$ according to Eq.(\ref{alphau}) and Eq.(\ref{alphal}), where $f_k\in\Theta_{R_j,f_i}$.
                 \STATE Compute the aggregative arrival curve at $R_j$ of  flow $f_i$ and flows in $\Theta{f_i,j}$.
                 \STATE Compute the leftover service curve $<\beta^{l^\prime}_{i,j},\beta^{u^\prime}_{i,j}>$ at router $R_j$ after serving flow $f_i$ and all flows in $\Theta_{R_j,f_i}$ according to Eq.(\ref{betal}) and Eq.(\ref{betau}).
             \ENDIF
