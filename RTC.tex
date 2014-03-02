@@ -110,7 +110,7 @@ In a CMP or SoC system interconnected with NoC, the communication between each p
 \end{figure}
 
 \subsection{Router Model}\label{router}
-While modeling the routers with RTC, we can analyze the data path stage by stage, and find the service curve for each stage. Then, the service curve provided by the router to each flow can be obtained by concatenating all the service curves of these five stages. This is significantly different with the existing network calculus based model \cite{Qian2010Analysis,Qian489900}, where they view the entire router as a whole. The advantage of our method is that, it can be easily modified to analyze the non-standard router architecture, just by letting the traversing time of non-existing stages to be zero. Thus, we first obtain the service curve of all these 5 stages.
+While modeling the routers with RTC, we can analyze the data path stage by stage, and find the service curve for each stage. Then, the service curve provided by the router to each flow can be obtained by concatenating all the service curves of these five stages. This is significantly different with the existing DNC based model \cite{Qian2010Analysis,Qian489900}, where they view the entire router as a whole. The advantage of our method is that, it can be easily modified to analyze the non-standard router architecture, just by letting the traversing time of non-existing stages to be zero. Thus, we first obtain the service curve of all these 5 stages.
 \begin{figure*}
   \centering
   \subfloat[Service Curve of BW, SA and ST stages]{\includegraphics[scale=0.5]{figures/BW_ST_SA.pdf}\label{result1}}\hspace{10pt}
