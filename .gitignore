@@ -1,3 +1,6 @@
+*.bak
+*.sav
+*.asv
 *.synctex
 *.acn
 *.acr
