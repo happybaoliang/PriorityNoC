@@ -22,8 +22,8 @@
 \author{Baoliang~Li,~\IEEEmembership{Student Member,~IEEE,}
         Zeljko Zilic,~\IEEEmembership{Senior Member,~IEEE,}
         Wenhua~Dou,~\IEEEmembership{Non-Member,~IEEE}% <-this % stops a space
-\thanks{Baoliang~Li and Wenhua Dou are with the College of Computer Science, National University of Defense Technology, Changsha 410073, P.R. China}% 
-\thanks{Zeljko Zilic are with Department of Electrical \& Computer Engineering, McGill University, Montreal, Quebec, Canada H3A-2A7}% 
+\thanks{Baoliang~Li and Wenhua Dou are with the College of Computer Science, National University of Defense Technology, Changsha 410073, P.R. China}%
+\thanks{Zeljko Zilic are with Department of Electrical \& Computer Engineering, McGill University, Montreal, Quebec, Canada H3A-2A7}%
 \thanks{Manuscript received XX XX, 2014; revised XX XX, 2014.}}
 
 \markboth{Journal of XXX,~Vol.~XX, No.~XX, XX~2014}%
@@ -58,7 +58,7 @@ To overcome these shortcomings, DNC was used to analyze the worst case latency o
 
 \section{Preliminaries}\label{model}
 \subsection{Basic Assumptions}
-In this paper, we consider the same network model as in \cite{627905}\cite{Shi:2008:RCA:1397757.1397996}\cite{707545}\cite{73}: each router has 5 pipeline stages, i.e. Buffer-Write (BW), Route Computation (RC), VC Allocation (VA), Switch Allocation (SA), Switch Traversal (ST) and Link Traversal (LT); IP cores communicate with each other by transmitting packets, and each packet is composed of a header flit and several non-header flits optionally; Each header flit should traverse all the five stages to find a path and reserve buffer space for the follow non-header flits, and non-header flits skip the RC and VA stage since the routine and VC have been determined by header flit. For the detailed description of NoC architecture, please refer to \cite{jerger2009chip}\cite{DaTo04}. To ensure the predication of packet, we assume the NoC adopts deterministic routing polices and the switch allocator is priority aware. If multiple flits from different input ports or different VCs of the same input port contend for the same output port, the priority-aware switch allocator will only grant the flit with highest priority. Flits from a lower priority can transmit a flit if and only if there are no flits from higher priority in the input buffer or the flits with higher priority are self-blocked due to the insufficiency of VC buffer at downstream router. The packet of high priority can also preempt the transmission of packets with low priority. In addition, we also assume that, the buffer depth of each VC is finite, and credit-based flow control is adopted between each router. 
+In this paper, we consider the same network model as in \cite{627905}\cite{Shi:2008:RCA:1397757.1397996}\cite{707545}\cite{73}: each router has 5 pipeline stages, i.e. Buffer-Write (BW), Route Computation (RC), VC Allocation (VA), Switch Allocation (SA), Switch Traversal (ST) and Link Traversal (LT); IP cores communicate with each other by transmitting packets, and each packet is composed of a header flit and several non-header flits optionally; Each header flit should traverse all the five stages to find a path and reserve buffer space for the follow non-header flits, and non-header flits skip the RC and VA stage since the routine and VC have been determined by header flit. For the detailed description of NoC architecture, please refer to \cite{jerger2009chip}\cite{DaTo04}. To ensure the predication of packet, we assume the NoC adopts deterministic routing polices and the switch allocator is priority aware. If multiple flits from different input ports or different VCs of the same input port contend for the same output port, the priority-aware switch allocator will only grant the flit with highest priority. Flits from a lower priority can transmit a flit if and only if there are no flits from higher priority in the input buffer or the flits with higher priority are self-blocked due to the insufficiency of VC buffer at downstream router. The packet of high priority can also preempt the transmission of packets with low priority. In addition, we also assume that, the buffer depth of each VC is finite, and credit-based flow control is adopted between each router.
 Although we focus on the 5-stage router, our method can be easily adopted to the speculation-based router, e.g. routers with only 2 or 3 stages, the only difference is the initial delay of our model. To simplify of our analysis, we also assume that, the entire chip use synchronous design, the frequency and period of clock are $f$ and $T$, respectively. Our method can also be applied to analyze Global Asynchronous Local Synchronous (GALS) NoC without any modification, because the router located in different voltage-frequency islands can communicate with a half cycle fixed-latency synchronizer \cite{5476986}.
 
 Our model is topology independent, but to demonstrate the basic idea of our method, we take the mesh topology as an example, as shown in Fig. \ref{topology}. The router in mesh topology has five ports, corresponding to the four cardinal directions (West, East, North and South) and the Network Interface (NI), which connects to the local Intellectual Property (IP) core. Each port is equipped with a dedicated VC buffer for each priority. There are 4 traffic flows in the network, i.e. $f_1$, $f_2$, $f_3$ and $f_4$. A flow is a sequence of packets following the same transmission path with the same source and destination address. The path of a traffic flow is defined as a sequence of routers from source NI to destination NI. We must emphasize that, although there is only four flows in the network, it is sufficient to demonstrate our idea, and our method can handle more traffic flows efficiently. To ensure the low latency transmission for real-time traffic flows, we have to assign higher priorities to these flows. Denote by $P_i$ the priority of flow $f_i$, in the example shown in Fig. \ref{topology}, we assume $P_1=P_4=3$, $P_2=2$ and $P_3=1$, and a higher value indicates a higher priority. As the minimum transmission unit in NoC is flit and a higher priority packet can preempt the transmission of a lower priority packet, the NoC architecture considered in this paper is flit-level preemptive \cite{Lee:2003:RWC:846077.846083}. Our method extends the existing methods \cite{73}\cite{Qian489900} which assumes per-flow priority, to allows multiple flows share a same priority, e.g. both $f_1$ and $f_4$ in Fig. \ref{topology} are assigned the highest priority. Flits from different flows with the same priority are served in round-robin fashion, and the flits of the same flow were served in FIFO order.
@@ -93,10 +93,10 @@ From the definition of RTC service curve, we find that the upper and lower servi
 \alpha^{u^\prime}=\lceil\min\{(\alpha^u\otimes\beta^u)\oslash\beta^l,\beta^u\}\rceil
 \end{equation}
 \begin{equation}\label{betal}
-\beta^{l^\prime}=(\bar{\beta}^l-\bar{\alpha}^u)\bar{\otimes}0
+\beta^{l^\prime}=(\beta^l-\alpha^u)\bar{\otimes}0
 \end{equation}
 \begin{equation}\label{betau}
-\beta^{u^\prime}=\max\{(\bar{\beta}^u-\bar{\alpha}^l)\bar{\oslash}0,0\}
+\beta^{u^\prime}=\max\{(\beta^u-\alpha^l)\bar{\oslash}0,0\}
 \end{equation}
 where $\lceil\cdot\rceil$, $\lfloor\cdot\rfloor$ are the ceiling operator and flooring operator, and $\otimes$, $\oslash$, $\bar{\otimes}$, $\bar{\oslash}$ are corresponding to the min-plus convolution, de-convolution, and max-plus convolution and de-convolution \cite{Boudec2001Network}, respectively.
 
@@ -105,7 +105,7 @@ After we obtained the arrival curve $<\alpha^l_{f_i},\alpha^u_{f_i}>$ of traffic
 Delay(f_i)=H(\alpha^u_{f_i},\beta^l_{R_1,f_i}\otimes\beta^l_{R_2,f_i}\otimes\cdots\otimes\beta^l_{R_N,f_i}),
 \end{equation}
 \begin{equation}\label{backlog}
-Backlog(f_i)=V(\alpha^u_{f_i},\beta^l_{R_1,f_i}\otimes\beta^l_{R_2,f_i}\otimes\cdots\otimes\beta^l_{R_N,f_i})
+Delay(f_i)=V(\alpha^u_{f_i},\beta^l_{R_1,f_i}\otimes\beta^l_{R_2,f_i}\otimes\cdots\otimes\beta^l_{R_N,f_i})
 \end{equation}
 where $H(\cdot,\cdot)$ and $V(\cdot,\cdot)$ mean the maximal vertical and horizontal deviation, respectively.
 
@@ -216,7 +216,7 @@ The Longest Collapsible Sub-Path of flow $f$, denoted by $LCSP(f)$, is the longe
 For the high priority flows, the process of calculating the end-to-end equivalent service curve is also a collapsing process. But, to compute the leftover service curve at some routers, we have to know the arrival curve at these routers. As implied previously, we can leverage the concept of LCSP and compute the arrival curve at the starting point of each LCSP instead of the router-by-router calculation, since all the routers on $LCSP(f)$ can be replaced by a single virtual router providing service curve $<\otimes_{R_i\in LCSP(f)}\beta_{R_i,f}^l,\otimes_{R_i\in LCSP(f)}\beta_{R_i,f}^u>$. For a LCSP with $N$ routers, this method reduces $N-1$ times calculation of arrival curve and leftover service curve, the leftover service curve calculation is greatly simplified, and the accuracy of performance bound is also improved due to the well-known ``Pay-Burst-Only-Once" phenomenon in DNC theory \cite{Boudec2001Network}.
 
 \subsection{End-to-End Latency}
-After obtained the traffic model, router model and flow control model, compute the end-to-end latency is still a non-trivial task. The follow four aspects should be considered carefully: (1) We should always compute the end-to-end latency by collapsing all the LCSP to a single virtual node, as the hop-by-hop computation will lead to a looser bound; (2) In the fixed-priority flit-level preemptive NoC, only the leftover service curve can be used by the low priority flows, thus, our computation must start from higher priority flows to lower priority; (3) Before computing the leftover service curve for lower priority flows, we must ensure that all the higher priority flows has been served, in our algorithm, the label ``Calculated" is used for this purpose; (4) The computed service curve for flow controller can only be applicable for specific flow, and we should compute these curves for each flows. 
+After obtained the traffic model, router model and flow control model, compute the end-to-end latency is still a non-trivial task. The follow four aspects should be considered carefully: (1) We should always compute the end-to-end latency by collapsing all the LCSP to a single virtual node, as the hop-by-hop computation will lead to a looser bound; (2) In the fixed-priority flit-level preemptive NoC, only the leftover service curve can be used by the low priority flows, thus, our computation must start from higher priority flows to lower priority; (3) Before computing the leftover service curve for lower priority flows, we must ensure that all the higher priority flows has been served, in our algorithm, the label ``Calculated" is used for this purpose; (4) The computed service curve for flow controller can only be applicable for specific flow, and we should compute these curves for each flows.
 
 Keeping these four aspects in mind, we propose the performance evaluation algorithm, as shown in Algorithm \ref{alg:equivalentservicecurve}. Here are some explanation about our algorithm: suppose the entire NoC is represented as a directional topology graph $G:\ V\times E$, where $V$ and $E$ represent the set of routers and links, respectively. For each link $e_{i,j}\in E$ represent there is a physical channel between router $R_i$ and router $R_j$, $e_{i,j}\neq e_{j,i}$ since the topology graph is a directional graph. The set of all the flows in the network is denoted as $\mathcal{F}$, and each flow $f_i\in\mathcal{F}$ has a fixed-priority $P_i$. To simplify the description of our algorithm, we assume that $P_i\geq P_j$ holds for $\forall$ $i\geq j$. The path of a flow $f_i$ traversed is denoted as $\mathcal{R}_i$. If there exists interference between flow $f_i$ and $f_j$, $\mathcal{R}_i\wedge\mathcal{R}_j\neq\Phi$. Further, $R_k\in\mathcal{R}_i\wedge\mathcal{R}_j$ indicates that flow $f_i$ and $f_j$ content with each other at router $R_k$. The arrival curve of $f_i$ at router $R_j$ is $<\alpha_{R_j,f_i}^l,\alpha_{R_j,f_i}^u>$, and the leftover service curve of SA stage at router $R_j$ is denoted as $<\beta_{SA,R_j}^{l^\prime},\beta_{SA,R_j}^{u^\prime}>$. For all the router $R_j$ along the path of flow $f_i$, denote by the contention flows with the same priority as $f_i$ as $\Theta_{R_j,f_i}$, and the set with lower priority flow as $\Omega_{R_j,f_i}$.
 \begin{algorithm}
@@ -233,29 +233,32 @@ Keeping these four aspects in mind, we propose the performance evaluation algori
         \FOR {each router $R_j\in \mathcal{R}_{i}$}
             \IF {$\Theta_{R_j,f_i}\neq \emptyset$}
                 \FOR {each flow $f_k\in \Theta_{R_j,f_i}$}
-                    \STATE Compute $<\beta_{SA,R_j,f_k}^{l^\prime},\beta_{SA,R_j,f_k}^{u^\prime}>$;
-                    \STATE Compute $<\beta_{R_j,f_k}^l,\beta_{R_j,f_k}^u>$;
+                    \STATE $\beta_{SA,R_j,f_k}^{l^\prime}=\lfloor\beta_{SA,R_j}^l/N\rfloor$;
+                    \STATE $\beta_{SA,R_j,f_k}^{u^\prime}=\lceil\beta_{SA,R_j}^u/N\rceil$;
                 \ENDFOR
             \ENDIF
             \IF {$\beta_{SA,R_j,f_i}^l=\delta_0(t)$ and $\beta_{SA,R_j,f_i}^u=\delta_0(t)$}
                 \STATE $\beta_{SA,R_j,f_i}^l=\beta_{SA,R_j}^{l^\prime}$;
                 \STATE $\beta_{SA,R_j,f_i}^u=\beta_{SA,R_j}^{u^\prime}$;
-                \STATE Compute $<\beta_{R_j,f_i}^l,\beta_{R_j,f_i}^u>$.
             \ENDIF
+            \STATE $\beta_{R_j,f_i}^l=\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l\otimes\beta_{SA,R_j,f_i}^l\otimes \beta_{ST}^l$;
+            \STATE $\beta_{R_j,f_i}^u=\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u\otimes\beta_{SA,R_j,f_i}^u\otimes \beta_{ST}^u$;
         \ENDFOR
         \FOR {each router $R_j\in\mathcal{R}_i$}
-            \STATE Compute $<\beta_{\tau_j,f_i}^l,\beta_{\tau_j,f_i}^u>$.
+            \STATE $\beta^{l}_{\tau_j,f_i}(t)=\overline{\beta^l_{R_j,f_i}\otimes\delta_T(t)+B}$;
+            \STATE $\beta^{u}_{\tau_j,f_i}(t)=\overline{\beta^u_{R_j,f_i}\otimes\delta_T(t)+B}$;
         \ENDFOR
-        \STATE Label the flow $f_i$ as ``Calculated".
-        \STATE Compute the latency of flow $f_i$ according to Eq.(\ref{delay}).
+        \STATE Label the flow $f_i$ as ``Calculated";
+        \STATE Collapse $LCSP(f_i)$ and update $\Theta_{R_j,\cdot}$, $\Omega_{R_j,\cdot}$ and $\mathcal{R}_{\cdot}$;
+        \STATE Compute $<\alpha^l_{R_j,f_k},\alpha^u_{R_j,f_k}>$ at each router;
+        \STATE $Delay(f_i)=H(\alpha^u_{f_i},\beta^l_{R_1,f_i}\otimes\beta^l_{R_2,f_i}\otimes\cdots\otimes\beta^l_{R_N,f_i})$;
         \FOR {For all the router $R_j$ in $\mathcal{R}_{f_i}$}
             \IF {$\Omega_{R_j,f_i}\neq \emptyset$}
-                \IF {$\forall f_i\in\Theta_{R_j,f_i}$ have label ``Calculated"}
-                    \STATE Collapse all the possible $LCSP(f_i)$;
-                    \STATE Compute the arrival curve $<\alpha^l_{R_j,f_i},\alpha^u_{R_j,f_i}>$;
-                    \STATE Compute the arrival curve $<\alpha^l_{R_j,f_k},\alpha^u_{R_j,f_k}>$ where $f_k\in\Theta_{R_j,f_i}$;
-                    \STATE Compute the aggregative arrival curve at $R_j$ of  flow $f_i$ and flows in $\Theta_{f_i,j}$;
-                    \STATE Compute the leftover service curve $<\beta^{l^\prime}_{R_j,f_i},\beta^{u^\prime}_{R_j,f_i}>$ of router $R_j$ after serving $f_i$ and $\Theta_{R_j,f_i}$.
+                \IF {$\forall f_k\in\Theta_{R_j,f_i}$ have label ``Calculated"}
+                    \STATE $\alpha^l=\alpha^l_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^l_{R_j,f_k}$;
+                    \STATE $\alpha^u=\alpha^u_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^u_{R_j,f_k}$;
+                    \STATE $\beta^{l^\prime}_{SA,R_j}=(\beta^l_{SA,R_j}-\alpha^u)\bar{\otimes}0$;
+                    \STATE $\beta^{u^\prime}_{SA,R_j}=\max\{(\beta^u_{R_j}-\alpha^l)\bar{\oslash}0,0\}$;
                 \ENDIF
             \ENDIF
         \ENDFOR
