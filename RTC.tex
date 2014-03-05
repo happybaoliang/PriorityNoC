@@ -45,7 +45,7 @@ To meet the rigorous Quality-of-Service (QoS) requirement, various special hardw
 
 A reliable worst-case analysis is crucial for the application of wormhole-switched NoC, because an over optimistic estimation will lead to a wrong implementation, while an over pessimistic estimation will make the utilization of on-chip resource very low. The conventional simulation based method might not be competent for the worst-case analysis, this is because the worst-case scenarios are hard to be captured by simulation. As an alternative, the mathematical approach can establish the relationship between performance metrics and design parameters in a very short time, and giving the worst-case performance immediately. For the worst-case analysis of fixed-priority wormhole-switched on-chip networks, Flow-Level Analysis (FLA) \cite{Shi:2008:RCA:1397757.1397996}, Link-Level Analysis (LLA) \cite{73}\cite{189} and Deterministic Network Calculus (DNC) \cite{Qian489900} based analysis are widely used. Both FLA and LLA have their roots in the classic scheduling theory, which assume that, the traffic flows are strictly periodic, and the packet transmission delay is less than the packet inter-arrival time. In addition, they both assume that, the input buffer of wormhole-switched NoC is sufficient large, so that the back-pressure caused by flow control can be ignored. Deterministic network calculus overcomes these limitations by allowing the packet arrival at arbitrary pattern and arbitrary inter-arrival time. By applying the advanced sub-additive closure operator in dioid algebra, the large buffer assumption can also be eliminated.
 
-However, we found that, the DNC based latency bound can be further improved, this is because, the DNC based method \cite{Qian489900} ignored the maximal service capacity of on-chip routers, which has significant impact on the output arrival curve of traffic flow served by a specific router. The over estimated output arrival curve will further leads to a looser service curve left for other flows, and the over pessimistic service curve will finally leads to a looser performance bound for the low-priority flows. We will further demonstrate this phenomenon in Section \ref{experiments}. To overcome this shortcoming of DNC, we adopt the real-time calculus (RTC) to improve these delay bound in this paper. Compared with DNC, the RTC use the maximal service curve and minimal arrival curve to limit the output arrival curve and left service curve, which usually leads to a tighter performance bound. The advantages of RTC will be also demonstrated in section \ref{experiments}. In this paper, we build an end-to-end performance model for the wormhole-switched, credit-based flow controlled on-chip networks with RTC. Our results can be used to determine the worst-case latency and backlog bound of each flow. If all the packets of one flow can be transmitted within their deadlines, the flow is schedulable. The main contribution of this paper is two folded: (1) we propose an end-to-end performance analysis algorithm, compared with the existing methods, e.g. LLA \cite{73}\cite{189} and DNC \cite{Qian489900}, it can gives better performance bound. The output of this algorithm can be used for the IP core mapping, task mapping, routing selection, or NoC parameters configuration; (2) we propose an RTC based buffer optimization algorithm for the application-specific NoC the reduce the buffer size under strict deadline constraint.
+However, we found that, the DNC based latency bound can be further improved, this is because, the DNC based method \cite{Qian489900} ignored the maximal service capacity of on-chip routers, which has significant impact on the output arrival curve of traffic flow served by a specific router. The over estimated output arrival curve will further leads to a looser service curve left for other flows, and the over pessimistic service curve will finally leads to a looser performance bound for the low-priority flows. We will further demonstrate this phenomenon in Section \ref{experiments}. To overcome this shortcoming of DNC, we adopt the real-time calculus (RTC) to improve these delay bound in this paper. Compared with DNC, the RTC use the maximal service curve and minimal arrival curve to limit the output arrival curve and left service curve, which usually leads to a tighter performance bound. The advantages of RTC will be also demonstrated in section \ref{experiments}. In this paper, we build an end-to-end performance model for the wormhole-switched, credit-based flow controlled on-chip networks with RTC. Our results can be used to determine the worst-case latency and backlog bound of each flow. If all the packets of one flow can be transmitted within their deadlines, the flow is schedulable. The main contribution of this paper is two folded: (1) We propose an end-to-end performance analysis algorithm, compared with the existing methods, e.g. LLA \cite{73}\cite{189} and DNC \cite{Qian489900}, it can gives better performance bound. The output of this algorithm can be used for the IP core mapping, task mapping, routing selection, or NoC parameters configuration; (2) We propose an RTC based buffer optimization algorithm for the application-specific NoC the reduce the buffer size under strict deadline constraint.
 
 The rest of this paper is organized as follows: we present the existing real-time communication proposals and its related performance analysis method in Section \ref{related}. In Section \ref{model}, the basic assumptions on wormhole switched on-chip network and RTC theory is introduced. The detailed modeling process is presented in Section \ref{modeling}, and we present the experiment results and comparison with other mathematical methods in Section \ref{experiments}. Finally, we summarize our paper in Section \ref{conclusion}.
 
@@ -77,7 +77,7 @@ $$\alpha^l(t-s)\leq R[s,t)\leq \alpha^u(t-s),\forall s<t$$
 where $\alpha^l(0)=\alpha^u(0)=0$. The RTC arrival curve for $R$ is denoted as $<\alpha^l,\alpha^u>$ for short.
 \end{definition}
 
-From the definition, we find that the upper arrival curve (corresponding to the arrival curve of DNC \cite{Boudec2001Network}) and lower arrival curve are used to characterize the upper and lower bound of arrival event within any interval $\Delta$.
+From the definition, we find that the upper arrival curve (corresponding to the arrival curve of DNC \cite{Boudec2001Network}) and lower arrival curve are used to characterize the upper and lower bound of arrived events within any interval $\Delta$.
 
 \begin{definition}[Real-Time Service Curve]
 Let $S[s,t)$ denote the total number of events that can be processed by the system in the time interval $[s,t)$. The lower bound and upper bound on $S[s,t)$ is called the lower service curve $\beta^l$ and upper service curve $\beta^u$ which satisfy
@@ -121,7 +121,7 @@ In a CMP or SoC system interconnected with NoC, the communication between each p
 \end{figure}
 
 \subsection{Router Model}\label{router}
-While modeling the routers with RTC, we can analyze the data path stage by stage, and find the service curve for each stage. Then, the service curve provided by the router to each flow can be obtained by concatenating all the service curves of these five stages. This is significantly different with the existing DNC based model \cite{Qian2010Analysis,Qian489900}, where they view the entire router as a whole. The advantage of our method is that, it can be easily modified to analyze the non-standard router architecture, by simply letting the traversing time of non-existing stages to be zero. Thus, we first obtain the service curve of all these 5 stages.
+While modeling the routers with RTC, we can analyze the data path stage by stage, and find the service curve for each stage. Then, the service curve provided by the router to each flow can be obtained by concatenating all the service curves of these five stages. This is significantly different with the existing DNC based model \cite{Qian2010Analysis,Qian489900}, where they view the entire router as a whole. The advantage of our method is that, it can be easily modified to analyze the non-standard router architecture, by simply letting the traversing time of non-existing stages to be zero. Thus, we first obtain the service curve of all these 5 stages:
 \begin{figure*}
   \centering
   \subfloat[Service curve of BW, SA and ST stages]{\includegraphics[scale=0.5]{figures/BW_ST_SA.pdf}\label{result1}}\hspace{10pt}
@@ -168,7 +168,7 @@ In this subsection, we try to break the dependence loop caused by credit-based f
 \end{figure*}
 
 \begin{theorem}\label{credit}
-Suppose each router provide an upper service curve $\beta^u$, the virtual channel depth of each router is $B$, and the feedback delay is $T$, then the flow controller provides an equivalent upper service curve $\beta^{u}_\sigma$, where $$\beta^{u}_\sigma(t)=\overline{\beta^u\otimes\delta_T(t)+B}$$
+Suppose each router provide an upper service curve $\beta^u$, the virtual channel depth of each router is $B$, and the feedback delay is $T$, then the flow controller provides an equivalent upper service curve $\beta^{u}_\tau$, where $$\beta^{u}_\tau(t)=\overline{\beta^u\otimes\delta_T(t)+B}$$
 and $\bar{f}$ is the sub-additive closure of $f$, i.e. $\bar{f}=\inf_{n\geq 0}\{f^{(n)}\}$ and $f^{(0)}=\delta_0(t)$\footnote{$\delta_T(t)=+\infty$ for $\forall t>T$, and 0 otherwise.}.
 \end{theorem}
 \begin{IEEEproof}
@@ -200,7 +200,7 @@ An intuitive solution is that calculating the leftover service curve router by r
 \begin{figure}
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[scale=0.6]{figures/collapse.pdf}\\
+  \includegraphics[scale=0.8]{figures/collapse.pdf}\\
   \caption{Longest collapsible sub-path of $f_2$. Since the flow control between $R_{13}$ and $R_9$ can be ignored, they are replaced by a single virtual router $R_{13,9}$.}\label{collapse}
 \end{figure}
 
@@ -248,14 +248,13 @@ Keeping these four aspects in mind, we propose the performance evaluation algori
         \ENDFOR
         \STATE Label the flow $f_i$ as ``Calculated".
         \STATE Compute the latency of flow $f_i$ according to Eq.(\ref{delay}).
-        \STATE Compute the backlog of flow $f_i$ according to Eq.(\ref{backlog}).
         \FOR {For all the router $R_j$ in $\mathcal{R}_{f_i}$}
             \IF {$\Omega_{R_j,f_i}\neq \emptyset$}
                 \IF {$\forall f_i\in\Theta_{R_j,f_i}$ have label ``Calculated"}
-                    \STATE Collapse all the possible $LCSP(f_i)$.
+                    \STATE Collapse all the possible $LCSP(f_i)$;
                     \STATE Compute the arrival curve $<\alpha^l_{R_j,f_i},\alpha^u_{R_j,f_i}>$;
-                    \STATE Compute the arrival curve $<\alpha^l_{R_j,f_k},\alpha^u_{R_j,f_k}>$ where $f_k\in\Theta_{R_j,f_i}$.
-                    \STATE Compute the aggregative arrival curve at $R_j$ of  flow $f_i$ and flows in $\Theta_{f_i,j}$.
+                    \STATE Compute the arrival curve $<\alpha^l_{R_j,f_k},\alpha^u_{R_j,f_k}>$ where $f_k\in\Theta_{R_j,f_i}$;
+                    \STATE Compute the aggregative arrival curve at $R_j$ of  flow $f_i$ and flows in $\Theta_{f_i,j}$;
                     \STATE Compute the leftover service curve $<\beta^{l^\prime}_{R_j,f_i},\beta^{u^\prime}_{R_j,f_i}>$ of router $R_j$ after serving $f_i$ and $\Theta_{R_j,f_i}$.
                 \ENDIF
             \ENDIF
@@ -350,7 +349,7 @@ As has shown in previous subsections, the DNC based method \cite{Qian489900} can
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[scale=0.5]{figures/buffer.pdf}\\
-  \caption{End-to-end flows with different buffer size.}\label{buffer}
+  \caption{End-to-end flows with different buffer size}\label{buffer}
 \end{figure*}
 
 \section{Conclusion}\label{conclusion}
