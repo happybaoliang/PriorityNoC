@@ -218,7 +218,7 @@ For the high priority flows, the process of calculating the end-to-end equivalen
 \subsection{End-to-End Latency}
 After obtained the traffic model, router model and flow control model, compute the end-to-end latency is still a non-trivial task. The follow four aspects should be considered carefully: (1) We should always compute the end-to-end latency by collapsing all the CSP to a single virtual node, as the hop-by-hop computation will lead to a looser bound; (2) In the fixed-priority flit-level preemptive NoC, only the leftover service curve can be used by the low priority flows, thus, our computation must start from higher priority flows to lower priority; (3) Before computing the leftover service curve for lower priority flows, we must ensure that all the higher priority flows has been served; (4) The computed service curve for flow controller can only be applicable for specific flow, and we should compute these curves for each flows.
 
-Keeping these four aspects in mind, we propose the performance evaluation algorithm, as shown in Algorithm \ref{alg:equivalentservicecurve}. Here are some explanation about our algorithm: suppose the entire NoC is represented as a directional topology graph $G:\ V\times E$, where $V$ and $E$ represent the set of routers and links, respectively. For each link $e_{i,j}\in E$ represent there is a physical channel between router $R_i$ and router $R_j$, $e_{i,j}\neq e_{j,i}$ since the topology graph is a directional graph. The set of all the flows in the network is denoted as $\mathcal{F}$, and each flow $f_i\in\mathcal{F}$ has a fixed-priority $P_i$. To simplify the description of our algorithm, we assume that $P_i\geq P_j$ holds for $\forall$ $i\geq j$. The set of routers a flow $f_i$ traversed is denoted as $\mathcal{R}_i$, and the set of links a flow $f_i$ traversed is denoted as $\Gamma_i$. If there exists interference between flow $f_i$ and $f_j$, then $\Gamma_i\wedge\Gamma_j\neq\Phi$ and the set of contention routers is $\mathcal{R}_i\wedge\mathcal{R}_j$. The arrival curve of $f_i$ at router $R_j$ is $<\alpha_{R_j,f_i}^l,\alpha_{R_j,f_i}^u>$, and the leftover service curve of SA stage at router $R_j$ is denoted as $<\beta_{SA,R_j}^{l^\prime},\beta_{SA,R_j}^{u^\prime}>$. For all the router $R_j$ along the path of flow $f_i$, denote by the contention flows with the same priority as $f_i$ as $\Theta_{R_j,f_i}$, and the set with lower priority flow as $\Omega_{R_j,f_i}$.
+Keeping these four aspects in mind, we propose the performance evaluation algorithm, as shown in Algorithm \ref{alg:equivalentservicecurve}. Here are some explanation about our algorithm: suppose the entire NoC is represented as a directional topology graph $G:\ V\times E$, where $V$ and $E$ represent the set of routers and links, respectively. For each link $e_{i,j}\in E$ represent there is a physical channel between router $R_i$ and router $R_j$, $e_{i,j}\neq e_{j,i}$ since the topology graph is a directional graph. The set of all the flows in the network is denoted as $\mathcal{F}$, and each flow $f_i\in\mathcal{F}$ has a fixed-priority $P_i$. To simplify the description of our algorithm, we assume that $P_i\geq P_j$ holds for $\forall$ $i\geq j$. The set of routers a flow $f_i$ traversed is denoted as $\mathcal{R}_i$, and the set of links a flow $f_i$ traversed is denoted as $\Gamma_i$. If there exists interference between flow $f_i$ and $f_j$, then $\Gamma_i\wedge\Gamma_j\neq\Phi$ and the set of contention routers is $\mathcal{R}_i\wedge\mathcal{R}_j$. The arrival curve of $f_i$ at router $R_j$ is $<\alpha_{R_j,f_i}^l,\alpha_{R_j,f_i}^u>$, and the leftover service curve of SA stage at router $R_j$ is denoted as $<\beta_{SA,R_j}^{l^\prime},\beta_{SA,R_j}^{u^\prime}>$ (initially, $\beta_{SA,R_j}^{l^\prime}=\beta_{SA,R_j}^{l}$ and $\beta_{SA,R_j}^{u^\prime}=\beta_{SA,R_j}^{u}$). For all the router $R_j$ along the path of flow $f_i$, denote by the contention flows with the same priority as $f_i$ as $\Theta_{R_j,f_i}$, the set with lower priority flow as $\Omega_{R_j,f_i}$, and the buffer size as $B_{R_j,f_i}$. In addition, let $N_{R_j,f_i}$ and $N_{f_i}$ be the number of flows in $\Theta_{R_j,f_i}$ and the number of routers that $f_i$ traversed.
 \begin{algorithm}
 \caption{Calculating the End-to-End Latency}
 \label{alg:equivalentservicecurve}
@@ -232,8 +232,8 @@ Keeping these four aspects in mind, we propose the performance evaluation algori
         \FOR {each router $R_j\in \mathcal{R}_{i}$}
             \IF {$\Theta_{R_j,f_i}\neq \emptyset$}
                 \FOR {each flow $f_k\in \Theta_{R_j,f_i}$}
-                    \STATE $\beta_{SA,R_j,f_k}^{l^\prime}=\lfloor\beta_{SA,R_j}^l/N\rfloor$;
-                    \STATE $\beta_{SA,R_j,f_k}^{u^\prime}=\lceil\beta_{SA,R_j}^u/N\rceil$;
+                    \STATE $\beta_{SA,R_j,f_k}^{l^\prime}=\lfloor\beta_{SA,R_j}^l/N_{R_j,f_i}\rfloor$;
+                    \STATE $\beta_{SA,R_j,f_k}^{u^\prime}=\lceil\beta_{SA,R_j}^u/N_{R_j,f_i}\rceil$;
                 \ENDFOR
             \ENDIF
             \IF {$\beta_{SA,R_j,f_i}^l=\delta_0(t)$ and $\beta_{SA,R_j,f_i}^u=\delta_0(t)$}
@@ -244,11 +244,11 @@ Keeping these four aspects in mind, we propose the performance evaluation algori
         \ENDFOR
         \STATE $\beta_{\tau}^l=\delta_0(t)$; $\beta_{\tau}^u=\delta_0(t)$;
         \FOR {each router $R_j\in\mathcal{R}_i$ from destination to source}
-            \STATE $\beta^{l}_{\tau_j,f_i}(t)=\beta_{\tau}^l$; $\beta_{\tau}^l=\overline{\beta^l_{R_j,f_i}\otimes\beta^{l}_{\tau}\otimes\delta_T(t)+B}$;
-            \STATE $\beta^{u}_{\tau_j,f_i}(t)=\beta_{\tau}^u$; $\beta_{\tau}^u=\overline{\beta^u_{R_j,f_i}\otimes\beta^{u}_{\tau}\otimes\delta_T(t)+B}$;
+            \STATE $\beta^{l}_{\tau_j,f_i}(t)=\beta_{\tau}^l$; $\beta_{\tau}^l=\overline{\beta^l_{R_j,f_i}\otimes\beta^{l}_{\tau}\otimes\delta_T(t)+B_{R_j,f_i}}$;
+            \STATE $\beta^{u}_{\tau_j,f_i}(t)=\beta_{\tau}^u$; $\beta_{\tau}^u=\overline{\beta^u_{R_j,f_i}\otimes\beta^{u}_{\tau}\otimes\delta_T(t)+B_{R_j,f_i}}$;
         \ENDFOR
         \STATE Collapse $CSP(f_i)$ and update $\Theta_{R_j,\cdot}$, $\Omega_{R_j,\cdot}$ and $\mathcal{R}_{\cdot}$;
-        \STATE $Delay(f_i)=H(\alpha^u_{f_i},\beta^l_{R_1,f_i}\otimes\beta^l_{R_2,f_i}\otimes\cdots\otimes\beta^l_{R_N,f_i})$;
+        \STATE $Delay(f_i)=H(\alpha^u_{f_i},\beta^l_{R_1,f_i}\otimes\beta^l_{R_2,f_i}\otimes\cdots\otimes\beta^l_{R_{N_{f_i}},f_i})$;
         \STATE $\beta_{f_i}^l=\delta_0(t)$; $\beta_{f_i}^u=\delta_0(t)$;
         \FOR {For all the router $R_j$ in $\mathcal{R}_{f_i}$}
             \STATE $\beta^l=\beta^l_{f_i}\otimes\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l$;
@@ -258,11 +258,11 @@ Keeping these four aspects in mind, we propose the performance evaluation algori
             \STATE $\beta_{f_i}^l=\beta_{f_i}^l\otimes\beta_{R_j,f_i}^l$; $\beta_{f_i}^u=\beta_{f_i}^u\otimes\beta_{R_j,f_i}^u$;
             \IF {$\Omega_{R_j,f_i}\neq \emptyset$}
                 \IF {delay of $\forall f_k\in\Theta_{R_j,f_i}$ has been calculated}
-                    \STATE $\alpha^l=\alpha^l_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^l_{R_j,f_k}$;
-                    \STATE $\alpha^u=\alpha^u_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^u_{R_j,f_k}$;
-                    \STATE $\beta^{l^\prime}_{SA,R_j}=(\beta^l_{SA,R_j}-\alpha^u)\bar{\otimes}0$;
-                    \STATE $\beta^{u^\prime}_{SA,R_j}=\max\{(\beta^u_{R_j}-\alpha^l)\bar{\oslash}0,0\}$;
+                    \STATE $\alpha^l_{R_j,f_i}=\alpha^l_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^l_{R_j,f_k}$;
+                    \STATE $\alpha^u_{R_j,f_i}=\alpha^u_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^u_{R_j,f_k}$;
                 \ENDIF
+                \STATE $\beta^{l^\prime}_{SA,R_j}=(\beta^l_{SA,R_j}-\alpha^u_{R_j,f_i})\bar{\otimes}0$;
+                \STATE $\beta^{u^\prime}_{SA,R_j}=\max\{(\beta^u_{R_j}-\alpha^l_{R_j,f_i})\bar{\oslash}0,0\}$;
             \ENDIF
         \ENDFOR
     \ENDFOR
@@ -308,11 +308,11 @@ The priority-aware NoC requires the same amount of VC as the priorities, a prior
             \STATE $\beta_{f_i}^l=\beta_{f_i}^l\otimes\beta_{R_j,f_i}^l$; $\beta_{f_i}^u=\beta_{f_i}^u\otimes\beta_{R_j,f_i}^u$;
             \IF {$\Omega_{R_j,f_i}\neq \emptyset$}
                 \IF {delay of $\forall f_k\in\Theta_{R_j,f_i}$ has been calculated}
-                    \STATE $\alpha^l=\alpha^l_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^l_{R_j,f_k}$;
-                    \STATE $\alpha^u=\alpha^u_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^u_{R_j,f_k}$;
-                    \STATE $\beta^{l^\prime}_{SA,R_j}=(\beta^l_{SA,R_j}-\alpha^u)\bar{\otimes}0$;
-                    \STATE $\beta^{u^\prime}_{SA,R_j}=\max\{(\beta^u_{R_j}-\alpha^l)\bar{\oslash}0,0\}$;
+                    \STATE $\alpha^l_{R_j,f_i}=\alpha^l_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^l_{R_j,f_k}$;
+                    \STATE $\alpha^u_{R_j,f_i}=\alpha^u_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^u_{R_j,f_k}$;
                 \ENDIF
+                \STATE $\beta^{l^\prime}_{SA,R_j}=(\beta^l_{SA,R_j}-\alpha^u_{R_j,f_i})\bar{\otimes}0$;
+                \STATE $\beta^{u^\prime}_{SA,R_j}=\max\{(\beta^u_{R_j}-\alpha^l_{R_j,f_i})\bar{\oslash}0,0\}$;
             \ENDIF
         \ENDFOR
     \ENDFOR
