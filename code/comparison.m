@@ -3,7 +3,7 @@ handle=bar(data)
 set(gca,'xTickLabel',{'L=1','L=4','L=8','L=12','L=16'},'FontSize',15)
 xlabel('Packet Length','FontSize',15)
 ylabel('End-to-End Latency (ns)','FontSize',15)
-legend('NC','RTC','SIM')
+legend('DNC','RTC','Simulation')
 
 ncy=get(handle(1),'YData')
 ncx=get(handle(1),'XData')

@@ -10,9 +10,9 @@ data=[
     ];
 
 handle=bar(data)
-legend('nc-f1','rtc-f1','nc-f2','rtc-f2','nc-f3','rtc-f3','nc-f4','rtc-f4');
+legend('DNC-f1','RTC-f1','DNC-f2','RTC-f2','DNC-f3','RTC-f3','DNC-f4','RTC-f4');
 set(gca,'xTickLabel',{'B=4','B=5','B=6','B=7','B=8','B=9','B=10'},'FontSize',15)
-xlabel('VC Depth','FontSize',15)
+xlabel('Buffer Size','FontSize',15)
 ylabel('End-to-End Latency (ns)','FontSize',15)
 
 %legend('boxoff')
