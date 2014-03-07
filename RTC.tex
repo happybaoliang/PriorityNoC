@@ -325,12 +325,11 @@ The path of flow $f_i$ is started from source NI (denoted by $start_i$) followin
 We also need to mention that, FLBA and LLBA proposed in \cite{189} assume the packet injection period is less than the end-to-end latency, and the backlog bound obtained in \cite{189} is the minimum buffer size that does not trigger the flow control, i.e. $B_{R_j,f_i}$ computed in Line 12 of Algorithm \ref{alg:bufopt}. Our buffer optimization algorithm can also be used to reduce the router area and power consumption. But, there is significant difference between \cite{6560630} and our method. In \cite{6560630}, a DNC based latency model was proposed and energy optimization based on this method was carried out with Dynamic Voltage and Frequency Scaling (DVFS), they minimize the energy consumption by adjusting the voltage and frequency for the fixed configuration and deadline. In contrast, our method try to optimize the buffer size under the deadline constraint, and the buffer reduction directly leads to the area and power reduction.
 
 \section{Experiments}\label{experiments}
-\subsection{Simulation Setup}
-In this section, we will utilize the Heterogenous-Networks-on-Chip (HNoCs) \cite{6404157}, a modular open source NoC simulator, to verify our analytical model. To achieve this goal, we modify the switch allocator to support fixed-priority scheduling, and collect the maximal end-to-end packet delay at the destination IP core. We configure the clock cycle to be $2ns$, and the topology is $4\times 4$ mesh. Suppose all the flows $f_i,(i=1,2,3,4)$ in the network are periodical sources, and the period is $P_i$. Denote by the packet length of flow $f_i$ is $L_i$ (in flits), which means that, packets from the same flow has the same length, but packets of different flows can be of different lengths. We can obtain the arrival curve according to the method introduced in subsection \ref{traffic}.
+In this section, we first evaluate the tightness of our latency model compared with other analytical method. There are lots of latency analysis models for wormhole-switched real-time communication, e.g. contention tree model \cite{LuJS05}, FLA model \cite{Shi:2008:RCA:1397757.1397996}, LLA model \cite{73}, DNC model \cite{Qian489900}. In this section, we only compare our model with LLA and DNC, as they outperform all the other existing approach. Then, we consider the buffer optimization algorithm by comparing with other analytical method. There are also lots of backlog analysis models, e.g. scheduling analysis model \cite{Manolache:2006:BSO:1131481.1131683} and LLBA model \cite{189}. In addition, the DNC model proposed in \cite{Qian489900} can also be used to analyze the backlog bound. 
 
-\subsection{Comparison with Other Methods and Simulation}
-There are lots of latency analysis models for wormhole-switched real-time communication, e.g. contention tree model \cite{LuJS05}, FLA model \cite{Shi:2008:RCA:1397757.1397996}, LLA model \cite{73}, DNC model \cite{Qian489900}, there are also lots of backlog analysis models, e.g. scheduling analysis model \cite{Manolache:2006:BSO:1131481.1131683} and LLA model \cite{189}, in addition, the DNC model proposed in \cite{Qian489900} can also be used to analyze the backlog bound. In this section, we only compare our model with LLA and DNC, as they outperform all the other existing approach.
+The correctness of our latency model and buffer optimization algorithm is verified by simulation. We will utilize the Heterogenous-Networks-on-Chip (HNoCs) \cite{6404157}, a modular open source NoC simulator, to verify our analytical model. To achieve this goal, we modify the switch allocator to support fixed-priority scheduling, and collect the maximal end-to-end packet delay at the destination IP core. The network considered in this section is a $4\times 4$ mesh, with four periodical traffic flows $f_i,(i=1,2,3,4)$ in the network. Denote by the packet length of flow $f_i$ is $L_i$ (in flits) and the period is $P_i$. Packets from the same flow has the same length, but packets of different flows can be of different lengths. We can obtain the arrival curve according to the method introduced in subsection \ref{traffic}.
 
+\subsection{Latency Comparison with Other Methods}
 \subsubsection{Comparison with Link Level Analysis}
 The original LLA approach assumes each flit in a packet traverse the router with a fixed latency of 1 cycle, and can only be applicable the scenario that the deadline of each packet is less than its injection period, which limits its application. To compare with our method, we should specialize the standard 5 stages wormhole router to a single cycle router, this is achieved by letting the latency of BW, RC, VA and ST stage be zero. Thus, the service curve of entire router is the same as the service curve provided by the SA stage, which is $<\beta_{SA,R_i}^l,\beta_{SA,R_i}^u>$. We also have to suppose the VC buffers are large enough and the credit feedback delay $\sigma=0$, so that we can apply LLA for the latency analysis. For this scenario, let the packet length be 1 flit, we calculate end-to-end latency for each packet with our method and LLA under different injection period. There are two flows sharing the same priority, i.e. $f_1$ and $f_4$. While analyzing the latency of $f_1$, we can treat $f_4$ as a flow with higher priority than $f_1$, and vice versus. the calculation result is shown in Table \ref{LLAvsRTC}. The author can verify these results by hand. We also need to mention that, the RTC result is obtained by considering the $CSP(f_2)$ (i.e. $R_{13}$ and $R_{9}$). If this is not take into consideration, then, the analytical result for $f_1$, $f_2$, $f_3$ and $f_4$ are $5,6,7,5$, respectively.
 \begin{table}[htbp]
@@ -338,21 +337,21 @@ The original LLA approach assumes each flit in a packet traverse the router with
 \caption{\label{LLAvsRTC}Delay comparison with link level analysis}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\multirow{2}{*}{Injection Rate}  & \multicolumn{4}{|c|}{Link Level Analysis} & \multicolumn{4}{|c|}{Real Time Calculus} \\
+\multirow{2}{*}{Injection Rate (flits/cycle)}  & \multicolumn{4}{|c|}{Link Level Analysis} & \multicolumn{4}{|c|}{Real Time Calculus} \\
 \cline{2-9}
 & f1 & f2 & f3 & f4 & f1 & f2 & f3 & f4\\
 \hline\hline
-2 cycle & \multicolumn{4}{|c|}{$\infty$} & 5 & 8 & 9 & 5\\
+1/2 & \multicolumn{4}{|c|}{$\infty$} & 5 & 8 & 9 & 5\\
 \hline
-3 cycle & \multicolumn{4}{|c|}{$\infty$} & 5 & 7 & 8 & 5\\
+1/3 & \multicolumn{4}{|c|}{$\infty$} & 5 & 7 & 8 & 5\\
 \hline
-4 cycle & \multicolumn{4}{|c|}{$\infty$} & 5 & 6 & 6 & 5\\
+1/4 & \multicolumn{4}{|c|}{$\infty$} & 5 & 6 & 6 & 5\\
 \hline
-5 cycle & \multicolumn{4}{|c|}{$\infty$} & 5 & 6 & 6 & 5\\
+1/5 & \multicolumn{4}{|c|}{$\infty$} & 5 & 6 & 6 & 5\\
 \hline
-6 cycle & 5 & 6 & 6 & 5 & 5 & 6 & 6 & 5\\
+1/6 & 5 & 6 & 6 & 5 & 5 & 6 & 6 & 5\\
 \hline
-7 cycle & 5 & 6 & 6 & 5 & 5 & 6 & 6 & 5\\
+1/7 & 5 & 6 & 6 & 5 & 5 & 6 & 6 & 5\\
 \hline
 \end{tabular}
 \end{table}
@@ -374,7 +373,11 @@ Next, we explain the reason why our method outperform the DNC based method propo
   \caption{Comparison of service curve computed with real-time calculus and network calculus}\label{loose}
 \end{figure}
 
-\subsubsection{Buffer Optimization Comparison}
+\subsection{Buffer Optimization Comparison}
+\subsubsection{Comparison with Link-Level Buffer-space Analysis}
+
+
+\subsubsection{Comparison with Network Calculus}
 As has shown in previous subsections, the DNC based method \cite{Qian489900} can handle some circumstances that FLA and LLA can not be applied. This motivate us to optimize the buffer size of NoC with our method. Let the flit injection rate be $0.1$ flit/cycle, packet length $L=16$ flits and change the VC buffer depth from 4 flits to 10 flits, we compare the theoretical bound computed with DNC and our method, as shown in Fig. \ref{buffer}. It clear that, our method outperform the DNC based method, because it gives much tight bound for both $f_2$ and $f_3$. Further, if we set the deadline of $f_2$ and $f_3$ to 150ns, with our method, we can found that $B=8$ flits is sufficient enough to guarantee the delay bound. While the DNC based estimation is larger than $10$ flits. We also observed from Fig. \ref{buffer} that, the high priority flows (i.e. $f_1$ and $f_4$) are very insensitive to the buffer depths, which motivate us to allocate small buffers for these flows to reduce the area and power cost. Link-level analysis was extended in \cite{189} to finite buffer size scenario. But, we need to mention that, the LLA approach can not be applied to optimize the buffer size, this is because the network latency is larger than the injection period for this configuration. We also observed that, for the priority-aware NoC, the lower priorities, the higher blocking ratios, thus leading to a larger buffer requirement.
 \begin{figure*}
   \centering
