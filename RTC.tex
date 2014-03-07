@@ -379,17 +379,17 @@ Next, we explain the reason why our method outperform the DNC based method propo
 \begin{table}[htbp]
 \centering
 \caption{\label{LLBAvsRTC}buffer requirement comparison}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-\diagbox{flow}{method}  & LLBA & $B_{R_j,f_i}=\max\{B^l,B^u\}$ & Algorithm 2 \\
+\diagbox{flow}{method}  & LLBA (without self-blocking) & LLBA (with self-blocking) & $B_{R_j,f_i}=\max\{B^l,B^u\}$ & Algorithm 2 \\
 \hline
-$f_1$ & 0 & 0 & 0\\
+$f_1$ & 0 & 0 & 0 & 0\\
 \hline
-$f_2$ & 0 & 0 & 0\\
+$f_2$ & 0 & 0 & 0 & 0\\
 \hline
-$f_3$ & 0 & 0 & 0\\
+$f_3$ & 0 & 0 & 0 & 0\\
 \hline
-$f_4$ & 0 & 0 & 0\\
+$f_4$ & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
 \end{table}
