@@ -294,10 +294,10 @@ The priority-aware NoC requires the same amount of VC as the priorities, to redu
         \ENDFOR
         \STATE $curnode=Pre(end_i)$;
         \WHILE {$Pre(curnode)\neq null$}
-            \STATE $\beta_{f_i}^l=\underset{R_{j}\in\mathcal{R}_i}{\otimes}(\beta^l_{R_j,f_i}\otimes\overline{\beta^l_{R_j,f_i}\otimes\delta_T+B_{R_j,f_i}})$;
+            \STATE $\beta_{f_i}^l=\underset{R_{j}\in\mathcal{R}_i}{\otimes}(\beta^l_{R_j,f_i}\otimes\overline{\beta^l_{R_j,f_i}\otimes\delta_\sigma+B_{R_j,f_i}})$;
             \WHILE {$H(\alpha_{f_i}^u,\beta_{f_i}^l)<D_i$}
                 \STATE $B_{curnode,f_i}=B_{curnode,f_i}-1$;
-                \STATE $\beta_{f_i}^l=\underset{R_{j}\in\mathcal{R}_i}{\otimes}(\beta^l_{R_j,f_i}\otimes\overline{\beta^l_{R_j,f_i}\otimes\delta_T+B_{R_j,f_i}})$;
+                \STATE $\beta_{f_i}^l=\underset{R_{j}\in\mathcal{R}_i}{\otimes}(\beta^l_{R_j,f_i}\otimes\overline{\beta^l_{R_j,f_i}\otimes\delta_\sigma+B_{R_j,f_i}})$;
             \ENDWHILE
             \STATE $curnode=Pre(curnode)$;
         \ENDWHILE
@@ -326,7 +326,7 @@ The path of flow $f_i$ is started from source NI (denoted by $start_i$) followin
 We also need to mention that, FLBA and LLBA proposed in \cite{189} assume the packet injection period is less than the end-to-end latency, and the backlog bound obtained in \cite{189} is the minimum buffer size that does not trigger the flow control, i.e. $B_{R_j,f_i}$ computed in Line 12 of Algorithm \ref{alg:bufopt}. Our buffer optimization algorithm can also be used to reduce the router area and power consumption. But, there is significant difference between \cite{6560630} and our method. In \cite{6560630}, a DNC based latency model was proposed and energy optimization based on this method was carried out with Dynamic Voltage and Frequency Scaling (DVFS), they minimize the energy consumption by adjusting the voltage and frequency for the fixed configuration and deadline. In contrast, our method try to optimize the buffer size under the deadline constraint, and the buffer reduction directly leads to the area and power reduction.
 
 \section{Experiments}\label{experiments}
-In this section, we first evaluate the tightness of our latency model compared with other analytical method. There are lots of latency analysis models for wormhole-switched real-time communication, e.g. contention tree model \cite{LuJS05}, FLA model \cite{Shi:2008:RCA:1397757.1397996}, LLA model \cite{73}, DNC model \cite{Qian489900}. In this section, we only compare our model with LLA and DNC, as they outperform all the other existing approach. Then, we consider the buffer optimization algorithm by comparing with other analytical method. There are also lots of backlog analysis models, e.g. scheduling analysis model \cite{Manolache:2006:BSO:1131481.1131683} and LLBA model \cite{189}. In addition, the DNC model proposed in \cite{Qian489900} can also be used to analyze the backlog bound. 
+In this section, we first evaluate the tightness of our latency model compared with other analytical method. There are lots of latency analysis models for wormhole-switched real-time communication, e.g. contention tree model \cite{LuJS05}, FLA model \cite{Shi:2008:RCA:1397757.1397996}, LLA model \cite{73}, DNC model \cite{Qian489900}. In this section, we only compare our model with LLA and DNC, as they outperform all the other existing approach. Then, we consider the buffer optimization algorithm by comparing with other analytical method. There are also lots of backlog analysis models, e.g. scheduling analysis model \cite{Manolache:2006:BSO:1131481.1131683} and LLBA model \cite{189}. In addition, the DNC model proposed in \cite{Qian489900} can also be used to analyze the backlog bound.
 
 The correctness of our latency model and buffer optimization algorithm is verified by simulation. We will utilize the Heterogenous-Networks-on-Chip (HNoCs) \cite{6404157}, a modular open source NoC simulator, to verify our analytical model. To achieve this goal, we modify the switch allocator to support fixed-priority scheduling, and collect the maximal end-to-end packet delay at the destination IP core. The network considered in this section is a $4\times 4$ mesh, with four periodical traffic flows $f_i,(i=1,2,3,4)$ in the network. Denote by the packet length of flow $f_i$ is $L_i$ (in flits) and the period is $P_i$. Packets from the same flow has the same length, but packets of different flows can be of different lengths. We can obtain the arrival curve according to the method introduced in subsection \ref{traffic}.
 
@@ -375,6 +375,7 @@ Next, we explain the reason why our method outperform the DNC based method propo
 \end{figure}
 
 \subsection{Buffer Optimization Comparison}
+
 \subsubsection{Comparison with Link-Level Buffer-space Analysis}
 \begin{table}[htbp]
 \centering
