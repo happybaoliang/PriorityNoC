@@ -1,30 +1,29 @@
-times=5;
-
-f1_buf_r10=0;
-f1_buf_r14=0;
-f1_buf_r15=0;
-f1_buf_r16=0;
-
-f2_buf_r15=0;
-f2_buf_r14=0;
-f2_buf_r13=0;
-f2_buf_r9=0;
-f2_buf_r5=0;
-
-f3_buf_r1=0;
-f3_buf_r5=0;
-f3_buf_r9=0;
-f3_buf_r13=0;
-
-f4_buf_r8=0;
-f4_buf_r7=0;
-f4_buf_r6=0;
-f4_buf_r10=0;
+times=4;
+length=4;
+period=20;
+Deadline=[27 27 27 27];
 
 
-length=1;
-period=length*6;
-Deadline=[10 10 10 10];
+f1_buf_r10=1;
+f1_buf_r14=1;
+f1_buf_r15=1;
+f1_buf_r16=1;
+
+f2_buf_r15=1;
+f2_buf_r14=1;
+f2_buf_r13=1;
+f2_buf_r9=1;
+f2_buf_r5=1;
+
+f3_buf_r1=1;
+f3_buf_r5=1;
+f3_buf_r9=1;
+f3_buf_r13=1;
+
+f4_buf_r8=1;
+f4_buf_r7=1;
+f4_buf_r6=1;
+f4_buf_r10=1;
 
 scu=rtcpjdu(1,0,0);
 scl=rtcpjdl(1,0,0);
@@ -50,7 +49,7 @@ end
 tauur6f4=rtcmatminclos(scu,f4_buf_r6,times);
 while ~rtceq(rtcminconv(scu,tauur6f4(1)),scu)
     f4_buf_r6=f4_buf_r6+1;
-    tauur6f4=rtcmatminclos(scl,f4_buf_r6,times);
+    tauur6f4=rtcmatminclos(scu,f4_buf_r6,times);
 end
 taulr7f4=rtcmatminclos(scl,f4_buf_r7,times);
 while ~rtceq(rtcminconv(scl,taulr7f4(1)),scl)
@@ -60,7 +59,7 @@ end
 tauur7f4=rtcmatminclos(scu,f4_buf_r7,times);
 while ~rtceq(rtcminconv(scu,tauur7f4(1)),scu)
     f4_buf_r7=f4_buf_r7+1;
-    tauur7f4=rtcmatminclos(scl,f4_buf_r7,times);
+    tauur7f4=rtcmatminclos(scu,f4_buf_r7,times);
 end
 taulr8f4=rtcmatminclos(scl,f4_buf_r8,times);
 while ~rtceq(rtcminconv(scl,taulr8f4(1)),scl)
@@ -72,102 +71,89 @@ while ~rtceq(rtcminconv(scu,tauur8f4(1)),scu)
     f4_buf_r8=f4_buf_r8+1;
     tauur8f4=rtcmatminclos(scu,f4_buf_r8,times);
 end
-disp(['Buffer size Dist for f4: ',num2str(f1_buf_r10),' , ',num2str(f1_buf_r14),' , ',num2str(f1_buf_r15),' , ',num2str(f1_buf_r16)]);
+disp(['Buffer size Dist for f4: ',num2str(f4_buf_r8),' , ',num2str(f4_buf_r7),' , ',num2str(f4_buf_r6),' , ',num2str(f4_buf_r10)]);
 
-
+concscl=rtcminconv(rtcminconv(rtcminconv(scl,scl),scl),scl);
 eqscl4f4=rtcminconv(rtcminconv(rtcminconv(scl,scl),scl),scl);
-while (f4_buf_r10>1) && (rtch(acu,eqscl4f4)<Deadline(4))
+while (f4_buf_r10>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
     f4_buf_r10=f4_buf_r10-1;
-    taulr10f4=rtcmatminclos(scl,f4_buf_r10,times);
-    taulr6f4=rtcmatminclos(rtcminconv(scl,taulr10f4(1)),f4_buf_r6,times);
-    taulr7f4=rtcmatminclos(rtcminconv(scl,taulr14f4(1)),f4_buf_r7,times);
-    taulr8f4=rtcmatminclos(rtcminconv(scl,taulr15f4(1)),f4_buf_r8,times);
-    eqscl4f4=rtcminconv(rtcminconv(rtcminconv(taulr8f4(1),scl),taulr6f4(1)),scl);
-    eqscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f4,taulr7f4(1)),scl),taulr8f4(1)),scl);
+    temp1=rtcmin(rtcplus(scl,f4_buf_r10),rtcplus(scl,f4_buf_r6));
+    temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f4=rtcminconv(concscl,temp(1));
 end
 if f4_buf_r10==1
-    f4_buf_r10=(rtch(acu,eqscl4f4)<Deadline(4))+(rtch(acu,eqscl4f4)>Deadline(4))*2;
+    if rtch(acu,eqscl4f4)>Deadline(4)
+        f4_buf_r10=2;
+    end
 else
     f4_buf_r10=f4_buf_r10+1;
 end
-taulr10f4=rtcmatminclos(scl,f4_buf_r10,times);
-taulr6f4=rtcmatminclos(rtcminconv(scl,taulr10f4(1)),f4_buf_r6,times);
-taulr7f4=rtcmatminclos(rtcminconv(scl,taulr14f4(1)),f4_buf_r7,times);
-taulr8f4=rtcmatminclos(rtcminconv(scl,taulr15f4(1)),f4_buf_r8,times);
-eqscl4f4=rtcminconv(rtcminconv(rtcminconv(taulr8f4(1),scl),taulr6f4(1)),scl);
-eqscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f4,taulr7f4(1)),scl),taulr8f4(1)),scl);
-tauur10f4=rtcmatminclos(scu,f4_buf_r10,times);
-tauur6f4=rtcmatminclos(rtcminconv(scu,tauur10f4(1)),f4_buf_r6,times);
-tauur7f4=rtcmatminclos(rtcminconv(scu,tauur14f4(1)),f4_buf_r7,times);
-tauur8f4=rtcmatminclos(rtcminconv(scu,tauur15f4(1)),f4_buf_r8,times);
-eqscu4f4=rtcminconv(rtcminconv(rtcminconv(tauur8f4(1),scu),tauur6f4(1)),scu);
-eqscu4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscu4f4,tauur7f4(1)),scu),tauur8f4(1)),scu);
-while (f4_buf_r6>1) && (rtch(acu,eqscl4f4)<Deadline(4))
+temp1=rtcmin(rtcplus(scl,f4_buf_r10),rtcplus(scl,f4_buf_r6));
+temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
+temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+eqscl4f4=rtcminconv(concscl,temp(1));
+while (f4_buf_r6>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
     f4_buf_r6=f4_buf_r6-1;
-    taulr6f4=rtcmatminclos(rtcminconv(scl,taulr10f4(1)),f4_buf_r6,times);
-    taulr7f4=rtcmatminclos(rtcminconv(scl,taulr14f4(1)),f4_buf_r7,times);
-    taulr8f4=rtcmatminclos(rtcminconv(scl,taulr15f4(1)),f4_buf_r8,times);
-    eqscl4f4=rtcminconv(rtcminconv(rtcminconv(taulr8f4(1),scl),taulr6f4(1)),scl);
-    eqscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f4,taulr7f4(1)),scl),taulr8f4(1)),scl);
+    temp1=rtcmin(rtcplus(scl,f4_buf_r10),rtcplus(scl,f4_buf_r6));
+    temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f4=rtcminconv(concscl,temp(1));
 end
 if f4_buf_r6==1
-    f4_buf_r6=(rtch(acu,eqscl4f4)<Deadline(4))+(rtch(acu,eqscl4f4)>Deadline(4))*2;
+    if rtch(acu,eqscl4f4)>Deadline(4)
+        f4_buf_r6=2;
+    end
 else
     f4_buf_r6=f4_buf_r6+1;
 end
-taulr6f4=rtcmatminclos(rtcminconv(scl,taulr10f4(1)),f4_buf_r6,times);
-taulr7f4=rtcmatminclos(rtcminconv(scl,taulr14f4(1)),f4_buf_r7,times);
-taulr8f4=rtcmatminclos(rtcminconv(scl,taulr15f4(1)),f4_buf_r8,times);
-eqscl4f4=rtcminconv(rtcminconv(rtcminconv(taulr8f4(1),scl),taulr6f4(1)),scl);
-eqscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f4,taulr7f4(1)),scl),taulr8f4(1)),scl);
-tauur6f4=rtcmatminclos(rtcminconv(scu,tauur10f4(1)),f4_buf_r6,times);
-tauur7f4=rtcmatminclos(rtcminconv(scu,tauur14f4(1)),f4_buf_r7,times);
-tauur8f4=rtcmatminclos(rtcminconv(scu,tauur15f4(1)),f4_buf_r8,times);
-eqscu4f4=rtcminconv(rtcminconv(rtcminconv(tauur8f4(1),scu),tauur6f4(1)),scu);
-eqscu4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscu4f4,tauur7f4(1)),scu),tauur8f4(1)),scu);
-while (f4_buf_r7>1) && (rtch(acu,eqscl4f4)<Deadline(4))
+temp1=rtcmin(rtcplus(scl,f4_buf_r10),rtcplus(scl,f4_buf_r6));
+temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
+temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+eqscl4f4=rtcminconv(concscl,temp(1));
+while (f4_buf_r7>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
     f4_buf_r7=f4_buf_r7-1;
-    taulr7f4=rtcmatminclos(rtcminconv(scl,taulr14f4(1)),f4_buf_r7,times);
-    taulr8f4=rtcmatminclos(rtcminconv(scl,taulr15f4(1)),f4_buf_r8,times);
-    eqscl4f4=rtcminconv(rtcminconv(rtcminconv(taulr8f4(1),scl),taulr6f4(1)),scl);
-    eqscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f4,taulr7f4(1)),scl),taulr8f4(1)),scl);
+    temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f4=rtcminconv(concscl,temp(1));
 end
 if f4_buf_r7==1
-    f4_buf_r7=(rtch(acu,eqscl4f4)<Deadline(4))+(rtch(acu,eqscl4f4)>Deadline(4))*2;
+    if rtch(acu,eqscl4f4)>Deadline(4)
+        f4_buf_r7=2;
+    end
 else
     f4_buf_r7=f4_buf_r7+1;
 end
-taulr7f4=rtcmatminclos(rtcminconv(scl,taulr14f4(1)),f4_buf_r7,times);
-taulr8f4=rtcmatminclos(rtcminconv(scl,taulr15f4(1)),f4_buf_r8,times);
-eqscl4f4=rtcminconv(rtcminconv(rtcminconv(taulr8f4(1),scl),taulr6f4(1)),scl);
-eqscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f4,taulr7f4(1)),scl),taulr8f4(1)),scl);
-tauur7f4=rtcmatminclos(rtcminconv(scu,tauur14f4(1)),f4_buf_r7,times);
-tauur8f4=rtcmatminclos(rtcminconv(scu,tauur15f4(1)),f4_buf_r8,times);
-eqscu4f4=rtcminconv(rtcminconv(rtcminconv(tauur8f4(1),scu),tauur6f4(1)),scu);
-eqscu4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscu4f4,tauur7f4(1)),scu),tauur8f4(1)),scu);
-while (f4_buf_r8>1) && (rtch(acu,eqscl4f4)<Deadline(4))
+temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
+temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+eqscl4f4=rtcminconv(concscl,temp(1));
+while (f4_buf_r8>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
     f4_buf_r8=f4_buf_r8-1;
-    taulr8f4=rtcmatminclos(rtcminconv(scl,taulr15f4(1)),f4_buf_r8,times);
-    eqscl4f4=rtcminconv(rtcminconv(rtcminconv(taulr8f4(1),scl),taulr6f4(1)),scl);
-    eqscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f4,taulr7f4(1)),scl),taulr8f4(1)),scl);
+    temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f4=rtcminconv(concscl,temp(1));
 end
 if f4_buf_r8==1
-    f4_buf_r8=(rtch(acu,eqscl4f4)<Deadline(4))+(rtch(acu,eqscl4f4)>Deadline(4))*2;
+    if rtch(acu,eqscl4f4)>Deadline(4)
+        f4_buf_r8=2;
+    end
 else
     f4_buf_r8=f4_buf_r8+1;
 end
-taulr8f4=rtcmatminclos(rtcminconv(scl,taulr15f4(1)),f4_buf_r8,times);
-eqscl4f4=rtcminconv(rtcminconv(rtcminconv(taulr8f4(1),scl),taulr6f4(1)),scl);
-eqscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f4,taulr7f4(1)),scl),taulr8f4(1)),scl);
-tauur8f4=rtcmatminclos(rtcminconv(scu,tauur15f4(1)),f4_buf_r8,times);
-eqscu4f4=rtcminconv(rtcminconv(rtcminconv(tauur8f4(1),scu),tauur6f4(1)),scu);
-eqscu4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscu4f4,tauur7f4(1)),scu),tauur8f4(1)),scu);
-disp(['Optimized Bufsize of f4: ',num2str(f4_buf_r10),' , ',num2str(f4_buf_r6),' , ',num2str(f4_buf_r7),' , ',num2str(f4_buf_r8)]);
+taulr10f4=rtcmatminclos(scl,f4_buf_r10,times);
+taulr6f4=rtcmatminclos(rtcminconv(scl,taulr10f4(1)),f4_buf_r6,times);
+taulr7f4=rtcmatminclos(rtcminconv(scl,taulr6f4(1)),f4_buf_r7,times);
+taulr8f4=rtcmatminclos(rtcminconv(scl,taulr7f4(1)),f4_buf_r8,times);
+tauur10f4=rtcmatminclos(scu,f4_buf_r10,times);
+tauur6f4=rtcmatminclos(rtcminconv(scu,tauur10f4(1)),f4_buf_r6,times);
+tauur7f4=rtcmatminclos(rtcminconv(scu,tauur6f4(1)),f4_buf_r7,times);
+tauur8f4=rtcmatminclos(rtcminconv(scu,tauur7f4(1)),f4_buf_r8,times);
+disp(['Optimized Bufsize of f4: ',num2str(f4_buf_r8),' , ',num2str(f4_buf_r7),' , ',num2str(f4_buf_r6),' , ',num2str(f4_buf_r10)]);
 
-partialscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr8f4,scl),taulr7f4),scl),taulr6f4),scl),taulr8f4);
-partialscu4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(tauur8f4,scu),tauur7f4),scu),tauur6f4),scu),tauur8f4);
+partialscl4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr8f4(1),scl),taulr7f4(1)),scl),taulr6f4(1)),scl),taulr10f4(1));
+partialscu4f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(tauur8f4(1),scu),tauur7f4(1)),scu),tauur6f4(1)),scu),tauur10f4(1));
 outputacl4f4=rtcmin(rtcminconv(rtcmindeconv(acl,partialscu4f4),partialscl4f4),partialscl4f4);
-outputacu4f4=rtcmin(rtcmindeconv(rtcminconv(acl,partialscu4f4),partialscl4f4),partialscl4f4);
+outputacu4f4=rtcmin(rtcmindeconv(rtcminconv(acu,partialscu4f4),partialscl4f4),partialscu4f4);
 leftscl4f1=rtcmaxconv(rtcminus(scl,outputacu4f4),0);
 leftscu4f1=rtcmax(rtcmaxdeconv(rtcminus(scu,outputacl4f4),0),0);
 
@@ -211,82 +197,85 @@ while ~rtceq(rtcminconv(scu,tauur16f1(1)),scu)
     f1_buf_r16=f1_buf_r16+1;
     tauur16f1=rtcmatminclos(scu,f1_buf_r16,times);
 end
-disp(['Buffer size Dist for f1: ',num2str(f1_buf_r10),' , ',num2str(f1_buf_r14),' , ',num2str(f1_buf_r15),' , ',num2str(f1_buf_r16)]);
+disp(['Buffer size Dist for f1: ',num2str(f1_buf_r16),' , ',num2str(f1_buf_r15),' , ',num2str(f1_buf_r14),' , ',num2str(f1_buf_r10)]);
 
-
+concscl4f1=rtcminconv(rtcminconv(rtcminconv(scl,scl),scl),leftscl4f1);
 eqscl4f1=rtcminconv(rtcminconv(rtcminconv(scl,scl),scl),leftscl4f1);
-while (f1_buf_r10>1) && (rtch(acu,eqscl4f1)<Deadline(1))
+while (f1_buf_r10>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
     f1_buf_r10=f1_buf_r10-1;
-    taulr10f1=rtcmatminclos(leftscl4f1,f1_buf_r10,times);
-    taulr14f1=rtcmatminclos(rtcminconv(scl,taulr10f1(1)),f1_buf_r14,times);
-    taulr15f1=rtcmatminclos(rtcminconv(scl,taulr14f1(1)),f1_buf_r15,times);
-    taulr16f1=rtcmatminclos(rtcminconv(scl,taulr15f1(1)),f1_buf_r16,times);
-    eqscl4f1=rtcminconv(rtcminconv(rtcminconv(taulr16f1(1),scl),taulr15f1(1)),scl);
-    eqscl4f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f1,taulr14f1(1)),scl),taulr10f1(1)),leftscl4f1);
+    temp1=rtcmin(rtcplus(leftscl4f1,f1_buf_r10),rtcplus(scl,f1_buf_r14));
+    temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f1=rtcminconv(concscl4f1,temp(1));
 end
 if f1_buf_r10==1
-    f1_buf_r10=(rtch(acu,eqscl4f1)<Deadline(1))+(rtch(acu,eqscl4f1)>Deadline(1))*2;
+    if rtch(acu,eqscl4f1)>Deadline(1)
+        f1_buf_r10=2;
+    end
 else
     f1_buf_r10=f1_buf_r10+1;
 end
-taulr10f1=rtcmatminclos(leftscl4f1,f1_buf_r10,times);
-tauur10f1=rtcmatminclos(leftscu4f1,f1_buf_r10,times);
-taulr14f1=rtcmatminclos(rtcminconv(scl,taulr10f1(1)),f1_buf_r14,times);
-taulr15f1=rtcmatminclos(rtcminconv(scl,taulr14f1(1)),f1_buf_r15,times);
-taulr16f1=rtcmatminclos(rtcminconv(scl,taulr15f1(1)),f1_buf_r16,times);
-eqscl4f1=rtcminconv(rtcminconv(rtcminconv(taulr16f1(1),scl),taulr15f1(1)),scl);
-eqscl4f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f1,taulr14f1(1)),scl),taulr10f1(1)),leftscl4f1);
-while (f1_buf_r14>1) && (rtch(acu,eqscl4f1)<Deadline(1))
+temp1=rtcmin(rtcplus(leftscl4f1,f1_buf_r10),rtcplus(scl,f1_buf_r14));
+temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
+temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+eqscl4f1=rtcminconv(concscl4f1,temp(1));
+while (f1_buf_r14>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
     f1_buf_r14=f1_buf_r14-1;
-    taulr14f1=rtcmatminclos(rtcminconv(scl,taur10f1(1)),f1_buf_r14,times);
-    taulr15f1=rtcmatminclos(rtcminconv(scl,taulr14f1(1)),f1_buf_r15,times);
-    taulr16f1=rtcmatminclos(rtcminconv(scl,taulr15f1(1)),f1_buf_r16,times);
-    eqscl4f1=rtcminconv(rtcminconv(rtcminconv(taulr16f1(1),scl),taulr15f1(1)),scl);
-    eqscl4f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f1,taulr14f1(1)),scl),taur10f1(1)),leftscl4f1);
+    temp1=rtcmin(rtcplus(leftscl4f1,f1_buf_r10),rtcplus(scl,f1_buf_r14));
+    temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f1=rtcminconv(concscl4f1,temp(1));
 end
 if f1_buf_r14==1
-    f1_buf_r14=(rtch(acu,eqscl4f1)<Deadline(1))+(rtch(acu,eqscl4f1)>Deadline(1))*2;
+    if rtch(acu,eqscl4f1)>Deadline(1)
+        f1_buf_r14=2;
+    end
 else
     f1_buf_r14=f1_buf_r14+1;
 end
-taulr14f1=rtcmatminclos(rtcminconv(leftscl4f1,taulr10f1(1)),f1_buf_r14,times);
-tauur14f1=rtcmatminclos(rtcminconv(leftscu4f1,tauur10f1(1)),f1_buf_r14,times);
-taulr15f1=rtcmatminclos(rtcminconv(scl,taulr14f1(1)),f1_buf_r15,times);
-taulr16f1=rtcmatminclos(rtcminconv(scl,taulr15f1(1)),f1_buf_r16,times);
-eqscl4f1=rtcminconv(rtcminconv(rtcminconv(taulr16f1(1),scl),taulr15f1(1)),scl);
-eqscl4f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f1,taulr14f1(1)),scl),taulr10f1(1)),leftscl4f1);    
-while (f1_buf_r15>1) && (rtch(acu,eqscl4f1)<Deadline(1))
+temp1=rtcmin(rtcplus(leftscl4f1,f1_buf_r10),rtcplus(scl,f1_buf_r14));
+temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
+temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+eqscl4f1=rtcminconv(concscl4f1,temp(1));  
+while (f1_buf_r15>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
     f1_buf_r15=f1_buf_r15-1;
-    taulr15f1=rtcmatminclos(rtcminconv(scl,taulr14f1(1)),f1_buf_r15,times);
-    taulr16f1=rtcmatminclos(rtcminconv(scl,taulr15f1(1)),f1_buf_r16,times);
-    eqscl4f1=rtcminconv(rtcminconv(rtcminconv(taulr16f1(1),scl),taulr15f1(1)),scl);
-    eqscl4f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f1,taulr14f1(1)),scl),taur10f1(1)),leftscl4f1);
+    temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f1=rtcminconv(concscl4f1,temp(1));
 end
 if f1_buf_r15==1
-    f1_buf_r15=(rtch(acu,eqscl4f1)<Deadline(1))+(rtch(acu,eqscl4f1)>Deadline(1))*2;
+    if rtch(acu,eqscl4f1)>Deadline(1)
+        f1_buf_r15=2;
+    end
 else
     f1_buf_r15=f1_buf_r15+1;
 end
-taulr15f1=rtcmatminclos(rtcminconv(scl,taulr14f1(1)),f1_buf_r15,times);
-tauur15f1=rtcmatminclos(rtcminconv(scu,tauur14f1(1)),f1_buf_r15,times);
-taulr16f1=rtcmatminclos(rtcminconv(scl,taulr15f1(1)),f1_buf_r16,times);
-eqscl4f1=rtcminconv(rtcminconv(rtcminconv(taulr16f1(1),scl),taulr15f1(1)),scl);
-eqscl4f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f1,taulr14f1(1)),scl),taulr10f1(1)),leftscl4f1);
-while (f1_buf_r16>1) && (rtch(acu,eqscl4f1)<Deadline(1))
+temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
+temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+eqscl4f1=rtcminconv(concscl4f1,temp(1));  
+while (f1_buf_r16>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
     f1_buf_r16=f1_buf_r16-1;
-    taulr16f1=rtcmatminclos(rtcminconv(scl,taulr15f1(1)),f1_buf_r16,times);
-    eqscl4f1=rtcminconv(rtcminconv(rtcminconv(taulr16f1(1),scl),taulr15f1(1)),scl);
-    eqscl4f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f1,taulr14f1(1)),scl),taur10f1(1)),leftscl4f1);
+    temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f1=rtcminconv(concscl4f1,temp(1));  
 end
 if f1_buf_r16==1
-    f1_buf_r16=(rtch(acu,eqscl4f1)<Deadline(1))+(rtch(acu,eqscl4f1)>Deadline(1))*2;
+    if rtch(acu,eqscl4f1)>Deadline(1)
+        f1_buf_r16=2;
+    end
 else
     f1_buf_r16=f1_buf_r16+1;
 end
-taulr16f1=rtcmatminclos(rtcminconv(scl,taulr15f1(1)),f1_buf_r16,times);
-tauur16f1=rtcmatminclos(rtcminconv(scu,tauur15f1(1)),f1_buf_r16,times);
-disp(['Optimized Bufsize of f1: ',num2str(f1_buf_r10),' , ',num2str(f1_buf_r14),' , ',num2str(f1_buf_r15),' , ',num2str(f1_buf_r16)]);
+disp(['Optimized Bufsize of f1: ',num2str(f1_buf_r16),' , ',num2str(f1_buf_r15),' , ',num2str(f1_buf_r14),' , ',num2str(f1_buf_r10)]);
 
+temp1=rtcmin(rtcplus(leftscl4f1,f1_buf_r10),rtcplus(scl,f1_buf_r14));
+taulr15f1=rtcmatminclos(rtcmin(temp1,rtcplus(scl,f1_buf_r15)),0,times);
+temp2=rtcmin(rtcplus(leftscu4f1,f1_buf_r10),rtcplus(scu,f1_buf_r14));
+tauur15f1=rtcmatminclos(rtcmin(temp2,rtcplus(scu,f1_buf_r15)),0,times);
+temp1=rtcmin(temp1(1),rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16)));
+taulr16f1=rtcmatminclos(temp1(1),0,times);
+temp2=rtcmin(temp1(1),rtcmin(rtcplus(scu,f1_buf_r15),rtcplus(scu,f1_buf_r16)));
+tauur16f1=rtcmatminclos(temp2(1),0,times);
 
 partialsclf1=rtcminconv(rtcminconv(taulr16f1(1),scl),taulr15f1(1));
 partialscuf1=rtcminconv(rtcminconv(tauur16f1(1),scu),tauur15f1(1));
@@ -346,102 +335,88 @@ while ~rtceq(rtcminconv(leftscu4f2,tauur15f2(1)),leftscu4f2)
 end
 disp(['Buffer size Dist for f2: ',num2str(f2_buf_r15),' , ',num2str(f2_buf_r14),' , ',num2str(f2_buf_r13),' , ',num2str(f2_buf_r9),' , ',num2str(f2_buf_r5)]);
 
+concscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(leftscl4f2,scl),scl),scl),scl);
 eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(leftscl4f2,scl),scl),scl),scl);
-while (f2_buf_r5>1) && (rtch(acu,eqscl4f2)<Deadline(2))
+while (f2_buf_r5>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
     f2_buf_r5=f2_buf_r5-1;
-    taulr5f2=rtcmatminclos(scl,f2_buf_r5,times);
-    taulr9f2=rtcmatminclos(rtcminconv(scl,taulr5f2(1)),f2_buf_r9,times);
-    taulr13f2=rtcmatminclos(rtcminconv(scl,taulr9f2(1)),f2_buf_r13,times);
-    taulr14f2=rtcmatminclos(rtcminconv(scl,taulr13f2(1)),f2_buf_r14,times);
-    taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);
+    temp1=rtcmin(rtcplus(scl,f2_buf_r5),rtcplus(scl,f2_buf_r9));
+    temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
+    temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcmin(leftscl4f2,f2_buf_r15)),0,times);
+    eqscl4f2=rtcminconv(concscl4f2,temp);
 end
 if f2_buf_r5==1
-    f2_buf_r5=(rtch(acu,eqscl4f2)<Deadline(2))+(rtch(acu,eqscl4f2)>Deadline(2))*2;
+    if rtch(acu,eqscl4f2)>Deadline(2)
+        f2_buf_r5=2;
+    end
 else
     f2_buf_r5=f2_buf_r5+1;
 end
-taulr5f2=rtcmatminclos(scl,f2_buf_r5,times);
-tauur5f2=rtcmatminclos(scu,f2_buf_r5,times);
-taulr9f2=rtcmatminclos(rtcminconv(scl,taulr5f2(1)),f2_buf_r9,times);
-taulr13f2=rtcmatminclos(rtcminconv(scl,taulr9f2(1)),f2_buf_r13,times);
-taulr14f2=rtcmatminclos(rtcminconv(scl,taulr13f2(1)),f2_buf_r14,times);
-taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);
-while (f2_buf_r9>1) && (rtch(acu,eqscl4f2)<Deadline(2))
+temp1=rtcmin(rtcplus(scl,f2_buf_r5),rtcplus(scl,f2_buf_r9));
+temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
+temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
+eqscl4f2=rtcminconv(concscl4f2,temp(1));
+while (f2_buf_r9>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
     f2_buf_r9=f2_buf_r9-1;
-    taulr9f2=rtcmatminclos(rtcminconv(scl,taulr5f2(1)),f2_buf_r9,times);
-    taulr13f2=rtcmatminclos(rtcminconv(scl,taulr9f2(1)),f2_buf_r13,times);
-    taulr14f2=rtcmatminclos(rtcminconv(scl,taulr13f2(1)),f2_buf_r14,times);
-    taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);
+    temp1=rtcmin(rtcplus(scl,f2_buf_r5),rtcplus(scl,f2_buf_r9));
+    temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
+    temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
+    eqscl4f2=rtcminconv(concscl4f2,temp);
 end
 if f2_buf_r9==1
-    f2_buf_r9=(rtch(acu,eqscl4f2)<Deadline(2))+(rtch(acu,eqscl4f2)>Deadline(2))*2;
+    if rtch(acu,eqscl4f2)>Deadline(2)
+        f2_buf_r9=2;
+    end
 else
     f2_buf_r9=f2_buf_r9+1;
 end
-taulr9f2=rtcmatminclos(scl,f2_buf_r9,times);
-tauur9f2=rtcmatminclos(scu,f2_buf_r9,times);
-taulr13f2=rtcmatminclos(rtcminconv(scl,taulr9f2(1)),f2_buf_r13,times);
-taulr14f2=rtcmatminclos(rtcminconv(scl,taulr13f2(1)),f2_buf_r14,times);
-taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);
-while (f2_buf_r13>1) && (rtch(acu,eqscl4f2)<Deadline(2))
+temp1=rtcmin(rtcplus(scl,f2_buf_r5),rtcplus(scl,f2_buf_r9));
+temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
+temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
+eqscl4f2=rtcminconv(concscl4f2,temp(1));
+while (f2_buf_r13>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
     f2_buf_r13=f2_buf_r13-1;
-    taulr13f2=rtcmatminclos(rtcminconv(scl,taulr9f2(1)),f2_buf_r13,times);
-    taulr14f2=rtcmatminclos(rtcminconv(scl,taulr13f2(1)),f2_buf_r14,times);
-    taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);
+    temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
+    temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
+    eqscl4f2=rtcminconv(concscl4f2,temp);
 end
 if f2_buf_r13==1
-    f2_buf_r13=(rtch(acu,eqscl4f2)<Deadline(2))+(rtch(acu,eqscl4f2)>Deadline(2))*2;
+    if rtch(acu,eqscl4f2)>Deadline(2)
+        f2_buf_r13=2;
+    end
 else
     f2_buf_r13=f2_buf_r13+1;
 end
-taulr13f2=rtcmatminclos(scl,f2_buf_r13,times);
-tauur13f2=rtcmatminclos(scu,f2_buf_r13,times);
-taulr14f2=rtcmatminclos(rtcminconv(scl,taulr13f2(1)),f2_buf_r14,times);
-taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);
-while (f2_buf_r14>1) && (rtch(acu,eqscl4f2)<Deadline(2))
+temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
+temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
+eqscl4f2=rtcminconv(concscl4f2,temp(1));
+while (f2_buf_r14>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
     f2_buf_r14=f2_buf_r14-1;
-    taulr14f2=rtcmatminclos(rtcminconv(scl,taulr13f2(1)),f2_buf_r14,times);
-    taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);
+    temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
+    temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
+    eqscl4f2=rtcminconv(concscl4f2,temp);
 end
 if f2_buf_r14==1
-    f2_buf_r14=(rtch(acu,eqscl4f2)<Deadline(2))+(rtch(acu,eqscl4f2)>Deadline(2))*2;
+    if rtch(acu,eqscl4f2)>Deadline(2)
+        f2_buf_r14=2;
+    end
 else
     f2_buf_r14=f2_buf_r14+1;
 end
-taulr14f2=rtcmatminclos(scl,f2_buf_r14,times);
-tauur14f2=rtcmatminclos(scu,f2_buf_r14,times);
-taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);
-while (f2_buf_r15>1) && (rtch(acu,eqscl4f2)<Deadline(2))
+temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
+temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
+eqscl4f2=rtcminconv(concscl4f2,temp(1));
+while (f2_buf_r15>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
     f2_buf_r15=f2_buf_r15-1;
-    taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-    eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);
+    temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
+    eqscl4f2=rtcminconv(concscl4f2,temp(1));
 end
 if f2_buf_r15==1
-    f2_buf_r15=(rtch(acu,eqscl4f2)<Deadline(2))+(rtch(acu,eqscl4f2)>Deadline(2))*2;
+    if rtch(acu,eqscl4f2)>Deadline(2)
+        f2_buf_r15=2;
+    end
 else
     f2_buf_r15=f2_buf_r15+1;
 end
-tauur15f2=rtcmatminclos(rtcminconv(leftscu4f2,tauur14f2(1)),f2_buf_r15,times);
-taulr15f2=rtcmatminclos(rtcminconv(leftscl4f2,taulr14f2(1)),f2_buf_r15,times);
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl4f2,scl),taulr9f2(1)),scl),taulr5f2(1)),scl);    
 disp(['Optimized Bufsize of f2: ',num2str(f2_buf_r15),' , ',num2str(f2_buf_r14),' , ',num2str(f2_buf_r13),' , ',num2str(f2_buf_r9),' , ',num2str(f2_buf_r5)]);
 
 taulr1f3=rtcmatminclos(scl,f3_buf_r1,times);
@@ -464,8 +439,20 @@ while ~rtceq(rtcminconv(scu,tauur5f3(1)),scu)
     f3_buf_r5=f3_buf_r5+1;
     tauur5f3=rtcmatminclos(scu,f3_buf_r5,times);
 end
-partialscu4f2=rtcminconv(rtcminconv(rtcminconv(tauur15f2(1),leftscu4f2),tauur14f2(1)),scu);
-partialscl4f2=rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl);
+temp1=rtcmin(rtcplus(scl,f2_buf_r9),rtcplus(scl,f2_buf_r5));
+temp2=rtcmin(rtcplus(scu,f2_buf_r9),rtcplus(scu,f2_buf_r5));
+taulr9f2=rtcmatminclos(temp1,0,times);
+tauur9f2=rtcmatminclos(temp2,0,times);
+taulr13f2=rtcmatminclos(rtcmin(temp1,rtcplus(scl,f2_buf_r13)),0,times);
+tauur13f2=rtcmatminclos(rtcmin(temp2,rtcplus(scu,f2_buf_r13)),0,times);
+temp3=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
+temp4=rtcmin(rtcplus(scu,f2_buf_r13),rtcplus(scu,f2_buf_r14));
+taulr14f2=rtcmatminclos(rtcmin(temp1,temp3),0,times);
+tauur14f2=rtcmatminclos(rtcmin(temp2,temp4),0,times);
+taulr15f2=rtcmatminclos(rtcmin(rtcmin(temp1,temp3),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
+tauur15f2=rtcmatminclos(rtcmin(rtcmin(temp2,temp4),rtcplus(leftscu4f2,f2_buf_r15)),0,times);
+partialscu4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(tauur15f2(1),leftscu4f2),tauur14f2(1)),scu),tauur13f2(1));
+partialscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr15f2(1),leftscl4f2),taulr14f2(1)),scl),taulr13f2(1));
 outacu4f2=rtcmin(rtcmindeconv(rtcminconv(acu,partialscu4f2),partialscl4f2),partialscu4f2);
 outacl4f2=rtcmin(rtcminconv(rtcmindeconv(acl,partialscu4f2),partialscl4f2),partialscl4f2);
 leftscl134f3=rtcmaxconv(rtcminus(scl,outacu4f2),0);
@@ -481,8 +468,8 @@ while ~rtceq(rtcminconv(leftscu134f3,tauur13f3(1)),leftscu134f3)
     f3_buf_r13=f3_buf_r13+1;
     tauur13f3=rtcmatminclos(leftscu134f3,f3_buf_r13,times);
 end
-partialscu4f2=rtcminconv(rtcminconv(partialscu4f2,scu),tauur13f3(1));
-partialscl4f2=rtcminconv(rtcminconv(partialscl4f2,scl),taulr13f3(1));
+partialscu4f2=rtcminconv(rtcminconv(partialscu4f2,scu),tauur9f2(1));
+partialscl4f2=rtcminconv(rtcminconv(partialscl4f2,scl),taulr9f2(1));
 outacu4f2=rtcmin(rtcmindeconv(rtcminconv(acu,partialscu4f2),partialscl4f2),partialscu4f2);
 outacl4f2=rtcmin(rtcminconv(rtcmindeconv(acl,partialscu4f2),partialscl4f2),partialscl4f2);
 leftscl94f3=rtcmaxconv(rtcminus(scl,outacu4f2),0);
@@ -499,64 +486,70 @@ while ~rtceq(rtcminconv(leftscu94f3,tauur9f3(1)),leftscu94f3)
 end
 disp(['Buffer size Dist for f3: ',num2str(f3_buf_r13),' , ',num2str(f3_buf_r9),' , ',num2str(f2_buf_r5),' , ',num2str(f3_buf_r1)]);
 
+concscl4f3=rtcminconv(rtcminconv(rtcminconv(leftscl134f3,leftscl94f3),scl),scl);
 eqscl4f3=rtcminconv(rtcminconv(rtcminconv(leftscl134f3,leftscl94f3),scl),scl);
-while (f3_buf_r1>1) && (rtch(acu,eqscl4f3)<Deadline(3))
+while (f3_buf_r1>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
     f3_buf_r1=f3_buf_r1-1;
-    taulr1f3=rtcmatminclos(scl,f3_buf_r1,times);
-    taulr5f3=rtcmatminclos(rtcminconv(scl,taulr1f3(1)),f3_buf_r5,times);
-    taulr9f3=rtcmatminclos(rtcminconv(leftscl94f3,taulr5f3(1)),f3_buf_r9,times);
-    taulr13f3=rtcmatminclos(rtcminconv(leftscl134f3,taulr9f3(1)),f3_buf_r13,times);
-    eqscl4f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr13f3(1),leftscl134f3),taulr9f3(1)),leftscl94f3),taulr5f3(1)),scl),taulr1f3(1)),scl);
+    temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
+    temp2=rtcmin(rtcplus(scl,f3_buf_r5),rtcplus(scl,f3_buf_r1));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f3=rtcminconv(concscl4f3,temp(1));
 end
 if f3_buf_r1==1
-    f3_buf_r1=(rtch(acu,eqscl4f3)<Deadline(3))+(rtch(acu,eqscl4f3)>Deadline(3))*2;
+    if rtch(acu,eqscl4f3)>Deadline(3)
+        f3_buf_r1=2;
+    end
 else
     f3_buf_r1=f3_buf_r1+1;
 end
-taulr1f3=rtcmatminclos(scl,f3_buf_r1,times);
-tauur1f3=rtcmatminclos(scu,f3_buf_r1,times);
-taulr5f3=rtcmatminclos(rtcminconv(scl,taulr1f3(1)),f3_buf_r5,times);
-taulr9f3=rtcmatminclos(rtcminconv(leftscl94f3,taulr5f3(1)),f3_buf_r9,times);
-taulr13f3=rtcmatminclos(rtcminconv(leftscl134f3,taulr9f3(1)),f3_buf_r13,times);
-eqscl4f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr13f3(1),leftscl134f3),taulr9f3(1)),leftscl94f3),taulr5f3(1)),scl),taulr1f3(1)),scl);
-while (f3_buf_r5>1) && (rtch(acu,eqscl4f3)<Deadline(3))
+temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
+temp2=rtcmin(rtcplus(scl,f3_buf_r5),rtcplus(scl,f3_buf_r1));
+temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+eqscl4f3=rtcminconv(concscl4f3,temp(1));
+while (f3_buf_r5>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
     f3_buf_r5=f3_buf_r5-1;
-    taulr5f3=rtcmatminclos(rtcminconv(scl,taulr1f3(1)),f3_buf_r5,times);
-    taulr9f3=rtcmatminclos(rtcminconv(leftscl94f3,taulr5f3(1)),f3_buf_r9,times);
-    taulr13f3=rtcmatminclos(rtcminconv(leftscl134f3,taulr9f3(1)),f3_buf_r13,times);
-    eqscl4f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr13f3(1),leftscl134f3),taulr9f3(1)),leftscl94f3),taulr5f3(1)),scl),taulr1f3(1)),scl);
+    temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
+    temp2=rtcmin(rtcplus(scl,f3_buf_r5),rtcplus(scl,f3_buf_r1));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f3=rtcminconv(concscl4f3,temp(1));
 end
 if f3_buf_r5==1
-    f3_buf_r5=(rtch(acu,eqscl4f3)<Deadline(3))+(rtch(acu,eqscl4f3)>Deadline(3))*2;
+    if rtch(acu,eqscl4f3)>Deadline(3)
+        f3_buf_r5=2;
+    end
 else
     f3_buf_r5=f3_buf_r5+1;
 end
-taulr5f3=rtcmatminclos(scl,f3_buf_r5,times);
-tauur5f3=rtcmatminclos(scu,f3_buf_r5,times);
-taulr9f3=rtcmatminclos(rtcminconv(leftscl94f3,taulr5f3(1)),f3_buf_r9,times);
-taulr13f3=rtcmatminclos(rtcminconv(leftscl134f3,taulr9f3(1)),f3_buf_r13,times);
-eqscl4f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr13f3(1),leftscl134f3),taulr9f3(1)),leftscl94f3),taulr5f3(1)),scl),taulr1f3(1)),scl);
-while (f3_buf_r9>1) && (rtch(acu,eqscl4f3)<Deadline(3))
+temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
+temp2=rtcmin(rtcplus(scl,f3_buf_r5),rtcplus(scl,f3_buf_r1));
+temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+eqscl4f3=rtcminconv(concscl4f3,temp(1));
+while (f3_buf_r9>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
     f3_buf_r9=f3_buf_r9-1;
-    taulr9f3=rtcmatminclos(rtcminconv(leftscl94f3,taulr5f3(1)),f3_buf_r9,times);
-    taulr13f3=rtcmatminclos(rtcminconv(leftscl134f3,taulr9f3(1)),f3_buf_r13,times);
-    eqscl4f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr13f3(1),leftscl134f3),taulr9f3(1)),leftscl94f3),taulr5f3(1)),scl),taulr1f3(1)),scl);
+    temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f3=rtcminconv(concscl4f3,temp(1));
 end
 if f3_buf_r9==1
-    f3_buf_r9=(rtch(acu,eqscl4f3)<Deadline(3))+(rtch(acu,eqscl4f3)>Deadline(3))*2;
+    if rtch(acu,eqscl4f3)>Deadline(3)
+        f3_buf_r9=2;
+    end
 else
     f3_buf_r9=f3_buf_r9+1;
 end
-taulr9f3=rtcmatminclos(rtcminconv(leftscl94f3,taulr5f3(1)),f3_buf_r9,times);
-taulr13f3=rtcmatminclos(rtcminconv(leftscl134f3,taulr9f3(1)),f3_buf_r13,times);
-eqscl4f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr13f3(1),leftscl134f3),taulr9f3(1)),leftscl94f3),taulr5f3(1)),scl),taulr1f3(1)),scl);
-while (f3_buf_r13>1) && (rtch(acu,eqscl4f3)<Deadline(3))
+temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
+temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+eqscl4f3=rtcminconv(concscl4f3,temp(1));
+while (f3_buf_r13>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
     f3_buf_r13=f3_buf_r13-1;
-    taulr13f3=rtcmatminclos(rtcminconv(leftscl134f3,taulr9f3(1)),f3_buf_r13,times);
-    eqscl4f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(taulr13f3(1),leftscl134f3),taulr9f3(1)),leftscl94f3),taulr5f3(1)),scl),taulr1f3(1)),scl);
+    temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
+    temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
+    eqscl4f3=rtcminconv(concscl4f3,temp(1));
 end
 if f3_buf_r13==1
-    f3_buf_r13=(rtch(acu,eqscl4f3)<Deadline(3))+(rtch(acu,eqscl4f3)>Deadline(3))*2;
+    if rtch(acu,eqscl4f3)>Deadline(3)
+        f3_buf_r13=2;
+    end
 else
     f3_buf_r13=f3_buf_r13+1;
 end
