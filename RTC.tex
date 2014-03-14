@@ -160,7 +160,7 @@ where $\beta^{l^\prime}_{SA,R_i,f_j}$ is the leftover service curve calculated w
 \beta^{u}_{SA,R_i,f_j}=\min\{\beta^{u}_{SA,R_i,f_j},\beta^{u^\prime}_{SA,R_i}+1\}.
 \end{equation}
 
-(b) there exists some contention flows with the same priority as $f_j$. Denote by the set of contention flows at router $R_i$ with the same priority as $f_j$ as $\Theta_{R_i,f_j}$, and let $N_{R_i,f_j}$ be the number of flows in $\Theta_{R_i,f_j}$. Then, the service curve provided to $f_j$ is $<\lfloor\beta^{l^\prime}_{SA,R_i}/N_{R_i,f_j}\rfloor,\lceil\beta^{u^\prime}_{SA,R_i}/N_{R_i,f_j}\rceil>$, since all the flows in $\Theta_{R_i,f_j}$ got service in Round-Robin order. This is slightly different from the conventional continuous time model which is $<\beta^{l^\prime}_{SA,R_i}/N_{R_i,f_j},\beta^{u^\prime}_{SA,R_i}/N_{R_i,f_j}>$, this is because our model is flit-level preemptive. An example with two flows with the same priority is shown in Fig. \ref{roundrobin}. After serving by all the flows in $\Theta_{R_i,f_j}$, the leftover service capacity for low priority flows can be obtained by applying Eq.(\ref{betal}) and Eq.(\ref{betau}).
+(b) there exists some contention flows with the same priority as $f_j$. Denote by the set of contention flows at router $R_i$ with the same priority as $f_j$ as $\Theta_{R_i,f_j}$, and let $N_{R_i,f_j}$ be the number of flows in $\Theta_{R_i,f_j}$. Then, the service curve provided to $f_j$ is $<\lfloor\beta^{l^\prime}_{SA,R_i}/(N_{R_i,f_j}+1)\rfloor,\lceil\beta^{u^\prime}_{SA,R_i}/(N_{R_i,f_j}+1)\rceil>$, since all the flows in $\Theta_{R_i,f_j}$ got service in Round-Robin order. This is slightly different from the conventional continuous time model which is $<\beta^{l^\prime}_{SA,R_i}/(N_{R_i,f_j}+1),\beta^{u^\prime}_{SA,R_i}/(N_{R_i,f_j}+1)>$, because our model is flit-level preemptive. An example with two flows with the same priority is shown in Fig. \ref{roundrobin}. After serving by all the flows in $\Theta_{R_i,f_j}$, the leftover service capacity for low priority flows can be obtained by applying Eq.(\ref{betal}) and Eq.(\ref{betau}).
 \begin{figure*}
   \centering
   % Requires \usepackage{graphicx}
@@ -183,7 +183,7 @@ Suppose the router provides an upper service curve $\beta^u$, the buffer size an
 \begin{IEEEproof}
 We take the flow control between $R_9$ and $R_5$ in Fig. \ref{f2} as an example to proof this theorem. Denote the amount of injected and departed flits at $R_5$ by time $t$ as $I(t)$ and $D(t)$, the amount of flits served by $R_9$ as $A(t)$. The feedback link can be represented as a network element providing upper service curve $\delta_\sigma(t)$. Next, we apply the basic properties of service curve and dioid algebra to derive the upper service curve this flow controller. We have $I(t)=\min\{A(t),D^\prime(t)+B\}$ by the property of credit-based flow control, where $D^\prime=D\otimes\delta_\sigma$.
  
-By the property of upper service curve $\beta^u$, we have
+Based on property of upper service curve $\beta^u$, we have\footnote{An alternative definition of upper service curve, see definition 1.6.1 in \cite{Boudec2001Network} for more details.}
 $$D(t)\leq I\otimes \beta^u(t).$$ 
 
 Bring $I(t)$ and $D^\prime(t)$ into this equality, we get
@@ -211,7 +211,7 @@ Theorem \ref{credit} derives the upper service curve of a single flow controller
 \subsection{Collapsible Sub-Path}\label{csp}
 We have build the traffic model, router model and flow control model in the previous subsections. Before giving the performance evaluation algorithm, we first consider the follow scenario. Take $f_2$ and $f_3$ in Fig. \ref{topology} as an example, they content the output link at both router $R_{13}$ and $R_{9}$. Suppose $P_2>P_3$ and denote by $B_{R_9,f_2}$ the buffer size of $R_{9}$ allocated to flow $f_2$, $<\beta_{R_{13},f_2}^l,\beta_{R_{13},f_2}^u>$ and $<\beta_{R_{9},f_2}^l,\beta_{R_{9},f_2}^u>$ the service curve of $R_{13}$ and $R_{9}$ provided to flow $f_2$, $<\beta_{\tau_{13},f_2}^l,\beta_{\tau_{13},f_2}^u>$ the service curve for flow controller of router $R_{13}$, $<\alpha_{R_{13},f_2}^l,\alpha_{R_{13},f_2}^u>$ and $<\alpha_{R_{13},f_3}^l,\alpha_{R_{13},f_3}^u>$ the arrival curve of $f_2$ and $f_3$ at router $R_{13}$. The question is: when $B_{R_9,f_2}$ is sufficiently large so that $\beta_{R_{13},f_2}^l\otimes\beta_{\tau_{13},f_2}^l=\beta_{R_{13},f_2}^l$ and $\beta_{R_{13},f_2}^u\otimes\beta_{\tau_{13},f_2}^u=\beta_{R_{13},f_2}^u$, how to derive the leftover service curve for $f_3$ at $R_{13}$ and $R_9$, and obtain a tight performance bound of $f_3$ efficiently?
 
-An intuitive solution is: Firstly, obtaining the leftover service curve of $R_{13}$ by applying Eq.(\ref{betal}) and Eq.(\ref{betau}); Secondly, deriving the output arrival curve $<\alpha_{R_{9},f_2}^{l^\prime},\alpha_{R_{9},f_2}^{u^\prime}>$ of $f_2$ by applying Eq.(\ref{alphal}) and Eq.(\ref{alphau}); Thirdly, the leftover service curve of $R_9$ can be easily obtained by applying Eq.(\ref{betal}) and Eq.(\ref{betau}); And finally, the leftover service curve for $f_3$ at $R_{13}$ and $R_9$ can be easily obtained by concatenating these two service curves. Another solution is: we can substitute $R_{13}$ and $R_{9}$ by a virtual router $R_{13,9}$ providing service curve $<\beta_{R_{13},f_2}^l\otimes\beta_{R_{13},f_2}^l,\beta_{R_{13},f_2}^u\otimes\beta_{R_{13},f_2}^u>$, since $B_{R_9,f_2}$ is sufficiently large and the flow control between $R_{13}$ and $R_9$ can be ignored, as shown in Fig. \ref{collapse}. Then, the leftover service curve $f_3$ obtained at $R_{13}$ and $R_{9}$ can be directly obtained by applying Eq.(\ref{betal}) and Eq.(\ref{betau}). Compared with previous router-by-router calculation method, it eliminates the calculation of intermediate arrival curve, and compute the equivalent service curve by just invoke Eq.(\ref{betal}) and Eq.(\ref{betau}) once, which is calculation efficient. We will also demonstrate in Section \ref{experiments} that, this method can achieve tighter performance bound compared with the former method. Next, we formalize this observation and propose the concept of collapsible sub-path.
+An intuitive solution is: Firstly, obtaining the leftover service curve of $R_{13}$ by applying Eq.(\ref{betal}) and Eq.(\ref{betau}); Secondly, deriving the output arrival curve $<\alpha_{R_{9},f_2}^{l^\prime},\alpha_{R_{9},f_2}^{u^\prime}>$ of $f_2$ by applying Eq.(\ref{alphal}) and Eq.(\ref{alphau}); Thirdly, the leftover service curve of $R_9$ can be easily obtained by applying Eq.(\ref{betal}) and Eq.(\ref{betau}); And finally, the leftover service curve for $f_3$ at $R_{13}$ and $R_9$ can be easily obtained by concatenating these two service curves. Another solution is: we can substitute $R_{13}$ and $R_{9}$ by a virtual router $R_{13,9}$ providing service curve $<\beta_{R_{13},f_2}^l\otimes\beta_{R_{13},f_2}^l,\beta_{R_{13},f_2}^u\otimes\beta_{R_{13},f_2}^u>$, since $B_{R_9,f_2}$ is sufficiently large and the flow control between $R_{13}$ and $R_9$ can be ignored, as shown in Fig. \ref{collapse}. Then, the leftover service curve $f_3$ obtained at $R_{13}$ and $R_{9}$ can be directly obtained by applying Eq.(\ref{betal}) and Eq.(\ref{betau}). Compared with previous router-by-router calculation method, it eliminates the calculation of intermediate arrival curve, and compute the equivalent service curve by just invoke Eq.(\ref{betal}) and Eq.(\ref{betau}) once, which is calculation efficient. We will also demonstrate in Section \ref{experiments} that this method can achieve tighter performance bound compared with the former method. We formalize this observation and propose the concept of Collapsible Sub-Path (CSP).
 \begin{figure}
   \centering
   % Requires \usepackage{graphicx}
@@ -219,7 +219,7 @@ An intuitive solution is: Firstly, obtaining the leftover service curve of $R_{1
   \caption{Collapsible sub-path of $f_2$. Since the flow control between $R_{13}$ and $R_9$ can be ignored, they are replaced by a single virtual router $R_{13,9}$.}\label{collapse}
 \end{figure}
 
-\begin{definition}[Collapsible Sub-Path (CSP)]
+\begin{definition}[Collapsible Sub-Path]
 The collapsible sub-path of flow $f$, denoted by $CSP(f)$, is a sub-path of $f$ satisfying the follow conditions:
 \begin{enumerate}
   \item all the routers $R_i$ on this sub-path, except the last one, satisfy $\beta_{R_{i},f}^l\otimes\beta_{\tau_{i},f}^l=\beta_{R_{i},f}^l$ and $\beta_{R_{i}，f}^u\otimes\beta_{\tau_{i},f}^u=\beta_{R_{i},f}^u$.
@@ -230,46 +230,34 @@ The collapsible sub-path of flow $f$, denoted by $CSP(f)$, is a sub-path of $f$ 
 For the high-priority flows, the process of calculating the end-to-end equivalent service curve is also a collapsing process. But, to compute the leftover service curve for low-priority flows at some routers, we have to know the arrival curve of high-priority flows at these routers. As implied previously, instead of the router-by-router calculation, we can leverage the concept of CSP and replace all the routers on $CSP(f)$ with a single virtual router providing service curve $<\otimes_{R_i\in CSP(f)}\beta_{R_i,f}^l,\otimes_{R_i\in CSP(f)}\beta_{R_i,f}^u>$. For a CSP with $n$ ($n\geq 2$) routers, this method reduces $n-1$ times calculation of arrival curve and leftover service curve. The leftover service curve calculation is greatly simplified, and the accuracy of performance bound is also improved due to the well-known ``Pay-Burst-Only-Once" phenomenon in DNC theory \cite{Boudec2001Network}. We will propose our improved latency analysis algorithm in the next subsection, which automatically identifies and collapses all the CSPs on the path of a flow.
  
 \subsection{End-to-End Latency}\label{e2elatency}
-After obtained the traffic model, router model and flow control model, compute the end-to-end latency is still a non-trivial task. The follow four aspects should be considered carefully: (1) We should always compute the end-to-end latency by collapsing all the CSP to a single virtual node, as the hop-by-hop computation will lead to a looser bound; (2) In the fixed-priority flit-level preemptive NoC, only the leftover service curve can be used by the low priority flows, thus, our computation must start from higher priority flows to lower priority; (3) Before computing the leftover service curve for lower priority flows, we must ensure that all the higher priority flows has been served; (4) The computed service curve for flow controller can only be applicable for specific flow, and we should compute these curves for each flows.
-
-Keeping these four aspects in mind, we propose the performance evaluation algorithm, as shown in Algorithm \ref{alg:equivalentservicecurve}. Here are some explanation about our algorithm: suppose the entire NoC is represented as a directional topology graph $G:\ V\times E$, where $V$ and $E$ represent the set of routers and links, respectively. For each link $e_{i,j}\in E$ represent there is a physical channel between router $R_i$ and router $R_j$, $e_{i,j}\neq e_{j,i}$ since the topology graph is a directional graph. The set of all the flows in the network is denoted as $\mathcal{F}$, and each flow $f_i\in\mathcal{F}$ has a fixed-priority $P_i$. The set of routers a flow $f_i$ traversed is denoted as $\mathcal{R}_i$, and the set of links a flow $f_i$ traversed is denoted as $\Gamma_i$. If there exists interference between flow $f_i$ and $f_j$, then $\Gamma_i\wedge\Gamma_j\neq\Phi$ and the set of contention routers is $\mathcal{R}_i\wedge\mathcal{R}_j$. Denote by $<\alpha_{f_i}^l,\alpha_{f_i}^u>$ the arrival curve of flow $f_i$ at the ingress port. Suppose the arrival curve of $f_i$ at router $R_j$ is $<\alpha_{R_j,f_i}^l,\alpha_{R_j,f_i}^u>$, and the leftover service curve of SA stage at router $R_j$ is denoted as $<\beta_{SA,R_j}^{l^\prime},\beta_{SA,R_j}^{u^\prime}>$ (initially, $\beta_{SA,R_j}^{l^\prime}=\beta_{SA,R_j}^{l}$ and $\beta_{SA,R_j}^{u^\prime}=\beta_{SA,R_j}^{u}$). For all the router $R_j$ along the path of flow $f_i$, denote by the contention flows with the same priority as $f_i$ as $\Theta_{R_j,f_i}$, the set with lower priority flow as $\Omega_{R_j,f_i}$, and the buffer size as $B_{R_j,f_i}$. In addition, let $N_{R_j,f_i}$ and $N_{f_i}$ be the number of flows in $\Theta_{R_j,f_i}$ and the number of routers that $f_i$ traversed.
+After obtained the traffic model, router model and flow control model, compute the end-to-end latency is still a non-trivial task. The follow four aspects should be considered carefully: (1) We should always compute the end-to-end latency by collapsing all the CSP to a single virtual node, as the hop-by-hop computation will lead to a looser bound; (2) In the fixed-priority flit-level preemptive NoC, only the leftover service curve can be used by the low priority flows, thus, our computation must start from higher priority flows to lower priority; (3) Before computing the leftover service curve for lower priority flows, we must ensure that all the higher priority flows has been served; (4) The computed service curve for flow controller can only be applicable for specific flow, and we should compute these curves for each flows. Keeping these four aspects in mind, we propose the performance evaluation algorithm, as shown in Algorithm \ref{alg:equivalentservicecurve}. 
 \begin{algorithm}
 \caption{End-to-End Latency Analysis Algorithm}
 \label{alg:equivalentservicecurve}
 \begin{algorithmic}[1]
-    \FOR {each flow $f_i\in\mathcal{F}$}
-        \FOR {each router $R_j\in\mathcal{R}_{i}$}
-            \STATE $\beta_{SA,R_j,f_i}^l=\delta_0(t)$; $\beta_{SA,R_j,f_i}^u=\delta_0(t)$;
-        \ENDFOR
-    \ENDFOR
     \FOR {each flow $f_i\in \mathcal{F}$ with priority order}
-        \FOR {each router $R_j\in \mathcal{R}_{i}$}
-            \IF {$\Theta_{R_j,f_i}\neq \emptyset$}
-                \FOR {each flow $f_k\in \Theta_{R_j,f_i}$}
-                    \STATE $\beta_{SA,R_j,f_k}^{l}=\lfloor\beta_{SA,R_j}^{l^\prime}/N_{R_j,f_i}\rfloor$;
-                    \STATE $\beta_{SA,R_j,f_k}^{u}=\lceil\beta_{SA,R_j}^{u^\prime}/N_{R_j,f_i}\rceil$;
-                \ENDFOR
-            \ENDIF
-            \IF {$\beta_{SA,R_j,f_i}^l=\delta_0(t)$ and $\beta_{SA,R_j,f_i}^u=\delta_0(t)$}
-                \STATE $\beta_{SA,R_j,f_i}^l=\beta_{SA,R_j}^{l^\prime}$; $\beta_{SA,R_j,f_i}^u=\beta_{SA,R_j}^{u^\prime}$;
-            \ENDIF
-            \STATE $\beta_{R_j,f_i}^l=\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l\otimes\beta_{SA,R_j,f_i}^l\otimes \beta_{ST}^l$;
-            \STATE $\beta_{R_j,f_i}^u=\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u\otimes\beta_{SA,R_j,f_i}^u\otimes \beta_{ST}^u$;
-        \ENDFOR
         \STATE $\beta_{\tau}^l=\delta_0(t)$; $\beta_{\tau}^u=\delta_0(t)$;
-        \FOR {each router $R_j\in\mathcal{R}_i$ from destination to source}
+        \FOR {each router $R_j\in \mathcal{R}_{i}$ from $end_i$ to $start_i$}
+            \IF {$\Theta_{R_j,f_i}\neq \emptyset$}
+                \STATE $\beta_{R_j,f_i}^l=\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l\otimes\lfloor\frac{\beta_{SA,R_j}^{l^\prime}}{N_{R_j,f_i}+1}\rfloor\otimes\beta_{ST}^l$;
+                \STATE $\beta_{R_j,f_i}^u=\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u\otimes\lceil\frac{\beta_{SA,R_j}^{u^\prime}}{N_{R_j,f_i}+1}\rceil\otimes\beta_{ST}^u$;
+            \ELSE
+                \STATE $\beta_{R_j,f_i}^l=\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l\otimes\beta_{SA,R_j}^{l^\prime}\otimes\beta_{ST}^l$;
+                \STATE $\beta_{R_j,f_i}^u=\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u\otimes\beta_{SA,R_j}^{u^\prime}\otimes\beta_{ST}^u$;
+            \ENDIF
             \STATE $\beta^{l}_{\tau_j,f_i}(t)=\beta_{\tau}^l$; $\beta_{\tau}^l=\overline{\beta^l_{R_j,f_i}\otimes\beta^{l}_{\tau}\otimes\delta_\sigma(t)+B_{R_j,f_i}}$;
             \STATE $\beta^{u}_{\tau_j,f_i}(t)=\beta_{\tau}^u$; $\beta_{\tau}^u=\overline{\beta^u_{R_j,f_i}\otimes\beta^{u}_{\tau}\otimes\delta_\sigma(t)+B_{R_j,f_i}}$;
         \ENDFOR
         \STATE Collapse $CSP(f_i)$ and update $\Theta_{R_j,\cdot}$, $\Omega_{R_j,\cdot}$ and $\mathcal{R}_{\cdot}$;
-        \STATE $Delay(f_i)=H(\alpha^u_{f_i},\beta^l_{R_1,f_i}\otimes\beta^l_{R_2,f_i}\otimes\cdots\otimes\beta^l_{R_{N_{f_i}},f_i})$;
+        \STATE $Delay(f_i)=H(\alpha^u_{f_i},\underset{R_k\in\mathcal{R}_{f_i}}{\otimes}(\beta^l_{R_k,f_i}\otimes\beta^l_{\tau_k,f_i}))$;
         \STATE $\beta_{f_i}^l=\delta_0(t)$; $\beta_{f_i}^u=\delta_0(t)$;
-        \FOR {For all the router $R_j$ in $\mathcal{R}_{f_i}$}
+        \FOR {For $\forall R_j\in\mathcal{R}_{f_i}$ from $start_i$ to $end_i$}
             \STATE $\beta^l=\beta^l_{f_i}\otimes\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l$;
             \STATE $\beta^u=\beta^u_{f_i}\otimes\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u$;
             \STATE $\alpha^l_{R_j,f_i}=\min\{(\alpha^l_{f_i}\oslash\beta^u)\otimes\beta^l,\beta^l\}$;
             \STATE $\alpha^u_{R_j,f_i}=\min\{(\alpha^u_{f_i}\otimes\beta^u)\oslash\beta^l,\beta^u\}$;
-            \STATE $\beta_{f_i}^l=\beta_{f_i}^l\otimes\beta_{R_j,f_i}^l$; $\beta_{f_i}^u=\beta_{f_i}^u\otimes\beta_{R_j,f_i}^u$;
+            \STATE $\beta_{f_i}^l=\beta_{f_i}^l\otimes\beta_{R_j,f_i}^l\otimes\beta^l_{R_j,f_i}$; 
+            \STATE $\beta_{f_i}^u=\beta_{f_i}^u\otimes\beta_{R_j,f_i}^u\otimes\beta_{R_j,f_i}^u$;
             \IF {$\Omega_{R_j,f_i}\neq \emptyset$}
                 \IF {delay of $\forall f_k\in\Theta_{R_j,f_i}$ has been calculated}
                     \STATE $\alpha^l_{R_j,f_i}=\alpha^l_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^l_{R_j,f_k}$;
@@ -283,7 +271,9 @@ Keeping these four aspects in mind, we propose the performance evaluation algori
 \end{algorithmic}
 \end{algorithm}
 
-In Algorithm \ref{alg:equivalentservicecurve}, the leftover service curve for lower priority flows should compute after all the service curve of higher priority flows have been calculated. The overall algorithm has two embedded loops, and the computation complexity for this algorithm is $O(np)$, where $n$ and $p$ is the number of flows and the hop count of each flow. This algorithm is of pseudo-polynomial complexity due to the computation complexity of algorithmic min-plus convolution and sub-additive closure \cite{Bouillard2008}. This algorithm can be easily integrated into the RTC toolbox \cite{rtc} to compute the end-to-end latency automatically.
+Here are some explanation about our algorithm: suppose the entire NoC is represented as a directional topology graph $G:\ V\times E$, where $V$ and $E$ represent the set of routers and links, respectively. For each link $e_{i,j}\in E$ represent there is a physical channel between router $R_i$ and router $R_j$, $e_{i,j}\neq e_{j,i}$ since the topology graph is a directional graph. The set of all the flows in the network is denoted as $\mathcal{F}$, and each flow $f_i\in\mathcal{F}$ has a fixed-priority $P_i$. The set of routers a flow $f_i$ traversed is denoted as $\mathcal{R}_i$, and the set of links a flow $f_i$ traversed is denoted as $\Gamma_i$. If there exists interference between flow $f_i$ and $f_j$, then $\Gamma_i\wedge\Gamma_j\neq\Phi$ and the set of contention routers is $\mathcal{R}_i\wedge\mathcal{R}_j$. Denote by $<\alpha_{f_i}^l,\alpha_{f_i}^u>$ the arrival curve of flow $f_i$ at the ingress port. Suppose the arrival curve of $f_i$ at router $R_j$ is $<\alpha_{R_j,f_i}^l,\alpha_{R_j,f_i}^u>$, and the leftover service curve of SA stage at router $R_j$ is denoted as $<\beta_{SA,R_j}^{l^\prime},\beta_{SA,R_j}^{u^\prime}>$ (Initially, $\beta_{SA,R_j}^{l^\prime}=\beta_{SA,R_j}^{l}$ and $\beta_{SA,R_j}^{u^\prime}=\beta_{SA,R_j}^{u}$). The path of flow $f_i$ is started from ingress router (denoted by $start_i$) to egress router (started by $end_i$). For all the router $R_j$ along the path of flow $f_i$, denote by the contention flows with the same priority as $f_i$ as $\Theta_{R_j,f_i}$, the set with lower priority flow as $\Omega_{R_j,f_i}$, and the buffer size as $B_{R_j,f_i}$. In addition, let $N_{R_j,f_i}$ and $N_{f_i}$ be the number of flows in $\Theta_{R_j,f_i}$ and the number of routers that $f_i$ traversed.
+
+In Algorithm \ref{alg:equivalentservicecurve}, the leftover service curve for lower priority flows should compute after all the service curve of higher priority flows have been calculated. The overall algorithm has two-level embedded loops, and the computation complexity for this algorithm is $O(np)$, where $n$ and $p$ is the number of flows and the hop count of each flow. This algorithm is of pseudo-polynomial complexity due to the computation complexity of algorithmic min-plus convolution and sub-additive closure \cite{Bouillard2008}. This algorithm can be easily integrated into the RTC toolbox \cite{rtc} to compute the end-to-end latency automatically.
 
 \subsection{Buffer Optimization}\label{bufferopt}
 The priority-aware NoC requires the same amount of VC as the priorities to prevent priority inversion \cite{707545}, which occurs when the low-priority flows occupy all the VCs and cause the blocking of high-priority flows. To reduce the design cost, we need to reduce the buffer size of each VC. We assume the application has been mapped onto the NoC, and each flow $f_i$ has been assigned to their corresponding priority $P_i$ and deadline $D_i$. Our aim is the reduce the buffer size under the constraint of deadline not be violated. Although two backlog bounds are derived with FLBA and LLBA in \cite{189}, these bounds do not take the flow control into consideration. In this section, we propose a buffer optimization algorithm taking the flow control into consideration to further improve the existing backlog bounds.
@@ -294,8 +284,8 @@ The priority-aware NoC requires the same amount of VC as the priorities to preve
     \FOR {each flow $f_i\in \mathcal{F}$ with priority order}
         \FOR {each router $R_j\in \mathcal{R}_{i}$}
             \IF {$\Theta_{R_j,f_i}\neq \emptyset$}
-                \STATE $\beta_{R_j,f_i}^l=\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l\otimes\lfloor\frac{\beta_{SA,R_j}^{l^\prime}}{N_{R_j,f_i}}\rfloor\otimes\beta_{ST}^l$;
-                \STATE $\beta_{R_j,f_i}^u=\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u\otimes\lceil\frac{\beta_{SA,R_j}^{u^\prime}}{N_{R_j,f_i}}\rceil\otimes\beta_{ST}^u$;
+                \STATE $\beta_{R_j,f_i}^l=\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l\otimes\lfloor\frac{\beta_{SA,R_j}^{l^\prime}}{N_{R_j,f_i}+1}\rfloor\otimes\beta_{ST}^l$;
+                \STATE $\beta_{R_j,f_i}^u=\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u\otimes\lceil\frac{\beta_{SA,R_j}^{u^\prime}}{N_{R_j,f_i}+1}\rceil\otimes\beta_{ST}^u$;
             \ELSE
                 \STATE $\beta_{R_j,f_i}^l=\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l\otimes\beta_{SA,R_j}^{l^\prime}\otimes\beta_{ST}^l$;
                 \STATE $\beta_{R_j,f_i}^u=\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u\otimes\beta_{SA,R_j}^{u^\prime}\otimes\beta_{ST}^u$;
@@ -303,23 +293,28 @@ The priority-aware NoC requires the same amount of VC as the priorities to preve
             \STATE $B^l=\inf\{B|\beta_{R_j,f_i}^l\otimes\overline{\beta_{R_j,f_i}^l\otimes\delta_\sigma(t)+B}\geq\beta_{R_j,f_i}^l\}$;
             \STATE $B^u=\inf\{B|\beta_{R_j,f_i}^u\otimes\overline{\beta_{R_j,f_i}^u\otimes\delta_\sigma(t)+B}\geq\beta_{R_j,f_i}^u\}$;
             \STATE $B_{R_j,f_i}=\max\{B^l,B^u\}$;
+            \STATE $\beta_{\tau_j,f_i}^l=\delta_0(t)$; $\beta_{\tau_j,f_i}^u=\delta_0(t)$;
         \ENDFOR
-        \STATE $curnode=Pre(end_i)$;
-        \WHILE {$Pre(curnode)\neq null$}
-            \STATE $\beta_{f_i}^l=\underset{R_{j}\in\mathcal{R}_i}{\otimes}(\beta^l_{R_j,f_i}\otimes\overline{\beta^l_{R_j,f_i}\otimes\delta_\sigma+B_{R_j,f_i}})$;
-            \WHILE {$H(\alpha_{f_i}^u,\beta_{f_i}^l)<D_i$}
-                \STATE $B_{curnode,f_i}=B_{curnode,f_i}-1$;
-                \STATE $\beta_{f_i}^l=\underset{R_{j}\in\mathcal{R}_i}{\otimes}(\beta^l_{R_j,f_i}\otimes\overline{\beta^l_{R_j,f_i}\otimes\delta_\sigma+B_{R_j,f_i}})$;
+        \FOR {each router $R_j\in \mathcal{R}_{i}$ from $end_i$ to $start_i$}
+            \STATE $Delay(f_i)=H(\alpha^u_{f_i},\underset{R_k\in\mathcal{R}_{f_i}}{\otimes}(\beta^l_{R_k,f_i}\otimes\beta^l_{\tau_k,f_i}))$;
+            \WHILE {$Delay(f_i)\leq D_i$ and $B_{R_j,f_i}>1$}
+                \STATE $B_{R_j,f_i}=B_{R_j,f_i}-1$;
+                \STATE Recalculate $\beta_{\tau_k,f_i}^l$ for all $R_{k}$ from $R_j$ to $start_i$;
+                \STATE $Delay(f_i)=H(\alpha^u_{f_i},\underset{R_k\in\mathcal{R}_{f_i}}{\otimes}(\beta^l_{R_k,f_i}\otimes\beta^l_{\tau_k,f_i}))$;
             \ENDWHILE
-            \STATE $curnode=Pre(curnode)$;
-        \ENDWHILE
+            \IF {$Delay(f_i)>D_i$}
+                \STATE $B_{R_j,f_i}=B_{R_j,f_i}+1$;
+                \STATE Recalculate $<\beta_{\tau_j,f_i}^l,\beta_{\tau_j,f_i}^u>$;
+            \ENDIF
+        \ENDFOR
         \STATE $\beta_{f_i}^l=\delta_0(t)$; $\beta_{f_i}^u=\delta_0(t)$;
-        \FOR {For all the router $R_j$ in $\mathcal{R}_{f_i}$}
+        \FOR {For $\forall R_j\in\mathcal{R}_{f_i}$ from $start_i$ to $end_i$}
             \STATE $\beta^l=\beta^l_{f_i}\otimes\beta_{BW}^l\otimes\beta_{RC}^l\otimes\beta_{VA}^l$;
             \STATE $\beta^u=\beta^u_{f_i}\otimes\beta_{BW}^u\otimes\beta_{RC}^u\otimes\beta_{VA}^u$;
             \STATE $\alpha^l_{R_j,f_i}=\min\{(\alpha^l_{f_i}\oslash\beta^u)\otimes\beta^l,\beta^l\}$;
             \STATE $\alpha^u_{R_j,f_i}=\min\{(\alpha^u_{f_i}\otimes\beta^u)\oslash\beta^l,\beta^u\}$;
-            \STATE $\beta_{f_i}^l=\beta_{f_i}^l\otimes\beta_{R_j,f_i}^l$; $\beta_{f_i}^u=\beta_{f_i}^u\otimes\beta_{R_j,f_i}^u$;
+            \STATE $\beta_{f_i}^l=\beta_{f_i}^l\otimes\beta_{R_j,f_i}^l\otimes\beta_{\tau_j,f_i}^l$; 
+            \STATE $\beta_{f_i}^u=\beta_{f_i}^u\otimes\beta_{R_j,f_i}^u\otimes\beta_{\tau_j,f_i}^u$;
             \IF {$\Omega_{R_j,f_i}\neq \emptyset$}
                 \IF {delay of $\forall f_k\in\Theta_{R_j,f_i}$ has been calculated}
                     \STATE $\alpha^l_{R_j,f_i}=\alpha^l_{R_j,f_i}+\sum_{f_k\in\Theta_{R_j,f_i}}\alpha^l_{R_j,f_k}$;
@@ -333,19 +328,19 @@ The priority-aware NoC requires the same amount of VC as the priorities to preve
 \end{algorithmic}
 \end{algorithm}
 
-The path of flow $f_i$ is started from source NI (denoted by $start_i$) following a sequence of routers, and ended at destination NI (denoted by $end_i$). For any router/NI ($curnode$) on the path, denote by $Pre(curnode)$ the predecessor of $curnode$, and let $Pre(start_i)=null$. The detailed algorithm is shown in Algorithm \ref{alg:bufopt}, it tries to optimize the buffer size for each flow from high priority to low priority gradually. For each flow $f_i$, we first set the buffer size reserved for flow $f_i$ at router $R_j$ be $B_{R_j,f_i}$, which is the smallest buffer size that does not trigger the flow control. After assigned the initial buffer size for each router along the path, we reduce the buffer size gradually from $end_i$ to $start_i$. For each iteration, checking whether the deadline is satisfied, and move $curnode$ to its predecessor $Pre(curnode)$ if the former reduction violates the deadline constraint. Iteration for flow $f_i$ stops when $Pre(curnode)=null$. This algorithm can be implemented in RTC toolbox \cite{rtc} to optimize the buffer size automatically. The entire computation complexity is $O(np)$, where $n$ and $p$ are the number of flows and the number of routers along the path. This complexity is pseudo-polynomial due to the end-to-end latency calculation. We can also halt the optimization when the buffer budget are met to reduce the computation procedure.
+The detailed algorithm is shown in Algorithm \ref{alg:bufopt}, it tries to optimize the buffer size for each flow from high priority to low priority gradually. For each flow $f_i$, we first set the buffer size reserved for flow $f_i$ at router $R_j$ be $B_{R_j,f_i}$, which is the smallest buffer size that does not trigger the flow control. After assigned the initial buffer size for each router along the path, we reduce the buffer size gradually from ejection router to injection router. For each iteration, reduce the buffer size gradually until violate the deadline constraint. This algorithm can be implemented in RTC toolbox \cite{rtc} to optimize the buffer size automatically. The entire computation complexity is $O(np)$, where $n$ and $p$ are the number of flows and the number of routers along the path. This complexity is pseudo-polynomial due to the end-to-end latency calculation. We can also halt the optimization when the buffer budget are met to reduce the computation procedure.
 
-We also need to mention that, the backlog bound obtained in \cite{189} is the minimum buffer size that does not trigger the flow control, i.e. $B_{R_j,f_i}$ computed in Line 12 of Algorithm \ref{alg:bufopt}. Our buffer optimization algorithm can also be used to reduce the router area and power consumption. But, there is significant difference between \cite{6560630} and our method. In \cite{6560630}, a DNC based latency model was proposed and energy optimization based on this method was carried out with Dynamic Voltage and Frequency Scaling (DVFS), they minimize the energy consumption by adjusting the voltage and frequency for the fixed configuration and deadline. In contrast, our method try to optimize the buffer size under the deadline constraint, and the buffer reduction directly leads to the area and power reduction. Our algorithm can be used to optimize the buffer size of priority aware NoC in conjunction with the priority sharing techniques.
+We also need to mention that, the backlog bound obtained in \cite{189} is the minimum buffer size that does not trigger the flow control, i.e. $B_{R_j,f_i}$ computed in Line 12 of Algorithm \ref{alg:bufopt}. Our buffer optimization algorithm can also be used to reduce the router area and power consumption. But, there is significant difference between \cite{6560630} and our method. In \cite{6560630}, a DNC based latency model was proposed and energy optimization based on this method was carried out with Dynamic Voltage and Frequency Scaling (DVFS), they minimize the energy consumption by adjusting the voltage and frequency for the fixed configuration and deadline. In contrast, our method try to optimize the buffer size under the deadline constraint, and the buffer reduction directly leads to the area and power saving. Our algorithm can be used to optimize the buffer size of priority aware NoC in conjunction with the priority sharing techniques \cite{5161497}.
 
 \section{Experiments}\label{experiments}
-In this section, we first evaluate the tightness of our latency model compared with other analytical method. There are lots of latency analysis models for wormhole-switched real-time communication, e.g. contention tree model \cite{LuJS05}, FLA model \cite{Shi:2008:RCA:1397757.1397996}, LLA model \cite{73}, DNC model \cite{Qian489900}. In this section, we only compare our model with LLA and DNC, as they outperform all the other existing methods. Then, we consider the buffer optimization algorithm by comparing with other analytical methods. There are also lots of backlog analysis models, e.g. scheduling analysis model \cite{Manolache:2006:BSO:1131481.1131683} and LLBA model \cite{189}. In addition, the DNC model proposed in \cite{Qian489900} can also be used to analyze the backlog bound.
+There are lots of latency analysis models for wormhole-switched real-time communication, e.g. contention tree model \cite{LuJS05}, FLA model \cite{Shi:2008:RCA:1397757.1397996}, LLA model \cite{73}, DNC model \cite{Qian489900}. There are also lots of backlog analysis models, e.g. scheduling analysis model \cite{Manolache:2006:BSO:1131481.1131683} and LLBA model \cite{189}. In addition, the DNC model proposed in \cite{Qian489900} can also be used to analyze the backlog bound. In this section, we only compare our model with LLA and DNC, as they outperform all the other existing methods. The detailed comparison with LLA and DNC can be found in subsection \ref{llacmp} and subsection \ref{dnccmp}, respectively. 
 
-The correctness of our latency model and buffer optimization algorithm is verified by simulation. We will utilize the Heterogenous-Networks-on-Chip (HNoCs) \cite{6404157}, a modular open source NoC simulator, to verify our analytical model. To achieve this goal, we modify the switch allocator to support fixed-priority scheduling, and collect the maximal end-to-end packet delay at each destination IP core. The network considered in this section is a $4\times 4$ mesh, with four periodical traffic flows $f_i$ $(i=1,2,3,4)$ in the network, as shown in Fig. \ref{topology}. Denote by the packet length of flow $f_i$ is $L_i$ (in flits) and the injection period is $I_i$. Packets from the same flow has the same length, but packets of different flows can be of different lengths. We can obtain the arrival curve according to the method introduced in subsection \ref{traffic}.
+Denote by the packet length of flow $f_i$ is $L_i$ (in flits) and the injection period is $I_i$. Packets from the same flow has the same length, but packets of different flows can be of different lengths. We can obtain the arrival curve according to the method introduced in subsection \ref{traffic}.
 
-\subsection{Comparison with Link Level Analysis}
-To ease the analysis, LLA supposes the number of bits in a flit is the same as the physical channel width, and the latency of a flit traverses a router is 1 cycle. Under these assumptions, the traversing time of a packet with $F_i$ flits without contention, i.e. $L_i$, is equal to $F_i$. To compare with our method, we should specialize the standard 5 stages wormhole router to a single cycle router, this is achieved by letting the latency of BW, RC, VA and ST stage be zero. Thus, the service curve of entire router is the same as the service curve provided by the SA stage, which is $<\beta_{SA,R_i}^l,\beta_{SA,R_i}^u>$. Next, we compare the end-to-end latency and buffer requirement computed with LLA and RTC.
-\subsubsection{Latency Comparison}
-For this scenario, we suppose the VC buffer is large enough and the credit feedback delay $\sigma=0$, so that we can ignore the back-pressure caused by flow control and directly apply LLA for the latency analysis. There are two flows sharing the same priority in Fig. \ref{topology}, i.e. $f_1$ and $f_4$. While analyzing the latency of $f_1$, we can treat $f_4$ as a flow with higher priority than $f_1$, and vice versus. Let the injection period be packet length be 1 flit, we calculate end-to-end latency for each packet with our method and LLA under different injection period. the calculation result is shown in Table \ref{LLAvsRTC}. The RTC result is obtained by considering the $CSP(f_2)$ (i.e. $R_{13}$ and $R_{9}$). As shown in Table \ref{LLAvsRTC}, for small injection period, the RTC result is looser than the LLA results, this is because the RTC is stateless algebra approach, and ignored some detailed information about the system.
+\subsection{Comparison with Link Level Analysis}\label{llacmp}
+To ease the analysis, LLA supposes the number of bits in a flit is the same as the physical channel width, and the latency of a flit traverses a router is 1 cycle. Under these assumptions, the traversing time of a packet with $F_i$ flits without contention, i.e. $L_i$, is equal to $F_i$. To compare with our method, we should specialize the standard 5 stages wormhole router to a single cycle router, this is achieved by letting the latency of BW, RC, VA and ST stage be zero. Thus, the service curve of entire router is the same as the service curve provided by the SA stage, which is $<\beta_{SA,R_i}^l,\beta_{SA,R_i}^u>$. The network topology and flows are shown in Fig. \ref{topology}. There are four flows (i.e. $f_1$, $f_2$, $f_3$ and $f_4$) in the network, with different priority $P_4>P_1>P_2>P_3$. Next, we compare the end-to-end latency and buffer requirement computed with LLA and RTC.
+\subsubsection{Latency Comparison}\label{dnccmp}
+For this scenario, we suppose the VC buffer is large enough and the credit feedback delay $\sigma=0$, so that we can ignore the back-pressure caused by flow control and directly apply LLA for the latency analysis. We examine the end-to-end latency of the four flows under different packet length and injection period, the calculation result is shown in Table \ref{LLAvsRTC}. The RTC result is obtained by considering the $CSP(f_2)$ (i.e. $R_{13}$ and $R_{9}$). As shown in Table \ref{LLAvsRTC}, for small injection period, the RTC result is looser than the LLA results, this is because the RTC is stateless algebra approach, and ignored some detailed information about the system.
 \begin{table}[htbp]
 \centering
 \caption{\label{LLAvsRTC}Delay comparison with link level analysis}
@@ -369,15 +364,11 @@ $14$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,11,7  &   11,1
 \hline
 $16$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,11,7  &   11,12,11,7\\
 \hline
-$18$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,11,7  &   11,12,11,7\\
-\hline
-$20$    &   5,6,5,4 & 5,6,5,4   &   7,8,7,5 &   7,8,7,5 &   11,12,11,7  &   11,12,11,7\\
-\hline
 \end{tabular}
 \end{table}
 
 \subsubsection{Buffer Optimization Comparison}
-The LLBA \cite{189} given the required buffer size to prevent flow control, in this section, we try to demonstrate that, the RTC method can optimize the buffer size further. Following the same configuration with the previous subsection, suppose the injection period $I_i=20$ and packet size $F_i=4$ ($i=1,2,3,4$), the end-to-end latency for the four flows are 11, 12, 11, 7, and the buffer size are $(1,1,1,4)$, $(1,1,1,1,1)$, $(4,4,1,1)$, $(1,1,1,1)$. If we change the deadline constraint, we can optimize the buffer requirement with RTC method, as shown in Table \ref{LLBAvsRTC}.
+The LLBA \cite{189} given the required buffer size to prevent flow control. In this section, we try to demonstrate that, the RTC method can optimize the buffer size further. Following the same configuration with the previous subsection, suppose the injection period $I_i=20$ and packet size $F_i=4$ ($i=1,2,3,4$), the end-to-end latency for the four flows are 11, 12, 11, 7, and the buffer size are $(1,1,1,4)$, $(1,1,1,1,1)$, $(4,4,1,1)$, $(1,1,1,1)$. We change the deadline constraint from 15 cycle to 27 cycle, and compute the required buffer size four each flow, as shown in Table \ref{LLBAvsRTC}.
 \begin{table*}[htbp]
 \centering
 \caption{\label{LLBAvsRTC}buffer requirement comparison}
@@ -404,7 +395,7 @@ The LLBA \cite{189} given the required buffer size to prevent flow control, in t
 \end{table*}
 
 \subsection{Comparison with Network Calculus and Simulation}
-In this Subsection, we present the numerical results and simulation results to demonstrate the tightness and improvement of our method. In \cite{Qian489900}, the authors derived the service curve for each contention flow at the same input router. But, these service curves can only be used to derive the latency of injection router, for the service curve of each flow at subsequent router, the service curve should be computed with the same procedure as \cite{qian2009analysis}. We set the clock cycle as $T=2ns$, flit injection rate as $0.1$ flit/cycle, buffer depth as $B=4$ flits, credit feedback delay $\sigma=0$ cycle, and change the packet length from $1$ flit to $16$ flits. The simulation results and numerical results is plotted in Fig. \ref{comparison}. By comparison, we find that, for flow $f_1$ and $f_2$, the DNC method and our method get the same latency result. But, for flow $f_3$, we find that, RTC can derive a much tighter latency bound compared with DNC, as shown in Fig. \ref{comparison}. and the difference becomes larger when we increase the packet length. One important reason is that, the simulation might not cover the corner case during the simulation process.
+In this subsection, we present the numerical results and simulation results to demonstrate the tightness and improvement of our method over DNC method in \cite{Qian489900}. In \cite{Qian489900}, the authors derived the service curve for each contention flow at the same input router. But, these service curves can only be used to derive the latency of injection router, for the service curve of each flow at subsequent router, the service curve should be computed with the same procedure as \cite{qian2009analysis}. The correctness of our latency model and buffer optimization algorithm is verified by simulation. We will utilize the Heterogenous-Networks-on-Chip (HNoCs) \cite{6404157}, a modular open source NoC simulator, to verify our analytical model. To achieve this goal, we modify the switch allocator to support fixed-priority scheduling, and collect the maximal end-to-end packet delay at each destination IP core. We set the clock cycle as $T=2ns$, flit injection rate as $0.1$ flit/cycle, buffer depth as $B=4$ flits, credit feedback delay $\sigma=0$ cycle, and change the packet length from $1$ flit to $16$ flits. The simulation results and numerical results is plotted in Fig. \ref{comparison}. By comparison, we find that, for flow $f_1$ and $f_2$, the DNC method and our method get the same latency result. But, for flow $f_3$, we find that, RTC can derive a much tighter latency bound compared with DNC, as shown in Fig. \ref{comparison}. and the difference becomes larger when we increase the packet length. One important reason is that, the simulation might not cover the corner case during the simulation process.
 \begin{figure}
   \centering
   % Requires \usepackage{graphicx}
@@ -412,7 +403,7 @@ In this Subsection, we present the numerical results and simulation results to d
   \caption{Comparison with network calculus and simulation}\label{comparison}
 \end{figure}
 
-Next, we explain the reason why our method outperform the DNC based method proposed in \cite{Qian489900}. As implied by Theorem 1.72 in \cite{Boudec2001Network}, if we can take the maximal service curve into consideration, we can get a much tighter output arrival curve, then, the leftover service curve of the next router will be much tighter than the one calculated with \cite{qian2009analysis}. To demonstrate this, let $B=4$ flits, $L=4$ flits, $\sigma=0$ cycle and $T=2ns$, we obtained the calculated service curve for flow $f_2$ both with DNC and RTC, as shown in Fig. \ref{loose}. The calculation was carried out with RTC toolbox. From Fig. \ref{loose}, we find that, the calculated service curve with RTC is much 'better' than DNC, which explains why the RTC can produce better results.
+Next, we explain the reason why our method outperform the DNC based method proposed in \cite{Qian489900}. As implied by Theorem 1.72 in \cite{Boudec2001Network}, if we can take the maximal service curve into consideration, we can get a much tighter output arrival curve, then, the leftover service curve of the next router will be much tighter than the one calculated with \cite{qian2009analysis}. To demonstrate this, let $B=4$ flits, $L=4$ flits, $\sigma=0$ cycle and $T=2ns$, we obtained the calculated service curve for flow $f_2$ both with DNC and RTC, as shown in Fig. \ref{loose}. The numerical calculation was carried out with RTC toolbox. From Fig. \ref{loose}, we find that, the calculated service curve with RTC is much 'better' than DNC, which explains why the RTC can produce better results.
 \begin{figure}
   \centering
   % Requires \usepackage{graphicx}
