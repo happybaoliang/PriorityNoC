@@ -1,8 +1,8 @@
+length=2;
+period=6;
+
 scu=rtcpjdu(1,0,0);
 scl=rtcpjdl(1,0,0);
-
-length=4;
-period=40;
 
 acl=rtcscale(rtcpjdl(period,0,0),length,0);
 acu=rtcscale(rtcpjdu(period,0,0),length,0);
