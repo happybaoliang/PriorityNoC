@@ -1,6 +1,6 @@
 data=[28 25 23;31 29 24;55 47 39;81 73 56;123 107 72]
 handle=bar(data)
-set(gca,'xTickLabel',{'L=1','L=4','L=8','L=12','L=16'},'FontSize',15)
+set(gca,'xTickLabel',{'F=1','F=4','F=8','F=12','F=16'},'FontSize',15)
 xlabel('Packet Length','FontSize',15)
 ylabel('End-to-End Latency (cycle)','FontSize',15)
 legend('DNC','RTC','Simulation')

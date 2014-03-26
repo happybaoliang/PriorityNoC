@@ -46,7 +46,7 @@ The conventional on-chip interconnection paradigms, e.g. bus, ring and point-to-
 
 To meet the rigorous Quality-of-Service (QoS) requirement, various special hardware implementations have been proposed, e.g. Time-Division Multiplexing-Access (TDMA) \cite{GoDR05}, circuit-switch \cite{6628254} and time-triggered switch \cite{4617280}. Although providing strict real-time communication guarantee, the average performance and resource utilization of these proposals are very poor. In contrast, wormhole-switched NoC is widely used in on-chip network due to its simplicity and high-efficiency. Thus, providing real-time communication support on the conventional wormhole-switched NoC to meet both average-case and worst-case communication requirements is the most promising solution. To achieve this goal, a special scheduling policy (e.g. DifServ \cite{1411140} or priority-aware implementation \cite{Shi:2008:RCA:1397757.1397996}\cite{708526}\cite{627905}) or flow control mechanism (e.g. \cite{Li199649}\cite{707545}) should be integrated into the conventional wormhole-switched NoC. For all these real-time communication proposals based on wormhole-switched NoC, a key step before their adoption as the platform of real-time applications is the analysis of the worst-case communication latency for all the real-time flows to guarantee the satisfaction of deadline constraint. An effective buffer analysis approach is also needed to optimize the buffer allocation under real-time constraint, since buffer usually consumes about 46\% power \cite{pkundu} and occupies 30\% area \cite{5507566} of entire router.
 
-A creditable and accurate worst-case analysis is crucial for the application of wormhole-switched NoC in real-time communication, since an overoptimistic estimation will lead to the violation of deadline, while an overpessimistic estimation will make the utilization of on-chip resource very low. The conventional simulation method is not competent for the worst-case performance analysis, because the worst-case scenarios are hard to be captured by simulation. As an alternative, the analytical method can establish the relationship between performance metrics and design parameters in a very short time, and give the worst-case performance immediately. For the worst-case analysis of fixed-priority wormhole-switched on-chip networks, Flow-Level Analysis (FLA) \cite{Shi:2008:RCA:1397757.1397996}, Link-Level Analysis (LLA) \cite{73}\cite{189} and Deterministic Network Calculus (DNC) \cite{Qian489900} have been successfully applied to analyze the end-to-end latency and backlog. Both FLA and LLA have their roots in the classic scheduling theory, which assume that the traffic flows are strictly periodic, and the input buffer of wormhole-switched NoC is sufficient large, so that the back-pressure caused by flow control can be ignored. In addition, they simplify the router model by restricting the per-hop latency to be one cycle, which is complying with the conventional router implementation.
+A creditable and accurate worst-case analysis is crucial for the application of wormhole-switched NoC in real-time communication, since an overoptimistic estimation will lead to the violation of deadline, while an overpessimistic estimation will make the utilization of on-chip resource very low. The conventional simulation method is not competent for the worst-case performance analysis, because the worst-case scenarios are hard to be captured by simulation. As an alternative, the analytical method can establish the relationship between performance metrics and design parameters in a very short time, and give the worst-case performance immediately. For the worst-case analysis of fixed-priority wormhole-switched on-chip networks, Flow-Level Analysis (FLA) \cite{Shi:2008:RCA:1397757.1397996}, Link-Level Analysis (LLA) \cite{73}\cite{189} and Deterministic Network Calculus (DNC) \cite{Qian489900} have been successfully applied to analyze the end-to-end latency and backlog. Both FLA and LLA have their roots in the classic scheduling theory, which assume that the traffic flows are strictly periodic, and the buffer size of wormhole-switched NoC is sufficient large, so that the back-pressure caused by flow control can be ignored. In addition, they simplify the router model by restricting the per-hop latency to be one cycle, which is complying with the conventional router implementation.
 
 Deterministic network calculus based method \cite{Qian489900} overcomes these limitations by applying the advanced operators and properties of DNC. However, we found that the DNC based performance bound in \cite{Qian489900} can be further improved if we take the maximal service curve of on-chip routers and minimal arrival curve of traffic into consideration. These two curves can be used to improve the tightness of output arrival curve of current router and leftover service curve of the downstream routers. The improved leftover service curve further tightens the obtained performance bounds for low-priority flows. Motivated by this observation, we adopt the real-time calculus (RTC) theory \cite{1253607} originally used for the real-time analysis of task scheduling to build an end-to-end performance model for the wormhole-switched NoC with credit-based flow control. Compared with the DNC model in \cite{Qian489900}, our model can significantly improves the tightness of performance bounds, we will further explain the reason and demonstrate the improvement in Section \ref{experiments}. The main contribution of this paper is twofold: (1) We propose an end-to-end latency analysis algorithm for the priority-aware wormhole-switched NoC based on the RTC model. The output of this algorithm can be used as the reference of IP core mapping, task mapping, routing selection, or NoC parameters configuration, etc. (2) We also propose an RTC based buffer sizing algorithm for the priority-aware wormhole-switched NoC to reduce the buffer size under deadline constraint. This is a significant improvement of previously proposed FLA and LLA based buffer optimization method \cite{189}, which can be used to minimize the power consumption and chip area.
 
@@ -135,12 +135,12 @@ The inequalities above indicate that, if a flow has a flit arrival curve $<\alph
 
 \subsection{Service Model}\label{router}
 While modeling the service capacity of routers with RTC, we can analyze the data-path of a flow stage-by-stage. After obtained the service curve for each stage, the service curve provided by the router to the flow can be obtained by concatenating all the service curves of these five stages. This is significantly different with the existing DNC based model \cite{qian2009analysis,Qian489900}, where they treat the entire router as a whole and designate a Latency-Rate (LR) service curve for simplicity. The advantage of our method is that, it can be easily modified to characterize the non-standard router micro-architectures, by simply letting the service curve of non-existed stages to be burst delay function $\delta_0(t)$\footnote{$\delta_0(t)=+\infty$ if $t>0$, and 0 otherwise.}. Next, we try to obtain the service curves of all these 5 stages:
-\begin{figure*}
+\begin{figure}
   \centering
-  \subfloat[Service curve of BW, SA and ST stages]{\includegraphics[scale=0.5]{figures/BW_ST_SA.pdf}\label{result1}}\hspace{10pt}
-  \subfloat[Service curve of RC and VA stages]{\includegraphics[scale=0.5]{figures/RC_VA.pdf}\label{result2}}
+  \subfloat[Service curve of BW, SA and ST stages]{\includegraphics[scale=0.35]{figures/BW_ST_SA.pdf}\label{result1}}\hspace{10pt}
+  \subfloat[Service curve of RC and VA stages]{\includegraphics[scale=0.35]{figures/RC_VA.pdf}\label{result2}}
   \caption{Service model for each pipeline stages. The solid lines and dotted lines represent the upper service curves and lower service curves, respectively.}
-\end{figure*}
+\end{figure}
 
 (1) BW stage and ST stage: all the flits within a traffic flow will traverse these two stages, and experience a fixed delay $T$. Take the BW stage as an example, for any time interval of length less than $T$, the maximum and minimal number of flits can be served are one and zero, respectively, since it outputs one flit at each cycle $T$. Similarly, for any time interval of length greater than $T$, the maximum and minimal number of flits that can be seen are two and one, respectively. The resulted service curves, i.e. $<\beta^l_{BW},\beta^u_{BW}>$ and $<\beta^l_{ST},\beta^u_{ST}>$, are shown in Fig. \ref{result1}.
 
@@ -211,7 +211,7 @@ An intuitive solution is: Firstly, obtaining the leftover service curve of $R_{1
 \begin{figure}
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[scale=0.65]{figures/collapse.pdf}\\
+  \includegraphics[scale=0.5]{figures/collapse.pdf}\\
   \caption{Collapsible sub-path of $f_2$. Since the flow control between $R_{13}$ and $R_9$ can be ignored, they are replaced by a single virtual router $R_{13,9}$.}\label{collapse}
 \end{figure}
 
@@ -231,7 +231,7 @@ After obtained the traffic model, service model and flow control model, compute 
 \caption{End-to-End Latency Analysis Algorithm}
 \label{alg:equivalentservicecurve}
 \begin{algorithmic}[1]
-\REQUIRE Network Topology Graph and Traffic Characterization
+\REQUIRE Network Topology Graph and Flow Specification
 \ENSURE Worst-case End-to-End Latency for all the flows
     \FOR {each flow $f_i\in \mathcal{F}$ with priority order}
         \STATE $\beta_{\tau}^l=\delta_0(t)$; $\beta_{\tau}^u=\delta_0(t)$;
@@ -279,7 +279,7 @@ The priority-aware wormhole-switched NoC \cite{Shi:2008:RCA:1397757.1397996} req
 \caption{Buffer Sizing Algorithm}
 \label{alg:bufopt}
 \begin{algorithmic}[1]
-\REQUIRE Network Topology Graph and Deadline for all the flows
+\REQUIRE Network Topology Graph and Flow Specification
 \ENSURE Optimized Buffer Size
     \FOR {each flow $f_i\in \mathcal{F}$ with priority order}
         \FOR {each router $R_j\in \mathcal{R}_{i}$}
@@ -334,56 +334,56 @@ A significant difference with Algorithm 1 is that, this algorithm does not ident
 In this section, we validate the correctness and tightness of our performance model by comparison with other analytical methods and simulation. Several analytical methods exist for the delay analysis of priority-aware NoC, examples include contention tree model \cite{LuJS05}, lumped link model \cite{707545}, dependency graph model \cite{708526}, FLA \cite{Shi:2008:RCA:1397757.1397996}, LLA \cite{73} and DNC \cite{Qian489900}, etc. There are also extensive research on the buffer sizing of priority-aware NoC, representative works include shaping delay analysis \cite{Manolache:2006:BSO:1131481.1131683} and LLBA \cite{189}. In addition, the DNC model in \cite{Qian489900} can also be deployed to calculate the buffer bound. Among all these analytical methods, LLA \cite{73}\cite{189} and DNC \cite{Qian489900} based model outperform the others when the tightness of delay and backlog bound are considered. Thus, we will only perform comparison with LLA and DNC, as presented in subsection \ref{llacmp} and subsection \ref{dnccmp}, respectively.
 
 \subsection{Comparison with Link Level Analysis}\label{llacmp}
-The network topology and flows are shown in Fig. \ref{topology}. There are four flows (i.e. $f_1$, $f_2$, $f_3$ and $f_4$) in the network, with different priority $P_4>P_1>P_2>P_3$. We perform the comparison on a set of periodical traffic, due to the restriction of LLA method \cite{73}\cite{189}. Suppose the packet length of flow $f_i$ is $F_i$ (in flits) and the injection period is $I_i$. Packets from the same flow has the same length, but packets of different flows can be of different lengths. To ease the analysis, LLA supposes the number of bits in a flit is the same as the physical channel width, and the latency of a flit traverses a router is 1 cycle. Under these assumptions, the traversing time of a packet with $F_i$ flits without contention, i.e. $L_i$, is equal to $F_i$.
-
-To compare with LLA, our model for the standard 5 stages wormhole router should be specialized to a single cycle router, this is achieved by letting the service curve of BW, RC, VA and ST stage be burst delay function $\delta_0(t)$. Under this condition, the service curve of entire router is the same as the service curve provided by the SA stage, which is $<\beta_{SA,R_i}^l,\beta_{SA,R_i}^u>$. The LLA method does not consider the self-blocking caused by flow control. Thus, we set the credit feedback delay $\sigma=0$ cycle in our model for a fair comparison. Next, we compare the end-to-end latency and buffer requirement computed with LLA and our model.
+The network topology and flows are shown in Fig. \ref{topology}. There are four flows (i.e. $f_1$, $f_2$, $f_3$ and $f_4$) in the network, with different priority $P_4>P_1>P_2>P_3$. Suppose the packet length of flow $f_i$ is $F_i$ (in flits) and the injection period is $I_i$. We perform the comparison on a set of periodical traffic due to the restriction of LLA method \cite{73}\cite{189}, and the traffic jitter for all the flows are set to be zero. To ease the analysis, LLA supposes the number of bits in a flit is the same as the physical channel width, and the latency of a flit traverses a router is 1 cycle. To compare with LLA, our model for the standard 5 stages wormhole router should be specialized to a single cycle router, this is achieved by letting the service curve of BW, RC, VA and ST stage be burst delay function $\delta_0(t)$. Under this condition, the service curve of entire router is the same as the service curve provided by the SA stage, which is $<\beta_{SA,R_i}^l,\beta_{SA,R_i}^u>$. In addition, the LLA method does not consider the self-blocking caused by flow control. Thus, we set the credit feedback delay $\sigma=0$ cycle in our model for a fair comparison. Next, we compare the end-to-end latency and buffer requirement computed with LLA and our model.
 \subsubsection{End-to-End Latency}
-For this scenario, we suppose the VC buffer is large enough so that we can ignore the back-pressure caused by flow control and directly apply LLA for the latency analysis. We examine the end-to-end latency of the four flows in Fig. \ref{topology} under different packet length $L_i$ and injection period $I_i$, the calculated result is shown in Table \ref{LLAvsRTC}. Each element in the table is a quaternion, corresponding to the worst-case latency of $f_1$, $f_2$, $f_3$ and $f_4$ (in cycles). The blanking items in the table corresponding to the scenarios that the worst-case latency of a flow is greater than its injection period, which is unable to be analyzed with LLA \cite{73}. In contrast, the RTC method can tackle these circumstances and give the worst-case latency. The RTC result is obtained by collapsing the CSP of $f_2$ (i.e. $R_{13}$ and $R_{9}$).
+For this scenario, we suppose the VC buffer is large enough so that we can ignore the back-pressure caused by flow control and directly apply LLA for the latency analysis. Suppose all the flows have the same injection period $I_i$ and packet length $F_i$, we examine the end-to-end latency of the four flows in Fig. \ref{topology} under different packet length $F_i$ and injection period $I_i$, the calculated result is shown in Table \ref{LLAvsRTC}. The RTC result is obtained by collapsing the CSP of $f_2$ (i.e. $R_{13}$ and $R_{9}$). Each quaternion in the table is corresponding to the worst-case latency of $f_1$, $f_2$, $f_3$ and $f_4$ (in cycles). The blanking items corresponding to LLA columns indicate that the worst-case latency of a flow is greater than its injection period which is unable to be analyzed with LLA \cite{73}, and the blanking items corresponding to RTC columns indicate that the entire network is unstable due to too much packets were injected. As shown in Table \ref{LLAvsRTC}, the RTC method can tackle the circumstances which can not be analyzed by LLA and give the worst-case latency. In addition, we also found that the RTC result is as tight as that of LLA except for the scenarios that the worst-case latency of a flow is equal to the injection period. These exceptions are due to the fact that RTC theory we used in this paper is a stateless algebra approach \cite{Phan2008MultiMode}, which ignores some detailed information about the analyzed system.
 \begin{table}[htbp]
 \centering
 \caption{\label{LLAvsRTC}Delay comparison with link level analysis}
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-\multirow{3}{*}{$I_i$}  & \multicolumn{2}{|c|}{$L_i=1$} & \multicolumn{2}{|c|}{$L_i=2$}    &   \multicolumn{2}{|c|}{$L_i=4$} \\
+\multirow{3}{*}{$I_i$}  & \multicolumn{2}{|c|}{$F_i=1$} & \multicolumn{2}{|c|}{$F_i=2$}    &   \multicolumn{2}{|c|}{$F_i=4$} \\
 \cline{2-7}
 & RTC & LLA & RTC & LLA &   RTC &   LLA\\
 \hline
-$3$ &   7,8,8,4 &   --- &   \multicolumn{2}{|c|}{---}   &   \multicolumn{2}{|c|}{---}\\
+$3$ &   7,7,8,4 &   --- &   --- &   ---   &      --- &   --- \\
 \hline
-$5$ &   6,6,6,4 &   --- &   9,10,12,5 &   ---   &   \multicolumn{2}{|c|}{---}\\
+$4$ &   6,6,6,4 &   --- &   --- &   ---   &      --- &   --- \\
 \hline
-$6$ &   5,6,6,4 &   5,6,5,4 &   9,8,9,5 &   ---   &   \multicolumn{2}{|c|}{---}\\
+$5$ &   6,6,6,4 &   --- &   9,10,12,5 &   ---   &      --- &   --- \\
 \hline
-$7$ &   5,6,5,4 &   5,6,5,4 &   7,8,9,5 &   --- &   \multicolumn{2}{|c|}{---}\\
+$6$ &   5,6,6,4 &   5,6,5,4 &   9,8,9,5 &   ---   &      --- &   --- \\
 \hline
-$8$ &   5,6,5,4 &   5,6,5,4 &   7,8,9,5 &   7,8,7,5 &   \multicolumn{2}{|c|}{---}\\
+$7$ &   5,6,5,4 &   5,6,5,4 &   9,8,9,5 &   --- &      --- &   --- \\
 \hline
-$9$ &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   15,16,19,7 &   --- \\
+$8$ &   5,6,5,4 &   5,6,5,4 &   7,8,9,5 &   7,8,7,5 &      --- &   --- \\
+\hline
+$9$ &   5,6,5,4 &   5,6,5,4 &   7,8,9,5 &   7,8,7,5 &   15,16,19,7 &   --- \\
+\hline
+$10$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   15,12,15,7  &   ---\\
 \hline
 $11$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   15,12,15,7  &   ---\\
 \hline
+$12$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,15,7  &   ---\\
+\hline
 $13$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,15,7  &   ---\\
 \hline
-$15$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,11,7  &   11,12,11,7\\
+$14$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,15,7  &   ---\\
+\hline
+$15$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,15,7  &   11,12,11,7\\
+\hline
+$16$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,11,7  &   11,12,11,7\\
 \hline
 $17$    &   5,6,5,4 &   5,6,5,4 &   7,8,7,5 &   7,8,7,5 &   11,12,11,7  &   11,12,11,7\\
 \hline
 \end{tabular}
 \end{table}
 
-As shown in the table \ref{LLAvsRTC}, for the given configuration, RTC result is as tight as that of LLA except for the scenarios that the worst-case latency of a flow is equal to the injection period. This is because the RTC is stateless algebra approach, and ignored some detailed information about the system \cite{Phan2008MultiMode}. We also found that, both the LLA and RTC overestimate the worst-case latency bound. To demonstrate this, let $L_i=1$ flit, $I_i=6$ cycle, we plot the time line graph for the four flows in Fig. \ref{inaccurate}. As shown in Fig. \ref{inaccurate}, the worst-case latency of these four flows computed with LLA (5,6,5,4) and RTC (5,6,6,4) are looser than the actual latency, which is (5,5,4,4).
-\begin{figure}
-  \centering
-  % Requires \usepackage{graphicx}
-  \includegraphics[scale=0.7]{figures/inaccurate.pdf}\\
-  \caption{Time line graph of the four flows in Fig. \ref{topology}. Each block represents a router, and the color of the block means which flow are occupying the router at this time instance.}\label{inaccurate}
-\end{figure}
-
-\subsubsection{Buffer Optimization}
-The proposed LLBA method \cite{189} can give the required buffer size of each VC to prevent flow control, this buffer size can be further reduced as long as the deadline is not violated. In this section, we try to demonstrate that, the RTC method can optimize the buffer size further by taking the flow control into consideration. Suppose the injection period $I_i=20$ cycles and packet length $F_i=4$ flits ($i=1,2,3,4$), following the same configuration with the previous subsection, we can get the end-to-end latency for the four flows, which is (11,12,11,7) cycles. We can also get the buffer size reserved at each router for the four flows with LLBA method, which are $(1,1,1,4)$, $(1,1,1,1,1)$, $(4,4,1,1)$ and $(1,1,1,1)$, respectively. We change the deadline constraint from 15 cycles to 27 cycles, and compute the required buffer size for each flow with our buffer optimization algorithm, the result is shown in Table \ref{LLBAvsRTC}. The total buffer size calculated with our method is smaller than the LLBA method (26 flits).
+\subsubsection{Buffer Sizing}
+The LLBA method \cite{189} can only give the required buffer size at each VC to prevent flow control, this buffer size can be further reduced by applying our RTC based buffer sizing algorithm as long as the deadline constraint is not violated. Our RTC model takes the flow control into consideration, which can be utilized to reduce the buffer size calculated with LLBA method further. Suppose the packet injection period $I_i=20$ cycles and packet length $F_i=4$ flits ($i=1,2,3,4$), following the same configuration with the previous subsection, we can get the end-to-end latency for the four flows, which is (11,12,11,7) cycles. We can also get the buffer size reserved at each router for the four flows with LLBA method, which are $(1,1,1,4)$, $(1,1,1,1,1)$, $(4,4,1,1)$ and $(1,1,1,1)$, respectively. We change the deadline constraint from 15 cycles to 27 cycles, and compute the required buffer size for each flow with our buffer sizing algorithm, the result is shown in Table \ref{LLBAvsRTC}. The total buffer size calculated with our method is smaller than the LLBA method (26 flits).
 \begin{table*}[htbp]
 \centering
-\caption{\label{LLBAvsRTC}buffer requirement comparison}
+\caption{\label{LLBAvsRTC}buffer requirement computed with RTC performance model}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 \multirow{2}{*}{Deadline}  & $f_1$  &   $f_2$   &   $f_3$   &   $f_4$   &   \multirow{2}{*}{Required Buffer Size} \\
@@ -432,7 +432,7 @@ This observation also motivates us to improve the backlog bound derived with DNC
 \end{figure}
 
 \section{Conclusion}\label{conclusion}
-The priority-aware wormhole-switched NoC is a promising platform for the on-chip real-time communication if the worst-case performance can be accurately analyzed and guaranteed. Simulation is not competent for this purpose because it is difficult to cover all the corner cases. In this paper, we propose an RTC based analytical model to achieve this goal. We first build the traffic model and service model for this NoC, and propose a novel method to derive the upper service curve of window flow control. Then, based on the proposed RTC model, we proposed an end-to-end latency analyzing algorithm and a buffer optimization algorithm. The latency analyzing algorithm can be implemented in RTC toolbox to compute the end-to-end latency for each flow automatically, to verify whether all these flows meet their deadline under this configuration. To improve the calculated delay bound, we proposed the concept of collapsible sub-path. The proposed buffer optimization algorithm can optimize the buffer size iteratively, from high-priority flows to low-priority flows. It can also be implemented with RTC toolbox to perform the buffer optimization automatically under the constraint of deadline. Experiment results demonstrate that, our method outperforms the conventional analytical methods, e.g. LLA and DNC, when the tightness of performance bound are considered. Our results can also be applied to the mapping, routing and power optimization of NoC.
+The priority-aware wormhole-switched NoC is a promising platform for the on-chip real-time communication if the worst-case performance can be accurately analyzed and guaranteed. Simulation is not competent for this purpose because it is difficult to cover all the corner cases. In this paper, we propose an RTC based analytical model to achieve this goal. We first build the traffic model and service model for this NoC, and propose a novel method to derive the upper service curve of window flow control. Then, based on the proposed RTC model, we proposed an end-to-end latency analyzing algorithm and a buffer sizing algorithm. The latency analyzing algorithm can be implemented in RTC toolbox to compute the end-to-end latency for each flow automatically, to verify whether all these flows meet their deadline under this configuration. To improve the calculated delay bound, we proposed the concept of collapsible sub-path. The proposed buffer sizing algorithm can optimize the buffer size iteratively, from high-priority flows to low-priority flows. It can also be implemented with RTC toolbox to perform the buffer reduction automatically under the constraint of deadline. Experiment results demonstrate that, our method outperforms the conventional analytical methods, e.g. LLA and DNC, when the tightness of performance bound are considered. Our results can also be applied to the mapping, routing and power optimization of NoC.
 
 \section*{Acknowledgement}
 The authors would thank the reviewers for their suggestions and comments, and all the experiments are carried out at Integrated Microsystem Lab (IML) of McGill University. This research is supported by High Technology Research and Development Program of China (Grant No. 2012AA012201, 2012AA011902).
