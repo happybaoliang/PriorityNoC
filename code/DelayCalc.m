@@ -1,32 +1,36 @@
 function DelayCalc()
-RTC();
-DNC();
+times=6;
+length=8;
+period=48;
+bufSize=15;
+disp('RTC:');
+RTC(bufSize,length,period,times);
+disp('DNC:');
+DNC(bufSize,length,period,times);
 end
 
-function RTC()
-Times=9;
-Period=1;
-Length=1;
-buf_r10_f1=5;
-buf_r14_f1=5;
-buf_r15_f1=5;
-buf_r16_f1=5;
-buf_r10_f4=5;
-buf_r6_f4=5;
-buf_r7_f4=5;
-buf_r8_f4=5;
-buf_r15_f2=5;
-buf_r14_f2=5;
-buf_r13_f2=5;
-buf_r9_f2=5;
-buf_r5_f2=5;
-buf_r1_f3=5;
-buf_r5_f3=5;
-buf_r9_f3=5;
-buf_r13_f3=5;
+function RTC(bufSize,Length,Period,Times)
 FeedbackDelay=0;
 
-%Éú³É¸÷ÖÖÇúÏß
+buf_r10_f1=bufSize;
+buf_r14_f1=bufSize;
+buf_r15_f1=bufSize;
+buf_r16_f1=bufSize;
+buf_r10_f4=bufSize;
+buf_r6_f4=bufSize;
+buf_r7_f4=bufSize;
+buf_r8_f4=bufSize;
+buf_r15_f2=bufSize;
+buf_r14_f2=bufSize;
+buf_r13_f2=bufSize;
+buf_r9_f2=bufSize;
+buf_r5_f2=bufSize;
+buf_r1_f3=bufSize;
+buf_r5_f3=bufSize;
+buf_r9_f3=bufSize;
+buf_r13_f3=bufSize;
+
+%ï¿½ï¿½É¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 scu_stage1=rtcpjdu(1,0,0);
 scl_stage1=rtcpjdl(1,0,0);
 scu_stage4=rtcpjdu(1,0,0);
@@ -41,175 +45,342 @@ scl_stage2=rtcscale(rtcpjdl(1,0,0),Length,0);
 scu_stage3=rtcscale(rtcpjdu(1,0,0),Length,0);
 scl_stage3=rtcscale(rtcpjdl(1,0,0),Length,0);
 
-scu=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scu_stage1,scu_stage2),scu_stage3),scu_stage4),scu_stage5);
-scl=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scl_stage1,scl_stage2),scl_stage3),scl_stage4),scl_stage5);
+scl_first3stages=rtcminconv(rtcminconv(scl_stage1,scl_stage2),scl_stage3);
+scu_first3stages=rtcminconv(rtcminconv(scu_stage1,scu_stage2),scu_stage3);
 
-%¼ÆËãR10ÎªÊý¾ÝÁ÷f1ºÍf4Ìá¹©µÄ·þÎñÇúÏß
+scu=rtcminconv(rtcminconv(scu_first3stages,scu_stage4),scu_stage5);
+scl=rtcminconv(rtcminconv(scl_first3stages,scl_stage4),scl_stage5);
+
+%ï¿½ï¿½ï¿½ï¿½R10Îªï¿½ï¿½ï¿½ï¿½ï¿½f1ï¿½ï¿½f4ï¿½á¹©ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 %scu_stage4_f4=rtcceil(rtcscale(scu_stage4,0.5,0));
 scl_stage4_f4=rtcfloor(rtcscale(scl_stage4,0.5,0));
-%scur10_f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scu_stage1,scu_stage2),scu_stage3),scu_stage4_f4),scu_stage5);
-sclr10_f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scl_stage1,scl_stage2),scl_stage3),scl_stage4_f4),scl_stage5);
+%scur10_f4=rtcminconv(rtcminconv(scu_first3stages,scu_stage4_f4),scu_stage5);
+sclr10_f4=rtcminconv(rtcminconv(scl_first3stages,scl_stage4_f4),scl_stage5);
 scu_stage4_f1=rtcceil(rtcscale(scu_stage4,0.5,0));
 scl_stage4_f1=rtcfloor(rtcscale(scl_stage4,0.5,0));
-scur10_f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scu_stage1,scu_stage2),scu_stage3),scu_stage4_f1),scu_stage5);
-sclr10_f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scl_stage1,scl_stage2),scl_stage3),scl_stage4_f1),scl_stage5);
+scur10_f1=rtcminconv(rtcminconv(scu_first3stages,scu_stage4_f1),scu_stage5);
+sclr10_f1=rtcminconv(rtcminconv(scl_first3stages,scl_stage4_f1),scl_stage5);
 
-%¼ÆËãtau10_f1
+%ï¿½ï¿½ï¿½ï¿½tau10_f1
 tempu_f1=rtcplus(rtcminconv(scur10_f1,Feedback),buf_r10_f1);
 templ_f1=rtcplus(rtcminconv(sclr10_f1,Feedback),buf_r10_f1);
 %tau10u_f1=rtcmatminclos(tempu_f1,0,Times);
 tau10l_f1=rtcmatminclos(templ_f1,0,Times);
 
-%¼ÆËãtau10_f4
+%ï¿½ï¿½ï¿½ï¿½tau10_f4
 %tempu_f4=rtcplus(rtcminconv(scur10_f4,Feedback),buf_r10_f4);
 templ_f4=rtcplus(rtcminconv(sclr10_f4,Feedback),buf_r10_f4);
 %tau10u_f4=rtcmatminclos(tempu_f4,0,Times);
 tau10l_f4=rtcmatminclos(templ_f4,0,Times);
 
-%¼ÆËãtau14_f1
+%ï¿½ï¿½ï¿½ï¿½tau14_f1
 tempu_f1=rtcmin(tempu_f1,rtcplus(rtcminconv(scu,Feedback),buf_r14_f1));
 templ_f1=rtcmin(templ_f1,rtcplus(rtcminconv(scl,Feedback),buf_r14_f1));
 %tau14u_f1=rtcmatminclos(tempu_f1,0,Times);
 tau14l_f1=rtcmatminclos(templ_f1,0,Times);
 
-%¼ÆËãtau6_f4
+%ï¿½ï¿½ï¿½ï¿½tau6_f4
 %tempu_f4=rtcmin(tempu_f4,rtcplus(rtcminconv(scu,Feedback),buf_r6_f4));
 templ_f4=rtcmin(templ_f4,rtcplus(rtcminconv(scl,Feedback),buf_r6_f4));
 %tau6u_f4=rtcmatminclos(tempu_f4,0,Times);
 tau6l_f4=rtcmatminclos(templ_f4,0,Times);
 
-%¼ÆËãtau15_f1
+%ï¿½ï¿½ï¿½ï¿½tau15_f1
 tempu_f1=rtcmin(tempu_f1,rtcplus(rtcminconv(scu,Feedback),buf_r15_f1));
 templ_f1=rtcmin(templ_f1,rtcplus(rtcminconv(scl,Feedback),buf_r15_f1));
 tau15u_f1=rtcmatminclos(tempu_f1,0,Times);
 tau15l_f1=rtcmatminclos(templ_f1,0,Times);
 
-%¼ÆËãtau7_f4
+%ï¿½ï¿½ï¿½ï¿½tau7_f4
 %tempu_f4=rtcmin(tempu_f4,rtcplus(rtcminconv(scu,Feedback),buf_r7_f4));
 templ_f4=rtcmin(templ_f4,rtcplus(rtcminconv(scl,Feedback),buf_r7_f4));
 %tau7u_f4=rtcmatminclos(tempu_f4,0,Times);
 tau7l_f4=rtcmatminclos(templ_f4,0,Times);
 
-%¼ÆËãtau16_f1
+%ï¿½ï¿½ï¿½ï¿½tau16_f1
 tempu_f1=rtcmin(tempu_f1,rtcplus(rtcminconv(scu,Feedback),buf_r16_f1));
 templ_f1=rtcmin(templ_f1,rtcplus(rtcminconv(scl,Feedback),buf_r16_f1));
 tau16u_f1=rtcmatminclos(tempu_f1,0,Times);
 tau16l_f1=rtcmatminclos(templ_f1,0,Times);
 
-%¼ÆËãtau8_f4
+%ï¿½ï¿½ï¿½ï¿½tau8_f4
 %tempu_f4=rtcmin(tempu_f4,rtcplus(rtcminconv(scu,Feedback),buf_r8_f4));
 templ_f4=rtcmin(templ_f4,rtcplus(rtcminconv(scl,Feedback),buf_r8_f4));
 %tau8u_f4=rtcmatminclos(tempu_f4,0,Times);
 tau8l_f4=rtcmatminclos(templ_f4,0,Times);
 
-%¼ÆËãÍøÂçÎªÊý¾ÝÁ÷f4Ìá¹©µÄ·þÎñÇúÏß
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½f4ï¿½á¹©ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 eqscl_f4=rtcminconv(rtcminconv(rtcminconv(tau8l_f4(1),scl),tau7l_f4(1)),scl);
 eqscl_f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl_f4,tau6l_f4(1)),scl),tau10l_f4(1)),sclr10_f4);
 
-%¼ÆËãÍøÂçÎªÊý¾ÝÁ÷f1Ìá¹©µÄ·þÎñÇúÏß
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½f1ï¿½á¹©ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 eqscl_f1=rtcminconv(rtcminconv(rtcminconv(tau16l_f1(1),scl),tau15l_f1(1)),scl);
 eqscl_f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl_f1,tau14l_f1(1)),scl),tau10l_f1(1)),sclr10_f1);
 
-%¼ÆËãf1µÄ¶Ëµ½¶ËÑÓ³Ù
+%ï¿½ï¿½ï¿½ï¿½f1ï¿½Ä¶Ëµï¿½ï¿½ï¿½ï¿½Ó³ï¿½
 Y1=rtch(acu,eqscl_f1);
 fprintf('Delay Bound for Flow I:%3.3f cycles\n',Y1);
 
-%Îªf2¼ÆËãtau5
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau5
 tempu_f2=rtcplus(rtcminconv(scu,Feedback),buf_r5_f2);
 templ_f2=rtcplus(rtcminconv(scl,Feedback),buf_r5_f2);
 %tau5u_f2=rtcmatminclos(tempu_f2,0,Times);
 tau5l_f2=rtcmatminclos(templ_f2,0,Times);
 
-%Îªf2¼ÆËãtau9
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau9
 tempu_f2=rtcmin(tempu_f2,rtcplus(rtcminconv(scu,Feedback),buf_r9_f2));
 templ_f2=rtcmin(templ_f2,rtcplus(rtcminconv(scl,Feedback),buf_r9_f2));
 tau9u_f2=rtcmatminclos(tempu_f2,0,Times);
 tau9l_f2=rtcmatminclos(templ_f2,0,Times);
 
-%Îªf2¼ÆËãtau13
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau13
 tempu_f2=rtcmin(tempu_f2,rtcplus(rtcminconv(scu,Feedback),buf_r13_f2));
 templ_f2=rtcmin(templ_f2,rtcplus(rtcminconv(scl,Feedback),buf_r13_f2));
-%tau13u_f2=rtcmatminclos(tempu_f2,0,Times);
+tau13u_f2=rtcmatminclos(tempu_f2,0,Times);
 tau13l_f2=rtcmatminclos(templ_f2,0,Times);
 
-%Îªf2¼ÆËãtau14
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau14
 tempu_f2=rtcmin(tempu_f2,rtcplus(rtcminconv(scu,Feedback),buf_r14_f2));
 templ_f2=rtcmin(templ_f2,rtcplus(rtcminconv(scl,Feedback),buf_r14_f2));
 tau14u_f2=rtcmatminclos(tempu_f2,0,Times);
 tau14l_f2=rtcmatminclos(templ_f2,0,Times);
 
-%¼ÆËãf1ÔÚR15´¦µÄµ½´ïÇúÏß
-partialscu_f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(tau16u_f1,scu),tau15u_f1),scu_stage1),scu_stage2),scu_stage3);
-partialscl_f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(tau16l_f1,scl),tau15l_f1),scl_stage1),scl_stage2),scl_stage3);
+%ï¿½ï¿½ï¿½ï¿½f1ï¿½ï¿½R15ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+partialscu_f1=rtcminconv(rtcminconv(rtcminconv(tau16u_f1(1),scu),tau15u_f1(1)),scu_first3stages);
+partialscl_f1=rtcminconv(rtcminconv(rtcminconv(tau16l_f1(1),scl),tau15l_f1(1)),scl_first3stages);
 outacu_f1=rtcmin(rtcmindeconv(rtcminconv(acu,partialscu_f1),partialscl_f1),partialscu_f1);
 outacl_f1=rtcmin(rtcminconv(rtcmindeconv(acl,partialscu_f1),partialscl_f1),partialscl_f1);
 
-%¼ÆËãR15µÄÊ£Óà·þÎñÇúÏß
-leftscu15_f2=rtcmax(rtcmaxdeconv(rtcminus(scu,outacl_f1),0),0);
-leftscu15_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scu_stage1,scu_stage2),scu_stage3),leftscu15_f2),scu_stage5);
-leftscl15_f2=rtcmaxconv(rtcminus(scl,outacu_f1),0);
-leftscl15_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scl_stage1,scl_stage2),scl_stage3),leftscl15_f2),scl_stage5);
+%ï¿½ï¿½ï¿½ï¿½R15ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+leftscu15_f2=rtcmax(rtcmaxdeconv(rtcminus(scu_stage4,outacl_f1),0),0);
+leftscu15_f2=rtcminconv(rtcminconv(scu_first3stages,leftscu15_f2),scu_stage5);
+leftscl15_f2=rtcmaxconv(rtcminus(scl_stage4,outacu_f1),0);
+leftscl15_f2=rtcminconv(rtcminconv(scl_first3stages,leftscl15_f2),scl_stage5);
 
-%Îªf2¼ÆËãtau15
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau15
 tempu_f2=rtcmin(tempu_f2,rtcplus(rtcminconv(leftscu15_f2,Feedback),buf_r15_f2));
 templ_f2=rtcmin(templ_f2,rtcplus(rtcminconv(leftscl15_f2,Feedback),buf_r15_f2));
 tau15u_f2=rtcmatminclos(tempu_f2,0,Times);
 tau15l_f2=rtcmatminclos(templ_f2,0,Times);
 
-%¼ÆËãf2µÄµÈÐ§·þÎñÇúÏß
+%ï¿½ï¿½ï¿½ï¿½f2ï¿½Äµï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 eqscl_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(tau15l_f2(1),leftscl15_f2),tau14l_f2(1)),scl),tau13l_f2(1));
 eqscl_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl_f2,scl),tau9l_f2(1)),scl),tau5l_f2(1)),scl);
 
-%¼ÆËãf2µÄ¶Ëµ½¶ËÑÓ³Ù
+%ï¿½ï¿½ï¿½ï¿½f2ï¿½Ä¶Ëµï¿½ï¿½ï¿½ï¿½Ó³ï¿½
 Y2=rtch(acu,eqscl_f2);
 fprintf('Delay Bound for Flow II:%3.3f cycles\n',Y2);
 
-%ÎªÊý¾ÝÁ÷f3¼ÆËãtau1µÄÏÂÀ¨·þÎñÇúÏß
+%Îªï¿½ï¿½ï¿½ï¿½ï¿½f3ï¿½ï¿½ï¿½ï¿½tau1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 templ_f3=rtcplus(rtcminconv(scl,Feedback),buf_r1_f3);
 tau1l_f3=rtcmatminclos(templ_f3,0,Times);
 
-%ÎªÊý¾ÝÁ÷f3¼ÆËãtau5µÄÏÂÀ¨·þÎñÇúÏß
+%Îªï¿½ï¿½ï¿½ï¿½ï¿½f3ï¿½ï¿½ï¿½ï¿½tau5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 templ_f3=rtcmin(templ_f3,rtcplus(rtcminconv(scl,Feedback),buf_r5_f3));
 tau5l_f3=rtcmatminclos(templ_f3,0,Times);
 
-%¼ÆËãf2ÔÚR13´¦µÄµ½´ïÇúÏß
-partialscu_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(tau15u_f2,leftscu15_f2),tau14u_f2),scu),tau13u_f2(1)),scu_stage1),scu_stage2),scu_stage3);
-partialscl_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcmincvon(rtcminconv(tau15l_f2,leftscl15_f2),tau14l_f2),scl),tau13l_f2(1)),scl_stage1),scl_stage2),scl_stage3);
+%ï¿½ï¿½ï¿½ï¿½f2ï¿½ï¿½R13ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+partialscu_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(tau15u_f2(1),leftscu15_f2),tau14u_f2(1)),scu),tau13u_f2(1)),scu_first3stages);
+partialscl_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(tau15l_f2(1),leftscl15_f2),tau14l_f2(1)),scl),tau13l_f2(1)),scl_first3stages);
 outacu_f2=rtcmin(rtcmindeconv(rtcminconv(acu,partialscu_f2),partialscl_f2),partialscu_f2);
 
-%¼ÆËãÊý¾ÝÁ÷f2ÔÚR13´¦µÄÏÂÀ¨Ê£Óà·þÎñÇúÏß
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½f2ï¿½ï¿½R13ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 leftscl13_f3=rtcmaxconv(rtcminus(scl_stage4,outacu_f2),0);
-leftscl13_f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scl_stage1,scl_stage2),scl_stage3),leftscl13_f3),scl_stage5);
+leftscl13_f3=rtcminconv(rtcminconv(scl_first3stages,leftscl13_f3),scl_stage5);
 
-%¼ÆËãtau13µÄÏÂÀ¨·þÎñÇúÏß
+%ï¿½ï¿½ï¿½ï¿½tau13ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 templ_f3=rtcmin(templ_f3,rtcplus(rtcminconv(leftscl13_f3,Feedback),buf_r13_f3));
 tau13l_f3=rtcmatminclos(templ_f3,0,Times);
 
-%¼ÆËãf2ÔÚR9´¦µÄµ½´ïÇúÏß
-partialscu_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(partialscu_f2,scu),tau9u_f2),scu_stage1),scu_stage2),scu_stage3);
-partialscl_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(partialscl_f2,scl),tau9l_f2),scl_stage1),scl_stage2),scl_stage3);
+%ï¿½ï¿½ï¿½ï¿½f2ï¿½ï¿½R9ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+partialscu_f2=rtcminconv(rtcminconv(rtcminconv(partialscu_f2,scu),tau9u_f2(1)),scu_first3stages);
+partialscl_f2=rtcminconv(rtcminconv(rtcminconv(partialscl_f2,scl),tau9l_f2(1)),scl_first3stages);
 outacu_f2=rtcmin(rtcmindeconv(rtcminconv(acu,partialscu_f2),partialscl_f2),partialscu_f2);
 
-%¼ÆËãÊý¾ÝÁ÷f2ÔÚR9´¦µÄÏÂÀ¨Ê£Óà·þÎñÇúÏß
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½f2ï¿½ï¿½R9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 leftscl9_f3=rtcmaxconv(rtcminus(scl_stage4,outacu_f2),0);
-leftscl9_f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(scl_stage1,scl_stage2),scl_stage3),leftscl9_f3),scl_stage5);
+leftscl9_f3=rtcminconv(rtcminconv(scl_first3stages,leftscl9_f3),scl_stage5);
 
-%¼ÆËãtau9µÄ·þÎñÇúÏß
+%ï¿½ï¿½ï¿½ï¿½tau9ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 templ_f3=rtcmin(templ_f3,rtcplus(rtcminconv(leftscl9_f3,Feedback),buf_r9_f3));
 tau9l_f3=rtcmatminclos(templ_f3,0,Times);
 
-%¼ÆËãÊý¾ÝÁ÷f3µÄµÈÐ§·þÎñÇúÏß
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½f3ï¿½Äµï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 eqscl_f3=rtcminconv(rtcminconv(rtcminconv(tau13l_f3(1),leftscl13_f3),tau9l_f3(1)),leftscl9_f3);
 eqscl_f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl_f3,tau5l_f3(1)),scl),tau1l_f3(1)),scl);
 
-%¼ÆËãf3µÄ¶Ëµ½¶ËÑÓ³Ù
+%ï¿½ï¿½ï¿½ï¿½f3ï¿½Ä¶Ëµï¿½ï¿½ï¿½ï¿½Ó³ï¿½
 Y3=rtch(acu,eqscl_f3);
 fprintf('Delay Bound for Flow III:%3.3f cycles\n',Y3);
 
-%¼ÆËãf4µÄ¶Ëµ½¶ËÑÓ³Ù
+%ï¿½ï¿½ï¿½ï¿½f4ï¿½Ä¶Ëµï¿½ï¿½ï¿½ï¿½Ó³ï¿½
 Y4=rtch(acu,eqscl_f4);
 fprintf('Delay Bound for Flow IV:%3.3f cycles\n',Y4);
 end
 
-function DNC()
+function DNC(bufSize,Length,Period,Times)
+FeedbackDelay=0;
+buf_r10_f1=bufSize;
+buf_r14_f1=bufSize;
+buf_r15_f1=bufSize;
+buf_r16_f1=bufSize;
+buf_r10_f4=bufSize;
+buf_r6_f4=bufSize;
+buf_r7_f4=bufSize;
+buf_r8_f4=bufSize;
+buf_r15_f2=bufSize;
+buf_r14_f2=bufSize;
+buf_r13_f2=bufSize;
+buf_r9_f2=bufSize;
+buf_r5_f2=bufSize;
+buf_r1_f3=bufSize;
+buf_r5_f3=bufSize;
+buf_r9_f3=bufSize;
+buf_r13_f3=bufSize;
+
+%ï¿½ï¿½É¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+scl_stage1=rtcpjdl(1,0,0);
+scl_stage4=rtcpjdl(1,0,0);
+scl_stage5=rtcpjdl(1,0,0);
+Feedback=rtccurve([FeedbackDelay Inf 0]);
+acu=rtcscale(rtcpjdu(Period,0,0),Length,0);
+scl_stage2=rtcscale(rtcpjdl(1,0,0),Length,0);
+scl_stage3=rtcscale(rtcpjdl(1,0,0),Length,0);
+
+scl_first3stages=rtcminconv(rtcminconv(scl_stage1,scl_stage2),scl_stage3);
+scl=rtcminconv(rtcminconv(scl_first3stages,scl_stage4),scl_stage5);
+
+%ï¿½ï¿½ï¿½ï¿½R10Îªï¿½ï¿½ï¿½ï¿½ï¿½f1ï¿½ï¿½f4ï¿½á¹©ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+scl_stage4_f4=rtcfloor(rtcscale(scl_stage4,0.5,0));
+sclr10_f4=rtcminconv(rtcminconv(scl_first3stages,scl_stage4_f4),scl_stage5);
+scl_stage4_f1=rtcfloor(rtcscale(scl_stage4,0.5,0));
+sclr10_f1=rtcminconv(rtcminconv(scl_first3stages,scl_stage4_f1),scl_stage5);
+
+%ï¿½ï¿½ï¿½ï¿½tau10_f1
+templ_f1=rtcplus(rtcminconv(sclr10_f1,Feedback),buf_r10_f1);
+tau10l_f1=rtcmatminclos(templ_f1,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½tau10_f4
+templ_f4=rtcplus(rtcminconv(sclr10_f4,Feedback),buf_r10_f4);
+tau10l_f4=rtcmatminclos(templ_f4,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½tau14_f1
+templ_f1=rtcmin(templ_f1,rtcplus(rtcminconv(scl,Feedback),buf_r14_f1));
+tau14l_f1=rtcmatminclos(templ_f1,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½tau6_f4
+templ_f4=rtcmin(templ_f4,rtcplus(rtcminconv(scl,Feedback),buf_r6_f4));
+tau6l_f4=rtcmatminclos(templ_f4,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½tau15_f1
+templ_f1=rtcmin(templ_f1,rtcplus(rtcminconv(scl,Feedback),buf_r15_f1));
+tau15l_f1=rtcmatminclos(templ_f1,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½tau7_f4
+templ_f4=rtcmin(templ_f4,rtcplus(rtcminconv(scl,Feedback),buf_r7_f4));
+tau7l_f4=rtcmatminclos(templ_f4,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½tau16_f1
+templ_f1=rtcmin(templ_f1,rtcplus(rtcminconv(scl,Feedback),buf_r16_f1));
+tau16l_f1=rtcmatminclos(templ_f1,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½tau8_f4
+templ_f4=rtcmin(templ_f4,rtcplus(rtcminconv(scl,Feedback),buf_r8_f4));
+tau8l_f4=rtcmatminclos(templ_f4,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½f4ï¿½á¹©ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+eqscl_f4=rtcminconv(rtcminconv(rtcminconv(tau8l_f4(1),scl),tau7l_f4(1)),scl);
+eqscl_f4=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl_f4,tau6l_f4(1)),scl),tau10l_f4(1)),sclr10_f4);
+
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½f1ï¿½á¹©ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+eqscl_f1=rtcminconv(rtcminconv(rtcminconv(tau16l_f1(1),scl),tau15l_f1(1)),scl);
+eqscl_f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl_f1,tau14l_f1(1)),scl),tau10l_f1(1)),sclr10_f1);
+
+%ï¿½ï¿½ï¿½ï¿½f1ï¿½Ä¶Ëµï¿½ï¿½ï¿½ï¿½Ó³ï¿½
+Y1=rtch(acu,eqscl_f1);
+fprintf('Delay Bound for Flow I:%3.3f cycles\n',Y1);
+
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau5
+templ_f2=rtcplus(rtcminconv(scl,Feedback),buf_r5_f2);
+tau5l_f2=rtcmatminclos(templ_f2,0,Times);
+
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau9
+templ_f2=rtcmin(templ_f2,rtcplus(rtcminconv(scl,Feedback),buf_r9_f2));
+tau9l_f2=rtcmatminclos(templ_f2,0,Times);
+
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau13
+templ_f2=rtcmin(templ_f2,rtcplus(rtcminconv(scl,Feedback),buf_r13_f2));
+tau13l_f2=rtcmatminclos(templ_f2,0,Times);
+
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau14
+templ_f2=rtcmin(templ_f2,rtcplus(rtcminconv(scl,Feedback),buf_r14_f2));
+tau14l_f2=rtcmatminclos(templ_f2,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½f1ï¿½ï¿½R15ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+partialscl_f1=rtcminconv(rtcminconv(rtcminconv(tau16l_f1(1),scl),tau15l_f1(1)),scl_first3stages);
+outacu_f1=rtcmindeconv(acu,partialscl_f1);
+
+%ï¿½ï¿½ï¿½ï¿½R15ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+leftscl15_f2=rtcmaxconv(rtcminus(scl_stage4,outacu_f1),0);
+leftscl15_f2=rtcminconv(rtcminconv(scl_first3stages,leftscl15_f2),scl_stage5);
+
+%Îªf2ï¿½ï¿½ï¿½ï¿½tau15
+templ_f2=rtcmin(templ_f2,rtcplus(rtcminconv(leftscl15_f2,Feedback),buf_r15_f2));
+tau15l_f2=rtcmatminclos(templ_f2,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½f2ï¿½Äµï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+eqscl_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(tau15l_f2(1),leftscl15_f2),tau14l_f2(1)),scl),tau13l_f2(1));
+eqscl_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl_f2,scl),tau9l_f2(1)),scl),tau5l_f2(1)),scl);
+
+%ï¿½ï¿½ï¿½ï¿½f2ï¿½Ä¶Ëµï¿½ï¿½ï¿½ï¿½Ó³ï¿½
+Y2=rtch(acu,eqscl_f2);
+fprintf('Delay Bound for Flow II:%3.3f cycles\n',Y2);
+
+%Îªï¿½ï¿½ï¿½ï¿½ï¿½f3ï¿½ï¿½ï¿½ï¿½tau1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+templ_f3=rtcplus(rtcminconv(scl,Feedback),buf_r1_f3);
+tau1l_f3=rtcmatminclos(templ_f3,0,Times);
+
+%Îªï¿½ï¿½ï¿½ï¿½ï¿½f3ï¿½ï¿½ï¿½ï¿½tau5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+templ_f3=rtcmin(templ_f3,rtcplus(rtcminconv(scl,Feedback),buf_r5_f3));
+tau5l_f3=rtcmatminclos(templ_f3,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½f2ï¿½ï¿½R13ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+partialscl_f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(tau15l_f2(1),leftscl15_f2),tau14l_f2(1)),scl),tau13l_f2(1)),scl_first3stages);
+outacu_f2=rtcmindeconv(acu,partialscl_f2);
+
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½f2ï¿½ï¿½R13ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+leftscl13_f3=rtcmaxconv(rtcminus(scl_stage4,outacu_f2),0);
+leftscl13_f3=rtcminconv(rtcminconv(scl_first3stages,leftscl13_f3),scl_stage5);
+
+%ï¿½ï¿½ï¿½ï¿½tau13ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+templ_f3=rtcmin(templ_f3,rtcplus(rtcminconv(leftscl13_f3,Feedback),buf_r13_f3));
+tau13l_f3=rtcmatminclos(templ_f3,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½f2ï¿½ï¿½R9ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+partialscl_f2=rtcminconv(rtcminconv(rtcminconv(partialscl_f2,scl),tau9l_f2(1)),scl_first3stages);
+outacu_f2=rtcmindeconv(acu,partialscl_f2);
+
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½f2ï¿½ï¿½R9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+leftscl9_f3=rtcmaxconv(rtcminus(scl_stage4,outacu_f2),0);
+leftscl9_f3=rtcminconv(rtcminconv(scl_first3stages,leftscl9_f3),scl_stage5);
+
+%ï¿½ï¿½ï¿½ï¿½tau9ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+templ_f3=rtcmin(templ_f3,rtcplus(rtcminconv(leftscl9_f3,Feedback),buf_r9_f3));
+tau9l_f3=rtcmatminclos(templ_f3,0,Times);
+
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½f3ï¿½Äµï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+eqscl_f3=rtcminconv(rtcminconv(rtcminconv(tau13l_f3(1),leftscl13_f3),tau9l_f3(1)),leftscl9_f3);
+eqscl_f3=rtcminconv(rtcminconv(rtcminconv(rtcminconv(eqscl_f3,tau5l_f3(1)),scl),tau1l_f3(1)),scl);
+
+%ï¿½ï¿½ï¿½ï¿½f3ï¿½Ä¶Ëµï¿½ï¿½ï¿½ï¿½Ó³ï¿½
+Y3=rtch(acu,eqscl_f3);
+disp('acu=');
+rtcexport(acu)
+disp('RTC eqscl_f3=');
+rtcexport(eqscl_f3)
+fprintf('Delay Bound for Flow III:%3.3f cycles\n',Y3);
+
+%ï¿½ï¿½ï¿½ï¿½f4ï¿½Ä¶Ëµï¿½ï¿½ï¿½ï¿½Ó³ï¿½
+Y4=rtch(acu,eqscl_f4);
+fprintf('Delay Bound for Flow IV:%3.3f cycles\n',Y4);
 end

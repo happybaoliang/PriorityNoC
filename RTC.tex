@@ -412,13 +412,13 @@ In this subsection, we present the numerical results to demonstrate the improvem
 \begin{figure}
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[scale=0.6]{figures/comparison.pdf}\\
+  \includegraphics[scale=0.65]{figures/comparison.pdf}\\
   \caption{Comparison with network calculus}\label{comparison}
 \end{figure}
 \begin{figure}
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[scale=0.6]{figures/loose.pdf}\\
+  \includegraphics[scale=0.65]{figures/loose.pdf}\\
   \caption{Service curve computed with RTC and DNC}\label{loose}
 \end{figure}
 
@@ -426,7 +426,7 @@ In this subsection, we present the numerical results to demonstrate the improvem
 The correctness of our delay analysis algorithm and buffer sizing algorithm is verified by simulation. We modified the switch allocator of a modular open source NoC simulator, Heterogenous Networks-on-Chip (HNoCs) \cite{6404157}, to support fixed-priority scheduling, and collect the maximal end-to-end packet delay at each destination IP core.
 
 \section{Conclusion}\label{conclusion}
-The priority-aware wormhole-switched NoC is a promising platform for the on-chip real-time communication if the worst-case performance can be accurately analyzed and guaranteed. Simulation is not competent for this purpose because it is difficult to cover all the corner cases. In this paper, we propose an RTC based performance model to achieve this goal. We first build the traffic model and service model for this NoC, and propose a novel method to derive the upper service curve of window flow control. Compared with the FLA and LLA method which assume the router to be single cycle and free of flow control, our performance model is more general and comprehensive. Then, based on the proposed RTC model, we proposed an end-to-end delay analysis algorithm and a buffer sizing algorithm. The delay analysis algorithm can be implemented to compute the end-to-end delay for each flow automatically, and verify whether all these flows meet their deadline under this configuration. To improve the calculated delay bound, we also proposed the concept of collapsible sub-path. The proposed buffer sizing algorithm can optimize the buffer size from high-priority flows to low-priority flows. It can also be implemented to perform the buffer reduction automatically under the constraint of deadline. Compared with the DNC based performance model, our model can give tighter performance bound, because the RTC-based model take the maximum service curve and minimum arrival curve into consideration. Experimental results also illustrated that, our method indeed outperforms the conventional analytical methods, e.g. LLA and DNC, when the tightness of performance bound are considered. Our results can be applied to the mapping, routing and power optimization of NoC.
+The priority-aware wormhole-switched NoC is a promising platform for the on-chip real-time communication if the worst-case performance can be accurately analyzed and guaranteed. Simulation is not competent for this purpose because it is difficult to cover all the corner cases. In this paper, we propose an RTC based performance model to achieve this goal. We first build the traffic model and service model for this NoC, and propose a novel method to derive the upper service curve of credit-based flow control. Compared with the FLA and LLA method which assume the router to be single cycle and free of flow control, our performance model is more general and comprehensive. Then, based on the proposed RTC model, we proposed an end-to-end delay analysis algorithm and a buffer sizing algorithm. The delay analysis algorithm can be implemented to compute the end-to-end delay for each flow automatically, and verify whether all these flows meet their deadline under this configuration. To improve the calculated delay bound, we also proposed the concept of collapsible sub-path. The proposed buffer sizing algorithm can optimize the buffer size from high-priority flows to low-priority flows. It can also be implemented to perform the buffer reduction automatically under the constraint of deadline. Compared with the DNC based performance model, our model can give tighter performance bound, because the RTC-based model take the maximum service curve and minimum arrival curve into consideration. Experimental results also illustrated that, our method indeed outperforms the conventional analytical methods, e.g. LLA and DNC, when the tightness of performance bound are considered. Our results can be applied to the mapping, routing and power reduction of NoC.
 
 \section*{Acknowledgement}
 The authors would thank the reviewers for their suggestions and comments, and all the experiments are carried out at Integrated Microsystem Lab (IML) of McGill University. This research is supported by High Technology Research and Development Program of China (Grant No. 2012AA012201, 2012AA011902).
