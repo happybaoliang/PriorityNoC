@@ -108,7 +108,7 @@ where $\otimes$, $\oslash$, $\bar{\otimes}$, $\bar{\oslash}$ are corresponding t
 
 After we obtained the arrival curve $<\alpha^l_{f_i},\alpha^u_{f_i}>$ of traffic flow $f_i$ and the service curve $<\beta_{R_j,f_i}^l,\beta_{R_j,f_i}^u>$ provided by each router $R_j$ to flow $f_i$ on its path, we can obtain the end-to-end delay bound by the following equation,
 \begin{equation}\label{delay}
-Delay(f_i)=H(\alpha^u_{f_i},\beta^l_{R_1,f_i}\otimes\beta^l_{R_2,f_i}\otimes\cdots\otimes\beta^l_{R_N,f_i}),
+Delay(f_i)=H(\alpha^u_{f_i},\beta^l_{R_1,f_i}\otimes\beta^l_{R_2,f_i}\otimes\cdots\otimes\beta^l_{R_N,f_i})
 \end{equation}
 where operators $H(\cdot,\cdot)$ means the maximal horizontal deviation between the two operands.
 
@@ -422,8 +422,22 @@ In this subsection, we present the numerical results to demonstrate the improvem
   \caption{Service curve computed with RTC and DNC}\label{loose}
 \end{figure}
 
+
+\begin{figure}
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[scale=0.65]{figures/reason.pdf}\\
+  \caption{Reason}\label{reason}
+\end{figure}
+
 \subsection{Comparison with Simulation}
 The correctness of our delay analysis algorithm and buffer sizing algorithm is verified by simulation. We modified the switch allocator of a modular open source NoC simulator, Heterogenous Networks-on-Chip (HNoCs) \cite{6404157}, to support fixed-priority scheduling, and collect the maximal end-to-end packet delay at each destination IP core.
+\begin{figure}
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[scale=0.65]{figures/rtcvssim.pdf}\\
+  \caption{Comparison with simulation}\label{rtcvssim}
+\end{figure}
 
 \section{Conclusion}\label{conclusion}
 The priority-aware wormhole-switched NoC is a promising platform for the on-chip real-time communication if the worst-case performance can be accurately analyzed and guaranteed. Simulation is not competent for this purpose because it is difficult to cover all the corner cases. In this paper, we propose an RTC based performance model to achieve this goal. We first build the traffic model and service model for this NoC, and propose a novel method to derive the upper service curve of credit-based flow control. Compared with the FLA and LLA method which assume the router to be single cycle and free of flow control, our performance model is more general and comprehensive. Then, based on the proposed RTC model, we proposed an end-to-end delay analysis algorithm and a buffer sizing algorithm. The delay analysis algorithm can be implemented to compute the end-to-end delay for each flow automatically, and verify whether all these flows meet their deadline under this configuration. To improve the calculated delay bound, we also proposed the concept of collapsible sub-path. The proposed buffer sizing algorithm can optimize the buffer size from high-priority flows to low-priority flows. It can also be implemented to perform the buffer reduction automatically under the constraint of deadline. Compared with the DNC based performance model, our model can give tighter performance bound, because the RTC-based model take the maximum service curve and minimum arrival curve into consideration. Experimental results also illustrated that, our method indeed outperforms the conventional analytical methods, e.g. LLA and DNC, when the tightness of performance bound are considered. Our results can be applied to the mapping, routing and power reduction of NoC.
