@@ -1,0 +1,201 @@
+bufopt
+deadline=28
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 4
+Buffer size Dist for f2: 9 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 2 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 8 , 8 , 1 , 1
+deadline=30
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 4
+Buffer size Dist for f2: 9 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 2 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 6 , 6 , 1 , 1
+deadline=32
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 3
+Buffer size Dist for f2: 9 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 2 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 4 , 4 , 1 , 1
+deadline=34
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 3
+Buffer size Dist for f2: 9 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 2 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 4 , 4 , 1 , 1
+deadline=36
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 3
+Buffer size Dist for f2: 9 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 4 , 4 , 1 , 1
+deadline=38
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 3
+Buffer size Dist for f2: 9 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 4 , 4 , 1 , 1
+deadline=40
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 3 , 3 , 1 , 1
+deadline=42
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 3 , 3 , 1 , 1
+deadline=44
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 3 , 3 , 1 , 1
+deadline=46
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 3 , 3 , 1 , 1
+deadline=48
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
+deadline=50
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 3 , 3 , 1 , 1
+deadline=44
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 3 , 3 , 1 , 1
+deadline=46
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 3 , 3 , 1 , 1
+deadline=48
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
+deadline=50
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
+deadline=52
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
+deadline=54
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
+deadline=56
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
+deadline=58
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
+deadline=60
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
+deadline=62
+Buffer size Dist for f4: 1 , 1 , 1 , 1
+Optimized Bufsize of f4: 1 , 1 , 1 , 1
+Buffer size Dist for f1: 1 , 1 , 1 , 9
+Optimized Bufsize of f1: 1 , 1 , 1 , 2
+Buffer size Dist for f2: 7 , 1 , 1 , 1 , 1
+Optimized Bufsize of f2: 1 , 1 , 1 , 1 , 1
+Buffer size Dist for f3: 9 , 9 , 1 , 1
+Optimized Bufsize of f3: 2 , 2 , 1 , 1
