@@ -3,14 +3,14 @@
 0
 0
 1
-RTC.tex
+elsarticle-template.tex
 42
 1
 0
 
 elsarticle-template.tex
 TeX:UNIX
-269594619 0 -1 78985 -1 78985 50 50 1180 608 0 1 264 323 -1 -1 0 0 -1 -1 -1 -1 1 0 78985 -1  0 -1 0
+286371835 0 -1 60795 -1 64109 50 50 1180 608 0 1 48 289 -1 -1 0 0 36 -1 -1 36 1 0 64109 -1  0 -1 0
 :\Workspace\Elsevier\elsarticle-template\elsarticle-template.tex
 TeX:UNIX
 286371835 0 -1 152 -1 270 25 25 1155 583 1 1 88 187 -1 -1 0 0 36 -1 -1 36 1 0 270 -1  0 -1 0
@@ -135,7 +135,7 @@ TeX:UTF-8
 TeX
 269496315 1 -1 0 -1 40216 25 25 1008 715 0 -1 25 986 -1 -1 0 0 -1 -1 -1 -1 1 0 40216 -1  0 0 0
 
-*RTC.tex
+*elsarticle-template.tex
 >
 *Docear
 <
