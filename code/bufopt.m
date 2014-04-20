@@ -1,7 +1,7 @@
 function bufopt()
-length=4;
-period=20;
-deadline=27;
+length=8;
+period=50;
+deadline=30;
 
 disp('RTC:');
 rtc(length,period,deadline);
@@ -11,8 +11,7 @@ end
 
 function rtc(length,period,deadline)
 times=5;
-%Deadline=[deadline deadline deadline deadline];
-Deadline=[11 12 11 7];
+Deadline=[deadline deadline deadline deadline];
 
 f1_buf_r10=1;
 f1_buf_r14=1;
@@ -85,7 +84,7 @@ disp(['Buffer size Dist for f4: ',num2str(f4_buf_r8),' , ',num2str(f4_buf_r7),' 
 
 concscl=rtcminconv(rtcminconv(rtcminconv(scl,scl),scl),scl);
 eqscl4f4=rtcminconv(rtcminconv(rtcminconv(scl,scl),scl),scl);
-while (f4_buf_r10>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
+while (f4_buf_r10>1) && (rtch(acu,eqscl4f4)<=Deadline(4)-2)
     f4_buf_r10=f4_buf_r10-1;
     temp1=rtcmin(rtcplus(scl,f4_buf_r10),rtcplus(scl,f4_buf_r6));
     temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
@@ -93,9 +92,9 @@ while (f4_buf_r10>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
     eqscl4f4=rtcminconv(concscl,temp(1));
 end
 if f4_buf_r10==1
-    if rtch(acu,eqscl4f4)>Deadline(4)
+    if rtch(acu,eqscl4f4)>Deadline(4)-2
         f4_buf_r10=2;
-        %disp('bufsize=1 at the same time deadline violated.');
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f4_buf_r10=f4_buf_r10+1;
@@ -104,7 +103,7 @@ temp1=rtcmin(rtcplus(scl,f4_buf_r10),rtcplus(scl,f4_buf_r6));
 temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
 temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
 eqscl4f4=rtcminconv(concscl,temp(1));
-while (f4_buf_r6>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
+while (f4_buf_r6>1) && (rtch(acu,eqscl4f4)<=Deadline(4)-2)
     f4_buf_r6=f4_buf_r6-1;
     temp1=rtcmin(rtcplus(scl,f4_buf_r10),rtcplus(scl,f4_buf_r6));
     temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
@@ -112,9 +111,9 @@ while (f4_buf_r6>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
     eqscl4f4=rtcminconv(concscl,temp(1));
 end
 if f4_buf_r6==1
-    if rtch(acu,eqscl4f4)>Deadline(4)
+    if rtch(acu,eqscl4f4)>Deadline(4)-2
         f4_buf_r6=2;
-        
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f4_buf_r6=f4_buf_r6+1;
@@ -123,15 +122,16 @@ temp1=rtcmin(rtcplus(scl,f4_buf_r10),rtcplus(scl,f4_buf_r6));
 temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
 temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
 eqscl4f4=rtcminconv(concscl,temp(1));
-while (f4_buf_r7>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
+while (f4_buf_r7>1) && (rtch(acu,eqscl4f4)<=Deadline(4)-2)
     f4_buf_r7=f4_buf_r7-1;
     temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
     temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
     eqscl4f4=rtcminconv(concscl,temp(1));
 end
 if f4_buf_r7==1
-    if rtch(acu,eqscl4f4)>Deadline(4)
+    if rtch(acu,eqscl4f4)>Deadline(4)-2
         f4_buf_r7=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f4_buf_r7=f4_buf_r7+1;
@@ -139,15 +139,16 @@ end
 temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
 temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
 eqscl4f4=rtcminconv(concscl,temp(1));
-while (f4_buf_r8>1) && (rtch(acu,eqscl4f4)<=Deadline(4))
+while (f4_buf_r8>1) && (rtch(acu,eqscl4f4)<=Deadline(4)-2)
     f4_buf_r8=f4_buf_r8-1;
     temp2=rtcmin(rtcplus(scl,f4_buf_r7),rtcplus(scl,f4_buf_r8));
     temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
     eqscl4f4=rtcminconv(concscl,temp(1));
 end
 if f4_buf_r8==1
-    if rtch(acu,eqscl4f4)>Deadline(4)
+    if rtch(acu,eqscl4f4)>Deadline(4)-2
         f4_buf_r8=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f4_buf_r8=f4_buf_r8+1;
@@ -213,7 +214,7 @@ disp(['Buffer size Dist for f1: ',num2str(f1_buf_r16),' , ',num2str(f1_buf_r15),
 
 concscl4f1=rtcminconv(rtcminconv(rtcminconv(scl,scl),scl),leftscl4f1);
 eqscl4f1=rtcminconv(rtcminconv(rtcminconv(scl,scl),scl),leftscl4f1);
-while (f1_buf_r10>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
+while (f1_buf_r10>1) && (rtch(acu,eqscl4f1)<=Deadline(1)-2)
     f1_buf_r10=f1_buf_r10-1;
     temp1=rtcmin(rtcplus(leftscl4f1,f1_buf_r10),rtcplus(scl,f1_buf_r14));
     temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
@@ -221,8 +222,9 @@ while (f1_buf_r10>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
     eqscl4f1=rtcminconv(concscl4f1,temp(1));
 end
 if f1_buf_r10==1
-    if rtch(acu,eqscl4f1)>Deadline(1)
+    if rtch(acu,eqscl4f1)>Deadline(1)-2
         f1_buf_r10=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f1_buf_r10=f1_buf_r10+1;
@@ -231,7 +233,7 @@ temp1=rtcmin(rtcplus(leftscl4f1,f1_buf_r10),rtcplus(scl,f1_buf_r14));
 temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
 temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
 eqscl4f1=rtcminconv(concscl4f1,temp(1));
-while (f1_buf_r14>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
+while (f1_buf_r14>1) && (rtch(acu,eqscl4f1)<=Deadline(1)-2)
     f1_buf_r14=f1_buf_r14-1;
     temp1=rtcmin(rtcplus(leftscl4f1,f1_buf_r10),rtcplus(scl,f1_buf_r14));
     temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
@@ -239,8 +241,9 @@ while (f1_buf_r14>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
     eqscl4f1=rtcminconv(concscl4f1,temp(1));
 end
 if f1_buf_r14==1
-    if rtch(acu,eqscl4f1)>Deadline(1)
+    if rtch(acu,eqscl4f1)>Deadline(1)-2
         f1_buf_r14=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f1_buf_r14=f1_buf_r14+1;
@@ -249,15 +252,16 @@ temp1=rtcmin(rtcplus(leftscl4f1,f1_buf_r10),rtcplus(scl,f1_buf_r14));
 temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
 temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
 eqscl4f1=rtcminconv(concscl4f1,temp(1));  
-while (f1_buf_r15>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
+while (f1_buf_r15>1) && (rtch(acu,eqscl4f1)<=Deadline(1)-2)
     f1_buf_r15=f1_buf_r15-1;
     temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
     temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
     eqscl4f1=rtcminconv(concscl4f1,temp(1));
 end
 if f1_buf_r15==1
-    if rtch(acu,eqscl4f1)>Deadline(1)
+    if rtch(acu,eqscl4f1)>Deadline(1)-2
         f1_buf_r15=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f1_buf_r15=f1_buf_r15+1;
@@ -265,15 +269,16 @@ end
 temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
 temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
 eqscl4f1=rtcminconv(concscl4f1,temp(1));  
-while (f1_buf_r16>1) && (rtch(acu,eqscl4f1)<=Deadline(1))
+while (f1_buf_r16>1) && (rtch(acu,eqscl4f1)<=Deadline(1)-2)
     f1_buf_r16=f1_buf_r16-1;
     temp2=rtcmin(rtcplus(scl,f1_buf_r15),rtcplus(scl,f1_buf_r16));
     temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
     eqscl4f1=rtcminconv(concscl4f1,temp(1));  
 end
 if f1_buf_r16==1
-    if rtch(acu,eqscl4f1)>Deadline(1)
+    if rtch(acu,eqscl4f1)>Deadline(1)-2
         f1_buf_r16=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f1_buf_r16=f1_buf_r16+1;
@@ -349,7 +354,7 @@ disp(['Buffer size Dist for f2: ',num2str(f2_buf_r15),' , ',num2str(f2_buf_r14),
 
 concscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(leftscl4f2,scl),scl),scl),scl);
 eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(leftscl4f2,scl),scl),scl),scl);
-while (f2_buf_r5>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
+while (f2_buf_r5>1) && (rtch(acu,eqscl4f2)<=Deadline(2)-2)
     f2_buf_r5=f2_buf_r5-1;
     temp1=rtcmin(rtcplus(scl,f2_buf_r5),rtcplus(scl,f2_buf_r9));
     temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
@@ -357,8 +362,9 @@ while (f2_buf_r5>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
     eqscl4f2=rtcminconv(concscl4f2,temp);
 end
 if f2_buf_r5==1
-    if rtch(acu,eqscl4f2)>Deadline(2)
+    if rtch(acu,eqscl4f2)>Deadline(2)-2
         f2_buf_r5=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f2_buf_r5=f2_buf_r5+1;
@@ -367,7 +373,7 @@ temp1=rtcmin(rtcplus(scl,f2_buf_r5),rtcplus(scl,f2_buf_r9));
 temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
 temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
 eqscl4f2=rtcminconv(concscl4f2,temp(1));
-while (f2_buf_r9>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
+while (f2_buf_r9>1) && (rtch(acu,eqscl4f2)<=Deadline(2)-2)
     f2_buf_r9=f2_buf_r9-1;
     temp1=rtcmin(rtcplus(scl,f2_buf_r5),rtcplus(scl,f2_buf_r9));
     temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
@@ -375,8 +381,9 @@ while (f2_buf_r9>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
     eqscl4f2=rtcminconv(concscl4f2,temp);
 end
 if f2_buf_r9==1
-    if rtch(acu,eqscl4f2)>Deadline(2)
+    if rtch(acu,eqscl4f2)>Deadline(2)-2
         f2_buf_r9=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f2_buf_r9=f2_buf_r9+1;
@@ -385,15 +392,16 @@ temp1=rtcmin(rtcplus(scl,f2_buf_r5),rtcplus(scl,f2_buf_r9));
 temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
 temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
 eqscl4f2=rtcminconv(concscl4f2,temp(1));
-while (f2_buf_r13>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
+while (f2_buf_r13>1) && (rtch(acu,eqscl4f2)<=Deadline(2)-2)
     f2_buf_r13=f2_buf_r13-1;
     temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
     temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
     eqscl4f2=rtcminconv(concscl4f2,temp);
 end
 if f2_buf_r13==1
-    if rtch(acu,eqscl4f2)>Deadline(2)
+    if rtch(acu,eqscl4f2)>Deadline(2)-2
         f2_buf_r13=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f2_buf_r13=f2_buf_r13+1;
@@ -401,15 +409,16 @@ end
 temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
 temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
 eqscl4f2=rtcminconv(concscl4f2,temp(1));
-while (f2_buf_r14>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
+while (f2_buf_r14>1) && (rtch(acu,eqscl4f2)<=Deadline(2)-2)
     f2_buf_r14=f2_buf_r14-1;
     temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
     temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
     eqscl4f2=rtcminconv(concscl4f2,temp);
 end
 if f2_buf_r14==1
-    if rtch(acu,eqscl4f2)>Deadline(2)
+    if rtch(acu,eqscl4f2)>Deadline(2)-2
         f2_buf_r14=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f2_buf_r14=f2_buf_r14+1;
@@ -417,14 +426,15 @@ end
 temp2=rtcmin(rtcplus(scl,f2_buf_r13),rtcplus(scl,f2_buf_r14));
 temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
 eqscl4f2=rtcminconv(concscl4f2,temp(1));
-while (f2_buf_r15>1) && (rtch(acu,eqscl4f2)<=Deadline(2))
+while (f2_buf_r15>1) && (rtch(acu,eqscl4f2)<=Deadline(2)-2)
     f2_buf_r15=f2_buf_r15-1;
     temp=rtcmatminclos(rtcmin(rtcmin(temp1,temp2),rtcplus(leftscl4f2,f2_buf_r15)),0,times);
     eqscl4f2=rtcminconv(concscl4f2,temp(1));
 end
 if f2_buf_r15==1
-    if rtch(acu,eqscl4f2)>Deadline(2)
+    if rtch(acu,eqscl4f2)>Deadline(2)-2
         f2_buf_r15=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f2_buf_r15=f2_buf_r15+1;
@@ -500,7 +510,7 @@ disp(['Buffer size Dist for f3: ',num2str(f3_buf_r13),' , ',num2str(f3_buf_r9),'
 
 concscl4f3=rtcminconv(rtcminconv(rtcminconv(leftscl134f3,leftscl94f3),scl),scl);
 eqscl4f3=rtcminconv(rtcminconv(rtcminconv(leftscl134f3,leftscl94f3),scl),scl);
-while (f3_buf_r1>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
+while (f3_buf_r1>1) && (rtch(acu,eqscl4f3)<=Deadline(3)-2)
     f3_buf_r1=f3_buf_r1-1;
     temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
     temp2=rtcmin(rtcplus(scl,f3_buf_r5),rtcplus(scl,f3_buf_r1));
@@ -508,8 +518,9 @@ while (f3_buf_r1>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
     eqscl4f3=rtcminconv(concscl4f3,temp(1));
 end
 if f3_buf_r1==1
-    if rtch(acu,eqscl4f3)>Deadline(3)
+    if rtch(acu,eqscl4f3)>Deadline(3)-2
         f3_buf_r1=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f3_buf_r1=f3_buf_r1+1;
@@ -518,7 +529,7 @@ temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
 temp2=rtcmin(rtcplus(scl,f3_buf_r5),rtcplus(scl,f3_buf_r1));
 temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
 eqscl4f3=rtcminconv(concscl4f3,temp(1));
-while (f3_buf_r5>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
+while (f3_buf_r5>1) && (rtch(acu,eqscl4f3)<=Deadline(3)-2)
     f3_buf_r5=f3_buf_r5-1;
     temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
     temp2=rtcmin(rtcplus(scl,f3_buf_r5),rtcplus(scl,f3_buf_r1));
@@ -526,8 +537,9 @@ while (f3_buf_r5>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
     eqscl4f3=rtcminconv(concscl4f3,temp(1));
 end
 if f3_buf_r5==1
-    if rtch(acu,eqscl4f3)>Deadline(3)
+    if rtch(acu,eqscl4f3)>Deadline(3)-2
         f3_buf_r5=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f3_buf_r5=f3_buf_r5+1;
@@ -536,15 +548,16 @@ temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
 temp2=rtcmin(rtcplus(scl,f3_buf_r5),rtcplus(scl,f3_buf_r1));
 temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
 eqscl4f3=rtcminconv(concscl4f3,temp(1));
-while (f3_buf_r9>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
+while (f3_buf_r9>1) && (rtch(acu,eqscl4f3)<=Deadline(3)-2)
     f3_buf_r9=f3_buf_r9-1;
     temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
     temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
     eqscl4f3=rtcminconv(concscl4f3,temp(1));
 end
 if f3_buf_r9==1
-    if rtch(acu,eqscl4f3)>Deadline(3)
+    if rtch(acu,eqscl4f3)>Deadline(3)-2
         f3_buf_r9=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f3_buf_r9=f3_buf_r9+1;
@@ -552,15 +565,16 @@ end
 temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
 temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
 eqscl4f3=rtcminconv(concscl4f3,temp(1));
-while (f3_buf_r13>1) && (rtch(acu,eqscl4f3)<=Deadline(3))
+while (f3_buf_r13>1) && (rtch(acu,eqscl4f3)<=Deadline(3)-2)
     f3_buf_r13=f3_buf_r13-1;
     temp1=rtcmin(rtcplus(leftscl134f3,f3_buf_r13),rtcplus(leftscl94f3,f3_buf_r9));
     temp=rtcmatminclos(rtcmin(temp1,temp2),0,times);
     eqscl4f3=rtcminconv(concscl4f3,temp(1));
 end
 if f3_buf_r13==1
-    if rtch(acu,eqscl4f3)>Deadline(3)
+    if rtch(acu,eqscl4f3)>Deadline(3)-2
         f3_buf_r13=2;
+        disp('bufsize=1 at the same time deadline violated.');
     end
 else
     f3_buf_r13=f3_buf_r13+1;
@@ -618,10 +632,10 @@ while (f3_delay_r9~=newvalue)
 end
 f3_delay_r5=f3_delay_r9;
 f3_delay_r1=f3_delay_r5;
-disp(['E2E Latency of f1: ',num2str(f1_delay_r10+J(1)+(4-1))]);
-disp(['E2E Latency of f2: ',num2str(f2_delay_r5+J(2)+(5-1))]);
-disp(['E2E Latency of f3: ',num2str(f3_delay_r1+J(3)+(4-1))]);
-disp(['E2E Latency of f4: ',num2str(f4_delay_r10+J(4)+(4-1))]);
+disp(['E2E Latency of f1: ',num2str(f1_delay_r10+J(1)+(6-1))]);
+disp(['E2E Latency of f2: ',num2str(f2_delay_r5+J(2)+(7-1))]);
+disp(['E2E Latency of f3: ',num2str(f3_delay_r1+J(3)+(6-1))]);
+disp(['E2E Latency of f4: ',num2str(f4_delay_r10+J(4)+(6-1))]);
 
 
 %f4

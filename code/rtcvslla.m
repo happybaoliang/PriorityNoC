@@ -1,6 +1,6 @@
 function rtcvslla()
-length=4;
-period=15;
+length=8;
+period=28;
 disp('RTC: ');
     RTC(length,period);
 disp('LLA: ');
@@ -12,13 +12,16 @@ function RTC(length,period)
 scu=rtcpjdu(1,0,0);
 scl=rtcpjdl(1,0,0);
 
+linkl=rtcpjdl(1,0,0);
+linku=rtcpjdu(1,0,0);
+
 acl=rtcscale(rtcpjdl(period,0,0),length,0);
 acu=rtcscale(rtcpjdu(period,0,0),length,0);
 
 partialscu4f4=rtcminconv(rtcminconv(scu,scu),scu);
 partialscl4f4=rtcminconv(rtcminconv(scl,scl),scl);
 
-eqscl4f4=rtcminconv(partialscl4f4,scl);
+eqscl4f4=rtcminconv(rtcminconv(linkl,partialscl4f4),rtcminconv(scl,linkl));
 
 outacu4f4=rtcmin(rtcmindeconv(rtcminconv(acu,partialscu4f4),partialscl4f4),partialscu4f4);
 %outacl4f4=rtcmin(rtcminconv(rtcmindeconv(acl,partialscu4f4),partialscl4f4),partialscl4f4);
@@ -27,7 +30,7 @@ leftscl4f1=rtcmaxconv(rtcminus(scl,outacu4f4),0);
 %leftscu4f1=rtcmax(rtcmaxdeconv(rtcminus(scu,outacl4f4),0),0);
 
 %eqscu4f1=rtcminconv(rtcminconv(rtcminconv(scu,scu),scu),leftscu4f1);
-eqscl4f1=rtcminconv(rtcminconv(rtcminconv(scl,scl),scl),leftscl4f1);
+eqscl4f1=rtcminconv(rtcminconv(rtcminconv(rtcminconv(linkl,scl),scl),scl),rtcminconv(leftscl4f1,linkl));
 
 outacl4f1=rtcmin(rtcminconv(rtcmindeconv(acl,scu),scl),scl);
 outacu4f1=rtcmin(rtcmindeconv(rtcminconv(acu,scu),scl),scu);
@@ -36,7 +39,7 @@ leftscl4f2=rtcmaxconv(rtcminus(scl,outacu4f1),0);
 leftscu4f2=rtcmax(rtcmaxdeconv(rtcminus(scu,outacl4f1),0),0);
 
 %eqscu4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(leftscu4f2,scu),scu),scu),scu);
-eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(leftscl4f2,scl),scl),scl),scl);
+eqscl4f2=rtcminconv(rtcminconv(rtcminconv(rtcminconv(rtcminconv(linkl,leftscl4f2),scl),scl),scl),rtcminconv(scl,linkl));
 
 partialscu4f2=rtcminconv(leftscu4f2,scu);
 partialscl4f2=rtcminconv(leftscl4f2,scl);
@@ -49,7 +52,7 @@ concscl=rtcminconv(scl,scl);
 leftscl4f3=rtcmaxconv(rtcminus(concscl,outacu4f2),0);
 %leftscu4f3=rtcmax(rtcmaxdeconv(rtcminus(concscu,outacl4f2),0),0);
 
-eqscl4f3=rtcminconv(rtcminconv(leftscl4f3,scl),scl);
+eqscl4f3=rtcminconv(rtcminconv(rtcminconv(linkl,leftscl4f3),scl),rtcminconv(scl,linkl));
 
 disp([rtch(acu,eqscl4f1),rtch(acu,eqscl4f2),rtch(acu,eqscl4f3),rtch(acu,eqscl4f4)])
 end
@@ -103,5 +106,5 @@ while (f3_delay_r9~=newvalue)
 end
 f3_delay_r5=f3_delay_r9;
 f3_delay_r1=f3_delay_r5;
-disp(['     ',num2str(f1_delay_r10+J(1)+(4-1)),'     ',num2str(f2_delay_r5+J(2)+(5-1)),'     ',num2str(f3_delay_r1+J(3)+(4-1)),'     ',num2str(f4_delay_r10+J(4)+(4-1))]);
+disp(['     ',num2str(f1_delay_r10+J(1)+(6-1)),'     ',num2str(f2_delay_r5+J(2)+(7-1)),'     ',num2str(f3_delay_r1+J(3)+(6-1)),'     ',num2str(f4_delay_r10+J(4)+(6-1))]);
 end
