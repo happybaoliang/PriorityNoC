@@ -23,45 +23,45 @@ first3stagesu=rtcminconv(rtcminconv(stageu,stageu),stageu);
 
 %flows without any contention
 acu09_13=rtcpjdu(125,0,0);
-eqscl0913=rtcminconv(rtcminconv(linkl,scl),rtcminconv(scl,linkl));
+eqscl0913=rtcminconv(rtcminconv(linkl,scl),scl);
 disp(['09->13: ' num2str(rtch(acu09_13,eqscl0913))]);
 
 acu10_14=rtcpjdu(125,0,0);
-eqscl1014=rtcminconv(rtcminconv(linkl,scl),rtcminconv(scl,linkl));
+eqscl1014=rtcminconv(rtcminconv(linkl,scl),scl);
 disp(['10->14: ' num2str(rtch(acu10_14,eqscl1014))]);
 
 acu11_15=rtcpjdu(125,0,0);
-eqscl1115=rtcminconv(rtcminconv(linkl,scl),rtcminconv(scl,linkl));
+eqscl1115=rtcminconv(rtcminconv(linkl,scl),scl);
 disp(['11->15: ' num2str(rtch(acu11_15,eqscl1115))]);
 
 acu16_12=rtcpjdu(32,0,0);
-eqscl1612=rtcminconv(rtcminconv(linkl,scl),rtcminconv(scl,linkl));
+eqscl1612=rtcminconv(rtcminconv(linkl,scl),scl);
 disp(['16->12: ' num2str(rtch(acu16_12,eqscl1612))]);
 
 %2-4
 acu02_04=rtcpjdu(500,0,0);
 acl02_04=rtcpjdl(500,0,0);
-eqscl0204=rtcminconv(rtcminconv(rtcminconv(linkl,scl),rtcminconv(sclhalf,sclhalf)),linkl);
+eqscl0204=rtcminconv(rtcminconv(linkl,scl),rtcminconv(sclhalf,sclhalf));
 disp(['02->04: ' num2str(rtch(acu02_04,eqscl0204))]);
 
 %3-4
 acu03_04=rtcpjdu(500,0,0);
 acl03_04=rtcpjdl(500,0,0);
-eqscl0304=rtcminconv(rtcminconv(linkl,sclhalf),rtcminconv(sclhalf,linkl));
+eqscl0304=rtcminconv(rtcminconv(linkl,sclhalf),sclhalf);
 disp(['03->04: ' num2str(rtch(acu03_04,eqscl0304))]);
 
 %4-3
 acu04_03=rtcpjdu(500,0,0);
 acl04_03=rtcpjdl(500,0,0);
-eqscl0403=rtcminconv(rtcminconv(linkl1_2,sclhalf),rtcminconv(scl,linkl));
-eqscu0403=rtcminconv(rtcminconv(linku1_2,scuhalf),rtcminconv(scu,linku));
+eqscl0403=rtcminconv(rtcminconv(linkl1_2,sclhalf),scl);
+eqscu0403=rtcminconv(rtcminconv(linku1_2,scuhalf),scu);
 disp(['04->03: ' num2str(rtch(acu04_03,eqscl0403))]);
 
 %4-2
 acu04_02=rtcpjdu(500,0,0);
 acl04_02=rtcpjdl(500,0,0);
-eqscl0402=rtcminconv(rtcminconv(rtcminconv(linkl1_2,sclhalf),rtcminconv(scl,scl)),linkl);
-eqscu0402=rtcminconv(rtcminconv(rtcminconv(linku1_2,scuhalf),rtcminconv(scu,scu)),linku);
+eqscl0402=rtcminconv(rtcminconv(linkl1_2,sclhalf),rtcminconv(scl,scl));
+eqscu0402=rtcminconv(rtcminconv(linku1_2,scuhalf),rtcminconv(scu,scu));
 disp(['04->02: ' num2str(rtch(acu04_02,eqscl0402))]);
 
 %13-16
@@ -82,8 +82,8 @@ eqscl=rtcminconv(rtcminconv(rtcminconv(leftlinkl,scl),rtcminconv(leftsclat14,lef
 eqscu=rtcminconv(rtcminconv(rtcminconv(leftlinku,scu),rtcminconv(leftscuat14,leftscuat15)),first3stagesu);
 outputacu13_16=outputacu(acu13_16,eqscl,eqscu);
 outputacl13_16=outputacl(acl13_16,eqscl,eqscu);
-eqscl=rtcminconv(rtcminconv(rtcminconv(leftlinkl,scl),rtcminconv(leftsclat14,leftsclat15)),rtcminconv(leftsclat16,linkl));
-eqscu=rtcminconv(rtcminconv(rtcminconv(leftlinku,scu),rtcminconv(leftscuat14,leftscuat15)),rtcminconv(leftscuat16,linku));
+eqscl=rtcminconv(rtcminconv(rtcminconv(leftlinkl,scl),rtcminconv(leftsclat14,leftsclat15)),leftsclat16);
+eqscu=rtcminconv(rtcminconv(rtcminconv(leftlinku,scu),rtcminconv(leftscuat14,leftscuat15)),leftscuat16);
 disp(['13->16: ' num2str(rtch(acu13_16,eqscl))]);
 
 %14-16
@@ -101,8 +101,8 @@ eqscl=rtcminconv(rtcminconv(leftlinkl,leftsclat14),rtcminconv(leftsclat15,first3
 eqscu=rtcminconv(rtcminconv(leftlinku,leftscuat14),rtcminconv(leftscuat15,first3stagesu));
 outputacu14_16=outputacu(acu14_16,eqscl,eqscu);
 outputacl14_16=outputacl(acl14_16,eqscl,eqscu);
-eqscl=rtcminconv(rtcminconv(leftlinkl,leftsclat14),rtcminconv(rtcminconv(leftsclat15,leftsclat16),linkl));
-eqscu=rtcminconv(rtcminconv(leftlinku,leftscuat14),rtcminconv(rtcminconv(leftscuat15,leftscuat16),linku));
+eqscl=rtcminconv(rtcminconv(leftlinkl,leftsclat14),rtcminconv(leftsclat15,leftsclat16));
+eqscu=rtcminconv(rtcminconv(leftlinku,leftscuat14),rtcminconv(leftscuat15,leftscuat16));
 disp(['14->16: ' num2str(rtch(acu14_16,eqscl))]);
 
 %15-16
@@ -120,8 +120,8 @@ eqscl=rtcminconv(rtcminconv(leftlinkl,leftsclat15),first3stagesl);
 eqscu=rtcminconv(rtcminconv(leftlinku,leftscuat15),first3stagesu);
 outputacu15_16=outputacu(acu15_16,eqscl,eqscu);
 outputacl15_16=outputacl(acl15_16,eqscl,eqscu);
-eqscl=rtcminconv(rtcminconv(leftlinkl,leftsclat15),rtcminconv(leftsclat16,linkl));
-eqscu=rtcminconv(rtcminconv(leftlinku,leftscuat15),rtcminconv(leftscuat16,linku));
+eqscl=rtcminconv(rtcminconv(leftlinkl,leftsclat15),leftsclat16);
+eqscu=rtcminconv(rtcminconv(leftlinku,leftscuat15),leftscuat16);
 disp(['15->16: ' num2str(rtch(acu15_16,eqscl))]);
 
 %7-16
@@ -133,8 +133,8 @@ eqscl=rtcminconv(rtcminconv(rtcminconv(linkl,scl),rtcminconv(scl,scl)),first3sta
 eqscu=rtcminconv(rtcminconv(rtcminconv(linku,scu),rtcminconv(scu,scu)),first3stagesu);
 outputacu7_16=outputacu(acu07_16,eqscl,eqscu);
 outputacl7_16=outputacl(acl07_16,eqscl,eqscu);
-eqscl=rtcminconv(rtcminconv(rtcminconv(linkl,scl),rtcminconv(scl,scl)),rtcminconv(leftsclat16,linkl));
-eqscu=rtcminconv(rtcminconv(rtcminconv(linku,scu),rtcminconv(scu,scu)),rtcminconv(leftscuat16,linku));
+eqscl=rtcminconv(rtcminconv(rtcminconv(linkl,scl),rtcminconv(scl,scl)),leftsclat16);
+eqscu=rtcminconv(rtcminconv(rtcminconv(linku,scu),rtcminconv(scu,scu)),leftscuat16);
 disp(['07->16: ' num2str(rtch(acu07_16,eqscl))]);
 
 %aggrassive acu of class C.
@@ -160,8 +160,8 @@ eqscuat12=conv(stageu,stageu,stageu,leftscu,stageu);
 %12_16
 acu12_16=rtcpjdu(32,0,0);
 acl12_16=rtcpjdl(32,0,0);
-eqscl=rtcminconv(rtcminconv(linkl,eqsclat12),rtcminconv(eqsclat16,linkl));
-eqscu=rtcminconv(rtcminconv(linku,eqscuat12),rtcminconv(eqscuat16,linku));
+eqscl=rtcminconv(rtcminconv(linkl,eqsclat12),eqsclat16);
+eqscu=rtcminconv(rtcminconv(linku,eqscuat12),eqscuat16);
 disp(['12->16: ' num2str(rtch(acu12_16,eqscl))]);
 
 %5-9
@@ -169,8 +169,8 @@ acu05_09=rtcpjdu(16,0,0);
 acl05_09=rtcpjdl(16,0,0);
 eqsclat5=conv(stagel,stagel,stagel,stagel,stagel);
 eqscuat5=conv(stagel,stageu,stageu,stageu,stageu);
-eqscl=rtcminconv(rtcminconv(linkl1_3,eqsclat5),rtcminconv(scl,linkl));
-eqscu=rtcminconv(rtcminconv(linku1_3,eqscuat5),rtcminconv(scu,linku));
+eqscl=rtcminconv(rtcminconv(linkl1_3,eqsclat5),scl);
+eqscu=rtcminconv(rtcminconv(linku1_3,eqscuat5),scu);
 disp(['05->09: ' num2str(rtch(acu05_09,eqscl))]);
 
 %leftover sc of 9
@@ -186,15 +186,15 @@ eqscuat9=conv(stageu,stageu,stageu,leftstageu,stageu);
 %13-9
 acu13_09=rtcpjdu(125,0,0);
 acl13_09=rtcpjdl(125,0,0);
-eqscl=rtcminconv(rtcminconv(linkl,scl),rtcminconv(eqsclat9,linkl));
-eqscu=rtcminconv(rtcminconv(linku,scu),rtcminconv(eqscuat9,linku));
+eqscl=rtcminconv(rtcminconv(linkl,scl),eqsclat9);
+eqscu=rtcminconv(rtcminconv(linku,scu),eqscuat9);
 disp(['13->09: ' num2str(rtch(acu13_09,eqscl))]);
 
 %5-10
 acu05_10=rtcpjdu(16,0,0);
 acl05_10=rtcpjdl(16,0,0);
-eqscl=rtcminconv(rtcminconv(linkl1_3,sclhalf),rtcminconv(rtcminconv(scl,scl),linkl));
-eqscu=rtcminconv(rtcminconv(linku1_3,scuhalf),rtcminconv(rtcminconv(scu,scu),linku));
+eqscl=rtcminconv(rtcminconv(linkl1_3,sclhalf),rtcminconv(scl,scl));
+eqscu=rtcminconv(rtcminconv(linku1_3,scuhalf),rtcminconv(scu,scu));
 disp(['05->10: ' num2str(rtch(acu05_10,eqscl))]);
 
 %14-10
@@ -206,15 +206,15 @@ leftstagel=leftoverscl(oacu,stagel);
 leftstageu=leftoverscu(oacl,stageu);
 eqsclat10=conv(stagel,stagel,stagel,leftstagel,stagel);
 eqscuat10=conv(stageu,stageu,stageu,leftstageu,stageu);
-eqscl=rtcminconv(rtcminconv(linkl,scl),rtcminconv(eqsclat10,linkl));
-eqscu=rtcminconv(rtcminconv(linku,scu),rtcminconv(eqscuat10,linku));
+eqscl=rtcminconv(rtcminconv(linkl,scl),eqsclat10);
+eqscu=rtcminconv(rtcminconv(linku,scu),eqscuat10);
 disp(['14->10: ' num2str(rtch(acu14_10,eqscl))]);
 
 %5-11
 acu05_11=rtcpjdu(16,0,0);
 acl05_11=rtcpjdl(16,0,0);
-eqscl=rtcminconv(rtcminconv(rtcminconv(linkl1_3,sclhalf),rtcminconv(scl,scl)),rtcminconv(scl,linkl));
-eqscu=rtcminconv(rtcminconv(rtcminconv(linku1_3,scuhalf),rtcminconv(scu,scu)),rtcminconv(scu,linku));
+eqscl=rtcminconv(rtcminconv(rtcminconv(linkl1_3,sclhalf),rtcminconv(scl,scl)),scl);
+eqscu=rtcminconv(rtcminconv(rtcminconv(linku1_3,scuhalf),rtcminconv(scu,scu)),scu);
 disp(['05->11: ' num2str(rtch(acu05_11,eqscl))]);
 
 %11
@@ -228,7 +228,7 @@ eqsclat11=conv(stagel,stagel,stagel,leftstagesl,stagel);
 eqscuat11=conv(stageu,stageu,stageu,leftstagesu,stageu);
 
 %15-11
-eqscl=rtcminconv(rtcminconv(linkl,eqsclat11),rtcminconv(scl,linkl));
+eqscl=rtcminconv(rtcminconv(linkl,eqsclat11),scl);
 disp(['15->11: ' num2str(rtch(acu15_11,eqscl))]);
 
 %12-08
@@ -236,8 +236,8 @@ acu12_08=rtcpjdu(125,0,0);
 acl12_08=rtcpjdl(125,0,0);
 leftlinkl=leftoverscl(acu12_16,linkl);
 leftlinku=leftoverscu(acl12_16,linku);
-eqscl=rtcminconv(rtcminconv(leftlinkl,scl),rtcminconv(scl,linkl));
-eqscu=rtcminconv(rtcminconv(leftlinku,scu),rtcminconv(scu,linku));
+eqscl=rtcminconv(rtcminconv(leftlinkl,scl),scl);
+eqscu=rtcminconv(rtcminconv(leftlinku,scu),scu);
 disp(['12->08: ' num2str(rtch(acu12_08,eqscl))]);
 
 %leftover sc of 5
@@ -264,15 +264,15 @@ eqscuat2=conv(stageu,stageu,stageu,leftoverscu(outacl,stageu),stageu);
 %5-2
 acu05_02=rtcpjdu(16,0,0);
 acl05_02=rtcpjdl(16,0,0);
-eqscl=rtcminconv(rtcminconv(leftlinkl,eqsclat5),rtcminconv(eqsclat2,linkl));
-eqscu=rtcminconv(rtcminconv(leftlinku,eqscuat5),rtcminconv(eqscuat2,linku));
+eqscl=rtcminconv(rtcminconv(leftlinkl,eqsclat5),eqsclat2);
+eqscu=rtcminconv(rtcminconv(leftlinku,eqscuat5),eqscuat2);
 disp(['05->02: ' num2str(rtch(acu05_02,eqscl))]);
 
 %5-6
 acu05_06=rtcpjdu(16,0,0);
 acl05_06=rtcpjdl(16,0,0);
-eqscl=rtcminconv(rtcminconv(leftlinkl,eqsclat5),rtcminconv(scl,linkl));
-eqscu=rtcminconv(rtcminconv(leftlinku,eqscuat5),rtcminconv(scu,linku));
+eqscl=rtcminconv(rtcminconv(leftlinkl,eqsclat5),scl);
+eqscu=rtcminconv(rtcminconv(leftlinku,eqscuat5),scu);
 disp(['05->06: ' num2str(rtch(acu05_06,eqscl))]);
 
 %5-3
@@ -296,8 +296,8 @@ eqsclat6=conv(stagel,stagel,stagel,l,stagel);
 eqscuat6=conv(stageu,stageu,stageu,u,stageu);
 acu05_03=rtcpjdu(16,0,0);
 acl05_03=rtcpjdl(16,0,0);
-eqscl=rtcminconv(rtcminconv(leftlinkl,eqsclat5),rtcminconv(rtcminconv(eqsclat3,eqsclat6),rtcminconv(scl,linkl)));
-eqscu=rtcminconv(rtcminconv(leftlinku,eqscuat5),rtcminconv(rtcminconv(eqscuat3,eqscuat6),rtcminconv(scu,linku)));
+eqscl=rtcminconv(rtcminconv(leftlinkl,eqsclat5),rtcminconv(rtcminconv(eqsclat3,eqsclat6),scl));
+eqscu=rtcminconv(rtcminconv(leftlinku,eqscuat5),rtcminconv(rtcminconv(eqscuat3,eqscuat6),scu));
 disp(['05->03: ' num2str(rtch(acu05_03,eqscl))]);
 
 %7-6
@@ -312,8 +312,8 @@ oacl=outputacl(acl05_06,eqscl,eqscu);
 leftscl4i=leftoverscl(oacu,stagel);
 leftscu4i=leftoverscu(oacl,stageu);
 eqsclat6=conv(stagel,stagel,stagel,leftscl4i,stagel);
-eqscl=rtcminconv(rtcminconv(leftlinksl,scl),rtcminconv(eqsclat6,linkl));
-eqscu=rtcminconv(rtcminconv(leftlinksu,scu),rtcminconv(eqscuat6,linku));
+eqscl=rtcminconv(rtcminconv(leftlinksl,scl),eqsclat6);
+eqscu=rtcminconv(rtcminconv(leftlinksu,scu),eqscuat6);
 disp(['07->06: ' num2str(rtch(acu07_06,eqscl))]);
 
 %4-8
@@ -331,8 +331,8 @@ outacu=outputacu(acu12_08,leftstagelat8,leftstageuat8);
 outacl=outputacl(acl12_08,leftstagelat8,leftstageuat8);
 eqsclat8=conv(stagel,stagel,stagel,leftoverscl(outacu,stagel),stagel);
 eqscuat8=conv(stageu,stageu,stageu,leftoverscu(outacl,stageu),stageu);
-eqscl=rtcminconv(rtcminconv(leftlinklat4,scl),rtcminconv(eqsclat8,linkl));
-eqscu=rtcminconv(rtcminconv(leftlinkuat4,scu),rtcminconv(eqscuat8,linku));
+eqscl=rtcminconv(rtcminconv(leftlinklat4,scl),eqsclat8);
+eqscu=rtcminconv(rtcminconv(leftlinkuat4,scu),eqscuat8);
 disp(['04->08: ' num2str(rtch(acu04_08,eqscl))]);
 
 %6-7
@@ -349,8 +349,8 @@ oacla=outputacu(acl05_11,l,h);
 leftstagel=leftoverscl(rtcplus(oacuh,oacua),stagel);
 leftstageu=leftoverscu(rtcplus(oaclh,oacla),stageu);
 eqsclat6=conv(stagel,stagel,stagel,leftstagel,stagel);
-eqscl=rtcminconv(rtcminconv(linkl,eqsclat6),rtcminconv(scl,linkl));
-eqscu=rtcminconv(rtcminconv(linku,eqscuat6),rtcminconv(scu,linku));
+eqscl=rtcminconv(rtcminconv(linkl,eqsclat6),scl);
+eqscu=rtcminconv(rtcminconv(linku,eqscuat6),scu);
 disp(['06->07: ' num2str(rtch(acu06_07,eqscl))]);
 end
 
