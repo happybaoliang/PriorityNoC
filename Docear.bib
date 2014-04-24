@@ -642,25 +642,24 @@
 }
 
 @ARTICLE{707545,
-  author = {Balakrishnan, S. and Ozguner, F.},
-  title = {A priority-driven flow control mechanism for real-time traffic in
-	multiprocessor networks},
+  author = {Balakrishnan, Shobana and \"{O}zg\"{u}ner, F\"{u}sun},
+  title = {A Priority-Driven Flow Control Mechanism for Real-Time Traffic in
+	Multiprocessor Networks},
   year = {1998},
   volume = {9},
   number = {7},
-  pages = {664-678},
+  month = jul,
+  pages = {664--678},
   issn = {1045-9219},
   doi = {10.1109/71.707545},
-  journal = {Parallel and Distributed Systems, IEEE Transactions on},
-  keywords = {computational complexity;multiprocessor interconnection networks;real-time
-	systems;telecommunication traffic;PPCS-RT router;architectural complexity;distributed
-	memory multiprocessors;multiple virtual channels;multiprocessor networks;preemptive
-	pipelined circuit switching;priority inversion;priority-based physical
-	link arbitration;priority-driven flow control mechanism;real-time
-	messages;real-time routers;real-time traffic;wormhole routing;Bandwidth;Communication
-	system traffic control;Computer networks;Intelligent networks;Multiprocessing
-	systems;Real time systems;Routing;Spread spectrum communication;Switching
-	circuits;Virtual colonoscopy}
+  acmid = {285066},
+  address = {Piscataway, NJ, USA},
+  issue_date = {July 1998},
+  journal = {IEEE Trans. Parallel Distrib. Syst.},
+  keywords = {Real-time, wormhole routing, virtual channel, feasibility analysis,
+	pipelined circuit switching.},
+  numpages = {15},
+  publisher = {IEEE Press}
 }
 
 @ARTICLE{Baldwin2000,
@@ -1118,16 +1117,23 @@
 }
 
 @ARTICLE{BCGK04,
-  author = {Evgeny Bolotin and Israel Cidon and Ran Ginosar and Avinoam Kolodny},
-  title = {{QNoC}: {QoS} architecture and design process for network on chip
-	},
+  author = {Bolotin, Evgeny and Cidon, Israel and Ginosar, Ran and Kolodny, Avinoam},
+  title = {QNoC: QoS Architecture and Design Process for Network on Chip},
   year = {2004},
   volume = {50},
   number = {2-3},
-  month = {Feb.},
-  pages = {105-128},
-  file = {:G\:\\系统结构\\片上网络\\论文\\QNoC-QoS architecture and design process for network on chip.pdf:PDF},
-  journal = {Journal of Systems Architecture, Special Issue on Networks on Chip}
+  month = feb,
+  pages = {105--128},
+  issn = {1383-7621},
+  doi = {10.1016/j.sysarc.2003.07.004},
+  acmid = {985400},
+  address = {New York, NY, USA},
+  issue_date = {February 2004},
+  journal = {J. Syst. Archit.},
+  keywords = {QNoC, QNoC design process, QoS architecture, network on chip, wormhole
+	switching},
+  numpages = {24},
+  publisher = {Elsevier North-Holland, Inc.}
 }
 
 @INPROCEEDINGS{Bolotin2007,
@@ -3535,16 +3541,17 @@
 }
 
 @ARTICLE{GoDR05,
-  author = {Kees Goossens and John Dielissen and Andrei R\u{a}dulescu},
-  title = {The {{$\AE$}thereal} Network on Chip: Concepts, Architectures, and
-	Implementations},
+  author = {Kees Goossens and John Dielissen and Andrei Radulescu},
+  title = {{\AE}thereal Network on Chip:Concepts, Architectures, and Implementations},
   year = {2005},
   volume = {22},
   number = {5},
-  month = {Sep.-Oct.},
   pages = {414-421},
-  file = {:G\:\\系统结构\\片上网络\\ProtoType\\论文\\aethereal\\Æthereal network on chip--Concepts,architectures,and implementations.pdf:PDF},
-  journal = {IEEE Design \& Test of Computers}
+  issn = {0740-7475},
+  doi = {http://doi.ieeecomputersociety.org/10.1109/MDT.2005.99},
+  address = {Los Alamitos, CA, USA},
+  journal = {IEEE Design \& Test of Computers},
+  publisher = {IEEE Computer Society}
 }
 
 @ARTICLE{Goyal:1997:DED:267482.267494,
@@ -4298,7 +4305,7 @@
 @ARTICLE{Jafari1922089,
   author = {Jafari, Fahimeh and Lu, Zhonghai and Jantsch, Axel and Yaghmaee,
 	Mohammad Hossein},
-  title = {Buffer optimization in network-on-chip through flow regulation},
+  title = {Buffer Optimization in Network-on-chip Through Flow Regulation},
   year = {2010},
   volume = {29},
   number = {12},
@@ -4310,8 +4317,8 @@
   address = {Piscataway, NJ, USA},
   issue_date = {December 2010},
   journal = {Trans. Comp.-Aided Des. Integ. Cir. Sys.},
-  keywords = {buffer size, buffer variance, interior point method, network-on-chip
-	(NoC), optimization problem},
+  keywords = {Buffer size, buffer size, buffer variance, interior point method,
+	network-on-chip (NoC), optimization problem},
   numpages = {14},
   publisher = {IEEE Press}
 }
@@ -4689,29 +4696,20 @@
 }
 
 @CONFERENCE{189,
-  author = {Hany Kashif and Hiren Patel},
-  title = {Bounding Buffer Space Requirements for Real-Time Priority-Aware Networks},
-  booktitle = {Proceedings of the Asia South Pacific Design Automation Conference
-	(ASPDAC)},
+  author = {Kashif, H. and Patel, H.},
+  title = {Bounding buffer space requirements for real-time priority-aware networks},
+  booktitle = {Design Automation Conference (ASP-DAC), 2014 19th Asia and South
+	Pacific},
   year = {2014},
-  month = {January},
-  abstract = {<p>One implementation alternative for network interconnects in modern
-	chip-multiprocessor systems is priority-aware arbitration networks.
-	To enable the deployment of real-time applications to priority-aware
-	networks, recent research proposes worst-case latency (WCL) analyses
-	for such networks. Buffer space requirements in priority-aware networks,
-	however, are seldom addressed. In this work, we bound the buffer
-	space required for valid WCL analyses and consequently optimize router
-	design for application specifications by computing the required buffer
-	space at each virtual channel in priority-aware routers. In addition
-	to the obvious advantage of bounding buffer space while providing
-	valid WCL bounds, buffer space reduction decreases chip area and
-	saves energy in priority-aware networks. Our experiments show that
-	the proposed buffer space computation reduces the number of unfeasible
-	implementations by 42\% compared to an existing buffer space analysis
-	technique. It also reduces the required buffer space in priority-aware
-	routers by up to 79\%.<br /> \&nbsp;</p>},
-  address = {SunTec, Singapore}
+  month = {Jan},
+  pages = {113-118},
+  doi = {10.1109/ASPDAC.2014.6742875},
+  keywords = {buffer storage;network routing;real-time systems;WCL analyses;application
+	specifications;bounding buffer space requirements;buffer space analysis
+	technique;buffer space computation;buffer space reduction;energy
+	savings;priority-aware routers;real-time priority-aware networks;router
+	design;virtual channel;worst-case latency;Bismuth;Interference;Jitter;Real-time
+	systems;Switches;Time division multiplexing;Upper bound}
 }
 
 @CONFERENCE{73,
@@ -6304,15 +6302,24 @@
 }
 
 @ARTICLE{LuJa08,
-  author = {Zhonghai Lu and Axel Jantsch},
-  title = {{TDM} Virtual-Circuit Configuration for Network-on-Chip},
+  author = {Zhonghai Lu and Jantsch, A.},
+  title = {TDM Virtual-Circuit Configuration for Network-on-Chip},
   year = {2008},
   volume = {16},
   number = {8},
-  month = {Aug.},
+  month = {Aug},
   pages = {1021-1034},
-  file = {:G\:\\系统结构\\片上网络\\论文\\TDM Virtual-Circuit Configuration for Network-on-Chip.pdf:PDF},
-  journal = {IEEE Transactions on Very Large Scale Integration (VLSI) Systems}
+  issn = {1063-8210},
+  doi = {10.1109/TVLSI.2008.2000673},
+  journal = {Very Large Scale Integration (VLSI) Systems, IEEE Transactions on},
+  keywords = {backtracking;network-on-chip;quality of service;time division multiplexing;NoC
+	topologies;TDM;backtracking algorithm;connection-oriented communication
+	service;logical network;multinode virtual circuit configuration problem;network-on-chip;path
+	diversity;path selection;quality of service;slot allocation;time-division-multiplexing;Bandwidth;Circuits;Clocks;Communication
+	switching;Frequency;Network-on-a-chip;Quality of service;Switches;Time
+	division multiplexing;Virtual colonoscopy;Logical network;network-on-chip
+	(NoC);quality of service (QoS);time division multiplexing (TDM);virtual
+	circuit}
 }
 
 @ARTICLE{LuJa07b,
@@ -6328,15 +6335,21 @@
 }
 
 @INPROCEEDINGS{LuJS05,
-  author = {Zhonghai Lu and Axel Jantsch and Ingo Sander},
+  author = {Zhonghai Lu and Jantsch, A. and Sander, I.},
   title = {Feasibility analysis of messages for on-chip networks using wormhole
 	routing},
-  booktitle = {Proceedings of the Asia and South Pacific Design Automation Conference},
+  booktitle = {Design Automation Conference, 2005. Proceedings of the ASP-DAC 2005.
+	Asia and South Pacific},
   year = {2005},
-  month = {Jan.},
-  pages = {960-964},
-  address = {Shanghai, China},
-  file = {:G\:\\系统结构\\片上网络\\路由器\\论文\\Feasibility Analysis of Messages for On-chip Networks Using Wormhole Routing.pdf:PDF}
+  volume = {2},
+  month = {Jan},
+  pages = {960-964 Vol. 2},
+  doi = {10.1109/ASPDAC.2005.1466499},
+  keywords = {network routing;system-on-chip;bandwidth partitioning method;contention
+	tree;feasibility analysis;nonrealtime messages;on-chip networks;real-time
+	messages;timing property;wormhole routing;wormhole-routed networks;Bandwidth;Communication
+	system control;Delay;Network-on-a-chip;Performance analysis;Pipelines;Routing;Testing;Timing
+	jitter;Upper bound}
 }
 
 @INPROCEEDINGS{LuLJ07,
@@ -9440,15 +9453,23 @@
 }
 
 @ARTICLE{Wandeler2006System,
-  author = {Wandeler, E. and Thiele, L. and Verhoef, M. and Lieverse, P.},
-  title = {System architecture evaluation using modular performance analysis:
-	a case study},
+  author = {Wandeler, Ernesto and Thiele, Lothar and Verhoef, Marcel and Lieverse,
+	Paul},
+  title = {System Architecture Evaluation Using Modular Performance Analysis:
+	A Case Study},
   year = {2006},
   volume = {8},
   number = {6},
-  pages = {649-667},
-  file = {:G\:\\计算机科学\\Network Calculus\\实时网络演算\\System architecture evaluation using modular performance analysis--a case study.pdf:PDF},
-  journal = {INTERNATIONAL JOURNAL ON SOFTWARE TOOLS FOR TECHNOLOGY TRANSFER (STTT)}
+  month = oct,
+  pages = {649--667},
+  issn = {1433-2779},
+  doi = {10.1007/s10009-006-0019-5},
+  acmid = {1177184},
+  address = {Berlin, Heidelberg},
+  issue_date = {October 2006},
+  journal = {Int. J. Softw. Tools Technol. Transf.},
+  numpages = {19},
+  publisher = {Springer-Verlag}
 }
 
 @INPROCEEDINGS{wang2011wireless,
