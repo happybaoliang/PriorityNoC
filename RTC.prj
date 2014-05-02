@@ -3,14 +3,14 @@
 0
 0
 1
-elsarticle-template.tex
+
 3
 1
 0
 
 elsarticle-template.tex
 TeX:UNIX
-286273531 0 -1 76950 -1 79139 50 50 1180 608 0 1 512 442 459 -1 255 0 934 -1 -1 36 1 0 79139 -1  0 -1 0
+286273531 0 -1 66114 -1 72912 50 50 1180 608 0 1 544 289 459 -1 255 0 934 -1 -1 36 1 0 72912 -1  0 -1 0
 RTC.tex
 TeX:UTF-8
 286273531 1 -1 206 -1 107 75 75 1125 633 1 -1 0 72 68 -1 -1 0 0 21 -1 -1 0  1 0 0
@@ -18,7 +18,3 @@ C:\CTEX\MiKTeX\doc\guides\italian\amsmath\diffs-m_it.txt
 ASCII:UNIX
 307341179 0 0 1 0 1 75 75 1205 633 1 -1 0 72 0 -1 -1 0 0 -1 -1 -1 0  1 0 0
 
-*elsarticle-template.tex
->
-*Docear
-<
