@@ -1,0 +1,15 @@
+Submitting your manuscript
+
+Most journals accept a PDF of your manuscript at initial submission.
+
+When the Elsevier Editorial System EES asks you to submit your manuscript source files, do the following:
+
+Build a PDF of your manuscript source files and attach it with item type 'Manuscript'.
+Bundle all manuscript source files in a single archive and attach it with item type 'LaTeX source files'. Source files include LaTeX files, BibTeX files, figures, tables, all LaTeX classes and packages that are not included in TeX Live and any other material that belongs to your manuscript.
+Please note the following technical requirements for the submission of source files:
+
+The source files should compile without errors with pdflatex or latex.
+The PDF should be generated from the source files you submit.
+All classes and packages that are not contained in TeX Live should be submitted along with the source files. You can check in the CTAN database whether your class or package is contained in TeX Live.
+Figures should be submitted in one of the following formats: EPS, JPG, PDF or PNG. For quality standards, please see the artwork & media instructions.
+If the journal does not have the item type 'LaTeX source files', please contact support@elsevier.com.

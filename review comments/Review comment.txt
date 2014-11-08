@@ -1,0 +1,265 @@
+Ms. Ref. No.:  JSA-D-14-00078
+Title: Delay Analysis and Buffer Sizing for Priority-Aware Networks-on-Chip
+Journal of Systems Architecture
+
+
+Dear Dr. Li,
+
+Reviewers have now commented on your paper, entitled "Delay Analysis and Buffer Sizing for Priority-Aware Networks-on-Chip". You will see that they are advising for a Major Revise of your manuscript. We would appreciate it if you could revise your paper within three months from this email.
+
+We look forward to receiving the revised version of your paper. You should explain how and where the reviewers' comments have been incorporated in the text (overview of changes). Should you disagree with the reviews, please explain why.
+
+To submit a revision, please go to http://ees.elsevier.com/jsa/ and login as an Author. 
+
+On your Main Menu page is a folder entitled "Submissions Needing Revision". You will find your submission record there. 
+
+When submitting your revised manuscript, please ensure that you upload the source files (e.g. Word). Uploading a PDF file at this stage will create delays should your manuscript be finally accepted for publication. If your revised submission does not include the source files, we will contact you to request them.
+
+Please note that this journal offers a new, free service called AudioSlides: brief, webcast-style presentations that are shown next to published articles on ScienceDirect (see also http://www.elsevier.com/audioslides). If your paper is accepted for publication, you will automatically receive an invitation to create an AudioSlides presentation.
+
+NOTE: Upon submitting your revised manuscript, please upload the source files for your article. For additional details regarding acceptable file formats, please refer to the Guide for Authors at: http://www.elsevier.com/journals/journal-of-systems-architecture/1383-7621/guide-for-authors
+
+When submitting your revised paper, we ask that you include the following items:
+
+Manuscript and Figure Source Files (mandatory)
+
+We cannot accommodate PDF manuscript files for production purposes. We also ask that when submitting your revision you follow the journal formatting guidelines.  Figures and tables may be embedded within the source file for the submission as long as they are of sufficient resolution for Production. For any figure that cannot be embedded within the source file (such as *.PSD Photoshop files), the original figure needs to be uploaded separately. Refer to the Guide for Authors for additional information.
+http://www.elsevier.com/journals/journal-of-systems-architecture/1383-7621/guide-for-authors
+
+Highlights (optional)
+
+Highlights consist of a short collection of bullet points that convey the core findings of the article and should be submitted in a separate file in the online submission system. Please use 'Highlights' in the file name and include 3 to 5 bullet points (maximum 85 characters, including spaces, per bullet point). See the following website for more information 
+http://www.elsevier.com/highlights
+
+Graphical Abstract (optional)
+
+Graphical Abstracts should summarize the contents of the article in a concise, pictorial form designed to capture the attention of a wide readership online. Refer to the following website for more information: http://www.elsevier.com/graphicalabstracts 
+
+The revised version of your submission is due by Dec 08, 2014.
+
+Yours sincerely,
+
+Samyuktha Moorthy
+Journal Manager
+Journal of Systems Architecture
+
+Reviewers' comments:
+
+
+Reviewer #1: The authors of the paper propose an extended RTC-based approach to compute upper-bounds on the end-to-end traversal time of packets sent over a priority-aware wormhole-switched NoC. In addition, they also propose a second algorithm to compute the minimum buffer space required in each router so that packets do not suffer any delay due to traffic jam in the downstream routers, or the incurred delay does not increase the traversal time beyond the deadline.
+
+One of the main defects of the paper is to not be self-contained at all. Most of the proofs presented in the document can be summarized essentially with "we jump straight from step 1, to step 2, to step 3, and finally to step 4, and if you want to understand what's going on here, just read [17]". The paper requires quite a background in Network Calculus which, unfortunately, I don't have. That said, it is the responsibility of the authors to summarize/popularize the main results in the field so that non-expert readers can at least understand the intuition behind the proposed contribution. I would thus strongly recommend the authors to repeat or summarize the main results of [17] so that they can avoid referring continuously to that book. The same is true for Eq. 1-4 taken from [13].
+
+Secondly, even if have very limited experience in this research field, I am absolutely not convinced by the experiments carried out in this research document. First, the main experiments (sections 5.1 and 5.2) are carried out on extremely poor examples with 4 flows that barely intersect each other. I believe the pessimism in both analyses (in yours as well as in the one used for the comparison) is always negligible in such a simple case. I guess the pessimism rather arises in complex scenarios with a lot of flows all crossing each other and in which some flows are blocked by other flows that are in turn blocked by a third group of flows that do not share routers with the first group. This is called indirect blocking in [REF - see below], which is btw not cited in the related work. Even though Fig 1 could have presented a very basic case of indirect blocking between flows 1, 2, and 3, you have deliberately avoided this problematic situation by assigning the priorities P1 > P2
+> P3. I strongly suggest the authors to carry out their experiments on much more complex case studies.
+
+Then, I have another problem with the comparison made in section 5.2 with the DNC technique taken from [8]. If I understood correctly, since no flows share the same priority level and since the feedback delay is assumed to be zero in that experiment, then all the improvements brought by your contribution to the RTC framework are cancelled out. Therefore, this experiment is basically comparing the performance of the regular RTC against DNC, and the observed gain does not owe anything to your contribution.
+
+Finally, for simple examples such as those used in the experiments, it should be possible to compute the EXACT minimum buffer space required so that flows do not incur any additional delays, by considering every possible packet injection times. It would be a very interesting result (even if the example has to be further simplified due to the combinatory explosion) because in the results presented, the required buffer space indicated by LBBA seems to be quite high for the given packet size and injection rate. All the flows inject a packet of 8 flits every 50 cycles and yet three routers out of four require a storage capacity of more than an entire packet to not suffer any delay. How far is that result from the *exact* minimum buffer space required not to suffer any delay?
+
+Additional questions and comments:
+
+On page 11, why do you treat the tail flit differently from the other flits since the delay it incurs is the same as that of any other (as seen in Fig 4)?
+
+Page 12. "We will try to tackle the same problem with another solution". Replace with "we will tackle the same problem ¡­"
+
+On page 21, you claim that DNC and LLBA outperform the state-of-the art techniques regarding tightness of the analysis and buffer requirement, respectively. Any reference to support that claim?
+
+
+[REF] Dakshina Dasari, Borislav Nikolic, Vincent N¨¦lis, Stefan M. Petters. NoC Contention Analysis using a Branch and Prune Algorithm. Transactions in Embedded Computing Systems (DCMP 12), ACM. Mar 2013, Volume 13, Issue 3s. Article No. 113. New York, NY, U.S.A.
+
+
+
+
+
+Reviewer #2: 
+This work targets priority-aware wormhole switched network-on-chips. The
+authors propose a real-time calculus performance model. They develop traffic and
+service models. These models are then used to compute end-to-end delays for
+traffic flows as well as compute the buffer sizes required at the different
+network routers such that the flows meet their deadlines. The authors compare
+their delay bounds to the deterministic network calculus-based method. They also
+compare the buffer bounds to the link-level buffer analysis method. The
+experiments demonstrate that an improvement is achieved in both delay and buffer
+bounds.
+
+I believe the authors in this work do a good job by applying RTC to analyzing
+delay bounds and buffer requirements in the context of priority aware wormhole
+switched networks. They extensively describe the derivation of the lower and
+upper service curves in the network while taking flow control into account. The
+algorithms for the delay analysis and buffer sizing are clear and easy to
+follow.
+
+The authors mention that they consider the priority aware router proposed in
+[6]. They also mention that flits of different flows sharing the same priority
+are served in round robin order when they compete for the same output port.
+However, the router, that the authors refer to, serve the flits that share the
+same priority in FIFO order. This raises multiple points:
+- Flits of the same flow generally have inherent priority. For instance, flits
+of a packet that was released first have higher priority then those of the
+second packet for instance. Hence, they are served in the order they are
+released in. Accordingly, if multiple flows share the same priority, they are
+treated in the same manner [6]. Why is it any different in this work? And why
+is round robin chosen? This should definitely be discussed since it deviates
+from the original specifications of the router that the authors build upon.
+- In [6] and related work, the motivation behind multiple flows sharing the
+same priority is reducing the router's virtual channels which reduces area. So
+two flows instead of having different priorities and different VCs, they now
+share the same VC, for instance. And in that case, their VC is basically one
+FIFO buffer similar to other VCs. The only difference is that flits belong to
+more than one flow. In this work, however, I am not sure how round robin is
+achieved. 
+--- Do flows with the same priority each have its own virtual channel? If that's
+the case, then what difference does it make between sharing priorities and not
+sharing them? The whole idea is sharing VCs to reduce area. From the article,
+it seems like each flow has its own VC. This is supported by the fact that
+buffer space is calculated for each flow on its own (even ones sharing the
+same priority). Then again, what exactly is the benefit here if VCs are not
+reduced?
+--- Otherwise do flows share the same VC? How does round robin work in that case
+then? How are flits of the same flow grouped together? Again extensive
+explanation is needed.
+- It seems that the algorithms proposed will not apply to the original router
+that the authors cited. If flows share the same VC and served in FIFO order,
+then the buffer space chosen for one flow might affect the other. This needs
+to be discussed.
+
+The authors mention some of the recent research such as LLA and DNC. In their
+experiments, the authors mention that DNC outperforms all others in the
+tightness of their delay bound.
+- This claim is unsupported. The DNC paper does not compare to LLA. On what
+basis do the authors make this claim?
+- LLA performs the analysis on the link level of the network. The main
+motivation for the LLA work is that performing the analysis on the link level
+accounts for interference from higher priority flows only once, i.e., if a
+higher priority shares more than one link with a lower priority flow, then the
+lower priority flow suffers interference only once from the higher priority
+flow. LLA isolates interferences to the links on which they occur. It seems
+that that's not the case with the proposed analysis in this work. I believe
+it is crucial to compare the delay bound results in this work against LLA in 
+different configurations.
+
+Introduction:
+-------------
+The authors give examples of some NoC implementations and then state that the
+average performance and resource utilization of these implementation are "very
+poor" when compared with the conventional wormhole-switched NoC.
+** What is "very poor" and what is "conventional"? These statements are very
+vague. There is no argument presented to support the fact that these
+implementations provide a "very poor" performance. Such unsupported claims
+should never be made.
+** A more important point here is that one of these implementations that the
+authors mention is TDMA and they cite the AEthereal NoC. The statement made
+compares TDMA to wormhole switched NoC. Actually the AEthereal implements TDMA
+and has a wormhole switching protocol, i.e., these are not mutually exclusive.
+** Of course then the concluding remark in this paragraph does not make sense as
+it is based on a faulty statement.
+
+
+Related Work:
+-------------
+In the related work, the opening statement says that an NoC is designed to be
+either best-effort or guaranteed services. I am not sure what this statement is
+supposed to imply. But an NoC can be designed to support both types of services.
+Again, the AEthereal NoC is one such example.
+
+In the related work section as well, authors mention that to provide guaranteed
+services, one way is classifying applications to different priority classes.
+The examples given for priority aware implementations include the AEthereal NoC.
+AEthereal only prioritizes guaranteed services over best effort services. Within
+guaranteed services, different applications are not prioritized. The guaranteed
+services are provided based on resource reservation. If the authors mean
+something else, it should definitely be clarified.
+
+
+Preliminaries:
+--------------
+Later on, in one of the algorithms, the authors define the operation 'Pre' to
+get the predecessor of a router.
+** One thing is that this operator only takes a router as an argument. Clearly,
+a predecessor of a router is only defined with respect to a path of a flow. The
+flow's path should be an argument as well.
+** In this section, the authors define the set of routers and the set of links
+on a flow's path. Apparently, there is no such thing as a predecessor of an
+element in a set. Should it be a sequence instead?
+
+The authors state that contention between two flows exist if and only if
+\Gamma_i \wedge \Gamma_j \neq \phi. I don't understand why a logic conjunction
+operator is used on two sets? Do you mean an intersection operator between the
+sets instead?
+
+The authors state "Each head flit should go through all these stages to
+determine the path and reserve a VC for the following non-head flits." As far as
+I understood, the authors are investigating priority-aware NoCs with runtime
+arbitration between the flows. This statement makes it sound like resources
+are actually reserved along the flow's path until flits arrive. The latter seems
+like circuit switching. I understand that a head flit just determines the
+path for the flits (of the same packet) that will follow. Please carify.
+
+Traffic Model:
+--------------
+It seems like everything is happening at the flit level. The arrival curves, 
+service curves, and their usage in the delay and buffer algorithms. Why are
+L-packetized arrival curves introduced although they are never used anywhere?
+And why is a whole theorem dedicated for it?
+
+In the last equation in the proof of theorem 1, shouldn't it be +l_max instead
+of -l_max?
+
+Experimentation:
+----------------
+Why is the comparison against LLBA for buffer sizes only with one example and
+different deadlines? Several factors should be varied. What is the average
+reduction in buffer size compared to LLBA?
+
+
+Minor Comments:
+---------------
+
+Unidentified nouns no "the": These are examples, please check everywhere.
+- Line 83: "allowing the concurrent link usage." -> no 'the'
+- Line 137: "ensure the predictable transmission delay" -> a predictable
+- Proof Theorem 1: "based on the definition 1" -> no 'the'
+
+Pluralization of certain unidentified nouns: These are examples,
+please check everywhere.
+- Line 23: "Violation of deadline" -> deadlines ... there are multiple deadlines
+- Line 24: "on-chip resource" -> resources ... again there are multiple
+resources
+- Line 33: "delay bound" -> bounds, "buffer requirement" -> requirements
+- Line 40: same as line 33
+- Line 43: "real-time system" -> systems
+- Line 119: "Packet of different" -> Packets
+- Line 133: " sufficient virtual channel" -> channels
+- Line 156: "other micro-architecture" -> architectures
+
+Singular/plural nouns/pronouns: These are examples, please check everywhere.
+- Abstract: they gives
+- Line 133: "Each input port have" -> has
+
+A/An: These are examples, please check everywhere.
+- Line 119: "a Intellectual" -> an
+- Line 179: "a event stream" -> an
+- Definition 13: "a event stream" -> an
+
+General:
+- Line 126: "set of line a flow traversed" -> tarverses
+- Line 131: "router we considered is" -> consider
+- Line 4: "Although various NoC proposals ... most of them are designed". This
+is vague. What aspect of NoCs? Is it topologies? Architecure? Switching
+protocols? Router design? Please be more specific.
+- Line 86: "comarison between FLA and the other method". Which other method? The
+previous sentence mentions that FLA outperforms three different methods. What is
+this statement referring to?
+- Line 122: "The path of a flow f_i traversed is defined ..". This sentence
+sounds odd. Please reword.
+- Line 142: "only grant the flit with". Grant it what?
+- Line 172: "Compete the same output port" -> Compete for the ...
+- Line 173: "is flit and" -> is a flit
+- Line 177: "Real-time calculus is the extension". This sentence sounds odd. 
+Please rewrite.
+- Figure 2: Dotted lines cannot be distinguished from solid lines
+- Line 265: The sentence sounds odd, please fix.
+- Line 277: "Unscheduled flits will be imposed an" -> the sentence does not
+sound right.
+- Line 296: "non-existed stage" -> nonexistent
